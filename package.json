@@ -4,9 +4,12 @@
   "description": "A podcast-player.",
   "author": "Christian Nilsson",
   "license": "",
-  "scripts": {
-  },
+  "scripts": {},
   "devDependencies": {
-    "react": "0.12.0"
+    "gulp": "3.8.10",
+    "gulp-browserify": "0.5.0",
+    "gulp-concat": "2.4.1",
+    "react": "0.12.0",
+    "reactify": "^0.15.2"
   }
 }
