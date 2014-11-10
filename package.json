@@ -5,11 +5,14 @@
   "author": "Christian Nilsson",
   "license": "",
   "scripts": {},
+  "dependencies": {
+    "firebase": "2.0.2",
+    "react": "0.12.0"
+  },
   "devDependencies": {
     "gulp": "3.8.10",
     "gulp-browserify": "0.5.0",
     "gulp-concat": "2.4.1",
-    "react": "0.12.0",
     "reactify": "^0.15.2"
   }
 }
