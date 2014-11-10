@@ -1,0 +1,12 @@
+{
+  "name": "Podcat",
+  "version": "0.0.1",
+  "description": "A podcast-player.",
+  "author": "Christian Nilsson",
+  "license": "",
+  "scripts": {
+  },
+  "devDependencies": {
+    "react": "0.12.0"
+  }
+}
