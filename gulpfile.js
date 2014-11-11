@@ -16,7 +16,7 @@ gulp.task('copyindex', function () {
 });
 
 gulp.task('test', function () {
-  return gulp.src('__tests__')
+  gulp.src('__tests__')
     .pipe(jest({
       testDirectoryName: 'spec',
       scriptPreprocessor: './support/preprocessor.js',
