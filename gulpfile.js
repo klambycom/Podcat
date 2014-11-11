@@ -5,6 +5,7 @@ var jest = require('gulp-jest');
 var docco = require('gulp-docco');
 var folderToc = require('folder-toc');
 var git = require('gulp-git');
+var sass = require('gulp-sass');
 
 gulp.task('browserify', function () {
   return gulp.src('src/main.js')
@@ -57,6 +58,12 @@ gulp.task('deploy', function () {
         if (err) throw err;
       }));
   });
+});
+
+gulp.task('sass', function () {
+  return gulp.src('src/scss/*.scss')
+    .pipe(sass())
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', function () {
