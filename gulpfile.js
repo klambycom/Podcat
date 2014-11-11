@@ -71,6 +71,7 @@ gulp.task('sass', function () {
 
 gulp.task('watch', function () {
   gulp.watch('src/**/*.js', ['browserify', 'copyindex']);
+  gulp.watch('src/scss/**/*.scss', ['sass']);
 });
 
 gulp.task('default', ['browserify', 'copyindex']);
