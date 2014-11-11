@@ -6,6 +6,7 @@ var docco = require('gulp-docco');
 var folderToc = require('folder-toc');
 var git = require('gulp-git');
 var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('browserify', function () {
   return gulp.src('src/main.js')
@@ -62,7 +63,9 @@ gulp.task('deploy', function () {
 
 gulp.task('sass', function () {
   return gulp.src('src/scss/*.scss')
-    .pipe(sass())
+    .pipe(sourcemaps.init())
+      .pipe(sass())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('dist'));
 });
 
