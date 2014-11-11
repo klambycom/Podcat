@@ -59,5 +59,9 @@ gulp.task('deploy', function () {
   });
 });
 
+gulp.task('watch', function () {
+  gulp.watch('src/**/*.js', ['browserify', 'copyindex']);
+});
+
 gulp.task('default', ['browserify', 'copyindex']);
 gulp.task('docs', ['builddocs', 'docsindex']);

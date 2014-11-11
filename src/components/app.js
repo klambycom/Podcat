@@ -8,7 +8,7 @@ var App = React.createClass({
     return (
         <div>
           <h1>Hello, world!</h1>
-          <p>Antal besök är <Counter /> st.</p>
+          <p>Sidan har visats <Counter /> gånger.</p>
         </div>
         );
   }
