@@ -1,7 +1,17 @@
 @import "includes/settings";
+@import "includes/animation";
 
 h1 {
   background-color: $red;
   color: yellow;
   text-align: center;
+}
+
+.counter {
+  @include animation(flash .5s 1);
+}
+
+@include keyframes(flash) {
+  0%   { background-color: yellow; }
+  100% { background-color: white; }
 }
