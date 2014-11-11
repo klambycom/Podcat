@@ -4,6 +4,10 @@
   "description": "A podcast-player.",
   "author": "Christian Nilsson",
   "license": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:klambycom/Podcat.git"
+  },
   "scripts": {
     "test": "gulp test"
   },
