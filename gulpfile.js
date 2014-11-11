@@ -4,6 +4,7 @@ var concat = require('gulp-concat');
 var jest = require('gulp-jest');
 var docco = require('gulp-docco');
 var folderToc = require('folder-toc');
+var git = require('gulp-git');
 
 gulp.task('browserify', function () {
   gulp.src('src/main.js')
@@ -31,7 +32,7 @@ gulp.task('test', function () {
 });
 
 gulp.task('builddocs', function () {
-  gulp.src(['src/*/*js', 'src/*.js'])
+  gulp.src(['src/*/*.js', 'src/*.js'])
     .pipe(docco())
     .pipe(gulp.dest('./docs'));
 });
@@ -42,6 +43,12 @@ gulp.task('docsindex', function () {
     layout: 'classic',
     filter: '*.html',
     title: 'Files'
+  });
+});
+
+gulp.task('deploy', function () {
+  git.checkout('gh-pages', function (err) {
+    if (err) throw err;
   });
 });
 
