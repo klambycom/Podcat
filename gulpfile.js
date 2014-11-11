@@ -49,6 +49,13 @@ gulp.task('docsindex', function () {
 gulp.task('deploy', function () {
   git.checkout('gh-pages', function (err) {
     if (err) throw err;
+
+    gulp.src(['docs', 'dist'])
+      .pipe(git.add())
+      .pipe(git.commit('Update'))
+      .pipe(git.push('origin', 'gh-pages', function (err) {
+        if (err) throw err;
+      }));
   });
 });
 
