@@ -1,0 +1,100 @@
+/*--------------------- Layout and Typography ----------------------------*/
+html
+{
+    height: 100%;
+}
+
+body
+{
+    font-family: serif;
+    font-size: 14px;
+    line-height: 130%;
+
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    color: #252519;
+}
+
+h1
+{
+    margin-bottom: 20px;
+}
+
+.file-index
+{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    overflow: auto;
+
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    width: 20%;
+    padding: 50px 20px;
+
+    -webkit-box-shadow: inset -8px 0 4px -8px #555;
+       -moz-box-shadow: inset -8px 0 4px -8px #555;
+            box-shadow: inset -8px 0 4px -8px #555;
+}
+
+.file
+{
+    display: block;
+
+    margin-bottom: 10px;
+
+    text-decoration: none;
+
+    color: #000;
+}
+
+.file .file-name
+{
+    font-size: 18px;
+
+    display: block;
+}
+
+.file .file-path
+{
+    font-size: 12px;
+
+    display: block;
+
+    color: #999;
+}
+
+.file-content
+{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 80%;
+    height: 100%;
+
+    border: 0;
+    background-color: #fff;
+}
+
+.search-form
+{
+    margin: 20px 0;
+}
+
+.search-form input
+{
+    display: block;
+
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+}
