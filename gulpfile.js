@@ -7,19 +7,19 @@ var folderToc = require('folder-toc');
 var git = require('gulp-git');
 
 gulp.task('browserify', function () {
-  gulp.src('src/main.js')
+  return gulp.src('src/main.js')
     .pipe(browserify({ transform: 'reactify' }))
     .pipe(concat('main.js'))
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('copyindex', function () {
-  gulp.src('src/index.html')
+  return gulp.src('src/index.html')
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('test', function () {
-  gulp.src('__tests__')
+  return gulp.src('__tests__')
     .pipe(jest({
       testDirectoryName: 'spec',
       scriptPreprocessor: './support/preprocessor.js',
@@ -32,13 +32,13 @@ gulp.task('test', function () {
 });
 
 gulp.task('builddocs', function () {
-  gulp.src(['src/*/*.js', 'src/*.js'])
+  return gulp.src(['src/*/*.js', 'src/*.js'])
     .pipe(docco())
     .pipe(gulp.dest('./docs'));
 });
 
 gulp.task('docsindex', function () {
-  folderToc('docs', {
+  return folderToc('docs', {
     name: 'index.html',
     layout: 'classic',
     filter: '*.html',
@@ -47,10 +47,10 @@ gulp.task('docsindex', function () {
 });
 
 gulp.task('deploy', function () {
-  git.checkout('gh-pages', function (err) {
+  return git.checkout('gh-pages', function (err) {
     if (err) throw err;
 
-    gulp.src(['docs', 'dist'])
+    return gulp.src(['docs', 'dist'])
       .pipe(git.add())
       .pipe(git.commit('Update'))
       .pipe(git.push('origin', 'gh-pages', function (err) {
