@@ -5,6 +5,9 @@ var jest = require('gulp-jest');
 var docco = require('gulp-docco');
 var folderToc = require('folder-toc');
 var git = require('gulp-git');
+var jshint = require('gulp-jshint');
+var react = require('gulp-react');
+var del = require('del');
 
 gulp.task('browserify', function () {
   return gulp.src('src/main.js')
@@ -16,6 +19,22 @@ gulp.task('browserify', function () {
 gulp.task('copyindex', function () {
   return gulp.src('src/index.html')
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('clean:tmp', function (cb) {
+  del(['./.tmp'], cb)
+});
+
+gulp.task('compile-jsx', ['clean:tmp'], function () {
+  return gulp.src('./src/**/*.js')
+    .pipe(react())
+    .pipe(gulp.dest('./.tmp'));
+});
+
+gulp.task('lint', ['compile-jsx'], function () {
+  return gulp.src('./.tmp/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('default'));
 });
 
 gulp.task('test', function () {

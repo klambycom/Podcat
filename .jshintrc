@@ -30,5 +30,5 @@
     "onevar": true,
     "regexp": false,
     "sub": true,
-    "white": true,
+    "white": true
 }
