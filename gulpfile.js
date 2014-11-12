@@ -42,7 +42,7 @@ gulp.task('builddocs', function () {
     .pipe(gulp.dest('./docs'));
 });
 
-gulp.task('docsindex', function () {
+gulp.task('docsindex', ['builddocs'], function () {
   return folderToc('docs', {
     name: 'index.html',
     layout: 'classic',
