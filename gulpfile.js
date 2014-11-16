@@ -85,5 +85,5 @@ gulp.task('watch', function () {
   gulp.watch('src/scss/**/*.scss', ['sass']);
 });
 
-gulp.task('default', ['browserify', 'copyindex']);
+gulp.task('default', ['browserify', 'copyindex', 'sass']);
 gulp.task('docs', ['builddocs', 'docsindex']);
