@@ -8,7 +8,7 @@ h1 {
 }
 
 .counter {
-  @include animation(flash .5s 1);
+  //@include animation(flash .5s 1);
 }
 
 @include keyframes(flash) {
