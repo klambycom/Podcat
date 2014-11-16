@@ -5,6 +5,8 @@ var jest = require('gulp-jest');
 var docco = require('gulp-docco');
 var folderToc = require('folder-toc');
 var git = require('gulp-git');
+var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
 var jshint = require('gulp-jshint');
 var react = require('gulp-react');
 
@@ -64,8 +66,17 @@ gulp.task('deploy', function () {
   });
 });
 
+gulp.task('sass', function () {
+  return gulp.src('src/scss/*.scss')
+    .pipe(sourcemaps.init())
+      .pipe(sass())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('watch', function () {
   gulp.watch('src/**/*.js', ['browserify', 'copyindex']);
+  gulp.watch('src/scss/**/*.scss', ['sass']);
 });
 
 gulp.task('default', ['browserify', 'copyindex']);
