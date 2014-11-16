@@ -17,6 +17,11 @@ gulp.task('browserify', function () {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('copyindex', function () {
+  return gulp.src('src/index.html')
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('lint', function () {
   return gulp.src('src/**/*.js')
     .pipe(react())
