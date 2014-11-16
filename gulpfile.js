@@ -80,7 +80,8 @@ gulp.task('sass', function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/**/*.js', ['browserify', 'copyindex']);
+  gulp.watch('src/index.html', ['copyindex']);
+  gulp.watch('src/**/*.js', ['browserify']);
   gulp.watch('src/scss/**/*.scss', ['sass']);
 });
 
