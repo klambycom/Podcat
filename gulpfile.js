@@ -7,6 +7,8 @@ var folderToc = require('folder-toc');
 var git = require('gulp-git');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
+var jshint = require('gulp-jshint');
+var react = require('gulp-react');
 
 gulp.task('browserify', function () {
   return gulp.src('src/main.js')
@@ -15,9 +17,12 @@ gulp.task('browserify', function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('copyindex', function () {
-  return gulp.src('src/index.html')
-    .pipe(gulp.dest('dist'));
+gulp.task('lint', function () {
+  return gulp.src('src/**/*.js')
+    .pipe(react())
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('test', function () {
@@ -39,7 +44,7 @@ gulp.task('builddocs', function () {
     .pipe(gulp.dest('./docs'));
 });
 
-gulp.task('docsindex', function () {
+gulp.task('docsindex', ['builddocs'], function () {
   return folderToc('docs', {
     name: 'index.html',
     layout: 'classic',
