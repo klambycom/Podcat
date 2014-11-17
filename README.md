@@ -1,10 +1,10 @@
-# Podcat [![Dependencies badge](david-image)](david-url) [![DevDependencies  badge](david-dev-image)](david-dev-url) [![Build Status](travis-image)](travis-url)
+# Podcat [![Dependencies badge][david-image]][david-url] [![DevDependencies  badge][david-dev-image]][david-dev-url] [![Build Status][travis-image]][travis-url]
 
 Podcat will be a podcast-player developed during the course
 [RIA-utveckling med JavaScript](https://coursepress.lnu.se/kurs/ria-utveckling-med-javascript/)
 at [Linnaeus University](http://lnu.se/?l=en).
 
-> A person who enjoys podcasts to excessive amounts, or who listens to podcasts
+> **Podcat:** A person who enjoys podcasts to excessive amounts, or who listens to podcasts
 > on a regular basis.
 >
 > — [Michael Capson on the radio program *Good Morning Dude*](http://en.wiktionary.org/wiki/podcat)
