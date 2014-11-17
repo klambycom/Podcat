@@ -14,7 +14,7 @@ var paths = {
   dist:   'dist',
   main:   'src/main.js',
   index:  'src/index.html',
-  src:    'src/**/*.js',
+  src:    'src/**/*.{js,jsx}',
   tests:  '__tests__',
   style:  'src/scss/*.scss',
   scss:   'src/scss/**/*.scss',
