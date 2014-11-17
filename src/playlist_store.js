@@ -1,15 +1,7 @@
 var Reflux = require('reflux');
+var actions = require('./playlist_actions.js');
 
-var actions = Reflux.createActions([
-  'play',
-  'pause',
-  'next',
-  'previous',
-  'add',
-  'remove'
-]);
-
-var playlist = Reflux.createStore({
+var store = Reflux.createStore({
   init: function () {
     this.listenToMany(actions);
   },
@@ -27,4 +19,4 @@ var playlist = Reflux.createStore({
   }
 });
 
-module.exports = actions;
+module.exports = store;
