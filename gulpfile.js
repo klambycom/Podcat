@@ -10,20 +10,31 @@ var sourcemaps = require('gulp-sourcemaps');
 var jshint = require('gulp-jshint');
 var react = require('gulp-react');
 
+var paths = {
+  dist:   'dist',
+  main:   'src/main.js',
+  index:  'src/index.html',
+  src:    'src/**/*.js',
+  tests:  '__tests__',
+  style:  'src/scss/*.scss',
+  scss:   'src/scss/**/*.scss',
+  docs:   './docs'
+};
+
 gulp.task('browserify', function () {
-  return gulp.src('src/main.js')
+  return gulp.src(paths.main)
     .pipe(browserify({ transform: 'reactify' }))
     .pipe(concat('main.js'))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('copyindex', function () {
-  return gulp.src('src/index.html')
-    .pipe(gulp.dest('dist'));
+  return gulp.src(paths.index)
+    .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('lint', function () {
-  return gulp.src('src/**/*.js')
+  return gulp.src(paths.src)
     .pipe(react())
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
@@ -31,7 +42,7 @@ gulp.task('lint', function () {
 });
 
 gulp.task('test', function () {
-  return gulp.src('__tests__')
+  return gulp.src(paths.tests)
     .pipe(jest({
       testDirectoryName: 'spec',
       scriptPreprocessor: './support/preprocessor.js',
@@ -44,9 +55,9 @@ gulp.task('test', function () {
 });
 
 gulp.task('builddocs', function () {
-  return gulp.src(['src/*/*.js', 'src/*.js'])
+  return gulp.src(paths.src)
     .pipe(docco())
-    .pipe(gulp.dest('./docs'));
+    .pipe(gulp.dest(paths.docs));
 });
 
 gulp.task('docsindex', ['builddocs'], function () {
@@ -72,17 +83,17 @@ gulp.task('deploy', function () {
 });
 
 gulp.task('sass', function () {
-  return gulp.src('src/scss/*.scss')
+  return gulp.src(paths.style)
     .pipe(sourcemaps.init())
       .pipe(sass())
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('watch', function () {
-  gulp.watch('src/index.html', ['copyindex']);
-  gulp.watch('src/**/*.js', ['browserify']);
-  gulp.watch('src/scss/**/*.scss', ['sass']);
+  gulp.watch(paths.index, ['copyindex']);
+  gulp.watch(paths.src, ['browserify']);
+  gulp.watch(paths.scss, ['sass']);
 });
 
 gulp.task('default', ['browserify', 'copyindex', 'sass']);
