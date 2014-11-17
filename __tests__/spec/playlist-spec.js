@@ -43,4 +43,10 @@ describe('Playlist', function () {
       expect(PlaylistActions.remove).toBeDefined();
     });
   });
+
+  describe('clear', function () {
+    it('should have clear action', function () {
+      expect(PlaylistActions.clear).toBeDefined();
+    });
+  });
 });
