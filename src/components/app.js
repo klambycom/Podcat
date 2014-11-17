@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-//var Counter = require('./counter');
 
 var App = React.createClass({
   render: function () {
