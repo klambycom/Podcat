@@ -1,14 +1,20 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Counter = require('./counter');
+var Player = require('./player');
+var Playlist = require('./playlist');
+var Feed = require('./feed');
 
 var App = React.createClass({
   render: function () {
     return (
         <div>
-          <h1>Hello, world!</h1>
-          <p>Sidan har visats <Counter /> gånger.</p>
+          <h1>Podcat</h1>
+          <Player />
+          <h2>Playlist</h2>
+          <Playlist />
+          <h2>Feed</h2>
+          <Feed />
         </div>
         );
   }
