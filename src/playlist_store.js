@@ -52,21 +52,29 @@ var store = Reflux.createStore({
     // TODO Save new start time
     this.trigger();
   },
-  // Arg is current episode with time
-  onNext: function (/*currentEpisode*/) {
-    // If saved start time (if not finished last time), dont run from begining.
+  onNext: function () {
+    // Remove first episode in queue
+    this.queue.shift();
+    localforage.setItem(this.QUEUE_ID, this.queue);
+    this.trigger(this.queue[0], this.queue);
   },
-  // Arg is current episode with time
-  onPrevious: function (/*currentEpisode*/) {
-    // If played more than a couple of seconds, start episode over.
+  onPrevious: function () {
+    // TODO
   },
-  onAdd: function (/*episode*/) {
+  onAdd: function (episode) {
     // Add last in queue
+    this.queue.push(episode);
+    localforage.setItem(this.QUEUE_ID, this.queue);
+    this.trigger(this.queue[0], this.queue);
   },
-  onRemove: function (/*episode*/) {
+  onRemove: function (episode) {
     // Remove episode from queue
-    // Maybe allow fn as argument
-    this.trigger(this.queue);
+    // TODO Maybe allow fn as argument
+    this.queue.filter(function (x) {
+      return x.audio_url !== episode.audio_url;
+    });
+    localforage.setItem(this.QUEUE_ID, this.queue);
+    this.trigger(this.queue[0], this.queue);
   },
   onClear: function () {
     // Maybe remove?
