@@ -8,46 +8,28 @@ var store = Reflux.createStore({
   init: function () {
     this.listenToMany(actions);
 
+    // Queue is saved in localStorage
     localforage
       .getItem(this.QUEUE_ID)
-      .then(this.initQueue);
+      .then(this.initQueue.bind(this));
 
-    localforage
-      .getItem(this.HISTORY_ID)
-      .then(this.initHistory);
-  },
-  fromStorage: function (type) {
-    var self = this[type];
-
-    return function (error, playlist) {
-      if (error) {
-        self = [];
-      } else {
-        self = playlist;
-      }
-    };
+    // TODO History should be saved in sessionStorage, and should not be
+    // initialized
+    //localforage
+      //.getItem(this.HISTORY_ID)
+      //.then(this.initHistory.bind(this));
   },
   initQueue: function (error, playlist) {
-    if (error) {
+    if (error || !(typeof playlist !== 'undefined' && playlist.length > 0)) {
       this.queue = [];
     } else {
       this.queue = playlist;
     }
   },
-  initHistory: function (error, playlist) {
-    if (error) {
-      this.history = [];
-    } else {
-      this.history = playlist;
-    }
-  },
-  indexOf: function (array, episode) {
-    return array.reduce(function (acc, x, i) {
-      return x.url === episode.url ? i : acc;
-    }, -1);
-  },
   onPlay: function (episode) {
-    var index = this.indexOf(this.queue, episode);
+    var index = this.queue.reduce(function (acc, x, i) {
+      return x.audio_url === episode.audio_url ? i : acc;
+    }, -1);
       
     if (index > -1) {
       // If episode is later in queue, move forward to first
