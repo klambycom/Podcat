@@ -19,7 +19,7 @@ var store = Reflux.createStore({
       //.getItem(this.HISTORY_ID)
       //.then(this.initHistory.bind(this));
   },
-  initQueue: function (error, playlist) {
+  initQueue: function (playlist, error) {
     if (error || !(typeof playlist !== 'undefined' && playlist.length > 0)) {
       this.queue = [];
     } else {

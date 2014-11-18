@@ -16,9 +16,6 @@ var Episode = React.createClass({
       audio_url: this.props.audio_url
     });
 
-    console.log(this.props.title);
-    console.log(this.props.audio_url);
-
     e.preventDefault();
   },
   render: function () {
