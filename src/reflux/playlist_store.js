@@ -1,6 +1,6 @@
 var Reflux = require('reflux');
 var actions = require('./playlist_actions.js');
-var storage = require('./playlist_storage.js');
+var storage = require('../playlist_storage.js');
 
 var store = Reflux.createStore({
   init: function () {
@@ -29,7 +29,7 @@ var store = Reflux.createStore({
       this.queue.unshift(episode);
     }
 
-    this.trigger(this.queue[0], this.queue);
+    this.trigger(this.queue);
 
     // Save new playlist
     storage.update(this.queue);
@@ -44,7 +44,7 @@ var store = Reflux.createStore({
     // Remove first episode in queue
     this.queue.shift();
     storage.update(this.queue);
-    this.trigger(this.queue[0], this.queue);
+    this.trigger(this.queue);
   },
   onPrevious: function () {
     // TODO
@@ -53,7 +53,7 @@ var store = Reflux.createStore({
     // Add last in queue
     this.queue.push(episode);
     storage.update(this.queue);
-    this.trigger(this.queue[0], this.queue);
+    this.trigger(this.queue);
   },
   onRemove: function (episode) {
     // Remove episode from queue
@@ -62,10 +62,7 @@ var store = Reflux.createStore({
       return x.audio_url !== episode.audio_url;
     });
     storage.update(this.queue);
-    this.trigger(this.queue[0], this.queue);
-  },
-  onClear: function () {
-    // Maybe remove?
+    this.trigger(this.queue);
   }
 });
 
