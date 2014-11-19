@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var PlaylistActions = require('../playlist_actions');
+var PlaylistActions = require('../reflux/playlist_actions');
 
 var Episode = React.createClass({
   getDefaultProps: function () {

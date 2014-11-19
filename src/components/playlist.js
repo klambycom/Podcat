@@ -4,8 +4,9 @@ var React = require('react');
 var Episode = require('./episode');
 
 var Reflux = require('reflux');
-var playlistStore = require('../playlist_store.js');
-var playlistStorage = require('../playlist_storage.js');
+var PlaylistStore = require('../reflux/playlist_store.js');
+
+var storage = require('../playlist_storage.js');
 
 var Playlist = React.createClass({
   mixins: [Reflux.ListenerMixin],
@@ -13,14 +14,14 @@ var Playlist = React.createClass({
     return { items: [] };
   },
   componentDidMount: function () {
-    playlistStorage.all(function (result) {
+    storage.all(function (result) {
       this.setState({ items: result });
     }.bind(this));
 
-    this.listenTo(playlistStore, this.onPlay);
+    this.listenTo(PlaylistStore, this.onChange);
   },
-  onPlay: function (current, all) {
-    this.setState({ items: all });
+  onChange: function (items) {
+    this.setState({ items: items });
   },
   render: function () {
     return (
