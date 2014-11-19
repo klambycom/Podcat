@@ -1,10 +1,11 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Episode = require('./episode');
+
 var Reflux = require('reflux');
 var playlistStore = require('../playlist_store.js');
-var localforage = require('localforage');
-var Episode = require('./episode');
+var playlistStorage = require('../playlist_storage.js');
 
 var Playlist = React.createClass({
   mixins: [Reflux.ListenerMixin],
@@ -12,15 +13,9 @@ var Playlist = React.createClass({
     return { items: [] };
   },
   componentDidMount: function () {
-    localforage
-      .getItem('playlist.queue')
-      .then(function (result, error) {
-        if (error || !(typeof result !== 'undefined' && result.length > 0)) {
-          this.setState({ items: [] });
-        } else {
-          this.setState({ items: result });
-        }
-      }.bind(this));
+    playlistStorage.all(function (result) {
+      this.setState({ items: result });
+    }.bind(this));
 
     this.listenTo(playlistStore, this.onPlay);
   },
