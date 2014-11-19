@@ -1,7 +1,7 @@
-var pathActions = '../../src/playlist_actions.js';
+var pathActions = '../../src/reflux/playlist_actions.js';
 jest.dontMock(pathActions);
 
-var pathStore = '../../src/playlist_store.js';
+var pathStore = '../../src/reflux/playlist_store.js';
 jest.dontMock(pathStore);
 
 describe('Playlist', function () {
@@ -68,12 +68,6 @@ describe('Playlist', function () {
   describe('remove', function () {
     it('should have remove action', function () {
       expect(PlaylistActions.remove).toBeDefined();
-    });
-  });
-
-  describe('clear', function () {
-    it('should have clear action', function () {
-      expect(PlaylistActions.clear).toBeDefined();
     });
   });
 });
