@@ -23,7 +23,7 @@ var store = Reflux.createStore({
         this.queue.splice(index, 1);
         this.queue.unshift(episode);
       }
-      // TODO Start from saved start time
+      // TODO Save start time
     } else {
       // If episode is not in queue, add first in queue
       this.queue.unshift(episode);
@@ -34,8 +34,10 @@ var store = Reflux.createStore({
     // Save new playlist
     storage.update(this.queue);
   },
-  onPause: function (/*episode*/) {
-    // TODO Save new start time
+  onPause: function (time) {
+    // Save new start time
+    this.queue[0].start_time = time;
+    storage.update(this.queue);
     this.trigger();
   },
   onNext: function () {
