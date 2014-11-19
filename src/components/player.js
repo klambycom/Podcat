@@ -1,8 +1,12 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var PlayPause = require('./play_pause.js');
+
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
+var PlaylistActions = require('../reflux/playlist_actions.js');
+
 var storage = require('../playlist_storage.js');
 
 var Player = React.createClass({
@@ -10,7 +14,8 @@ var Player = React.createClass({
   getInitialState: function () {
     return {
       image: '',
-      title: ''
+      title: '',
+      autoplay: false
     };
   },
   componentDidMount: function () {
@@ -32,16 +37,19 @@ var Player = React.createClass({
       this.audio.play();
       this.setState({
         title: episode[0].title,
-        image: episode[0].image
+        image: episode[0].image,
+        autoplay: true
       });
     }
   },
-  clickPlay: function (e) {
+  play: function () {
     this.audio.play();
-    e.preventDefault();
   },
-  clickPause: function (e) {
+  pause: function () {
     this.audio.pause();
+  },
+  clickNext: function (e) {
+    PlaylistActions.next();
     e.preventDefault();
   },
   render: function () {
@@ -50,8 +58,11 @@ var Player = React.createClass({
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
           <div className="controlls">
-            <a href="#" onClick={this.clickPlay}>Play</a> :
-            : <a href="#" onClick={this.clickPause}>Pause</a>
+            <PlayPause
+              autoplay={this.state.autoplay}
+              onPlay={this.play}
+              onPause={this.pause} /> :
+            : <a href="#" onClick={this.clickNext}>Next</a>
           </div>
         </div>
         );
