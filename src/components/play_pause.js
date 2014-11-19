@@ -33,9 +33,9 @@ var PlayPause = React.createClass({
   },
   render: function () {
     if (this.state.play) {
-      return (<a href="#" onClick={this.onPause}>Pause</a>);
+      return (<a href="#" onClick={this.onPause} className="fa fa-pause"></a>);
     } else {
-      return (<a href="#" onClick={this.onPlay}>Play</a>);
+      return (<a href="#" onClick={this.onPlay} className="fa fa-play"></a>);
     }
   }
 });

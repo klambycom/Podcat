@@ -7,7 +7,7 @@ var playlistStorage = {
     localforage
       .getItem(this.QUEUE_ID)
       .then(function (result, error) {
-        if (error || !(typeof result !== 'undefined' && result.length > 0)) {
+        if (error || !(typeof result !== 'undefined' && result !== null && result.length > 0)) {
           callback([]);
         } else {
           callback(result);
