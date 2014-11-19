@@ -18,8 +18,10 @@ var Player = React.createClass({
       autoplay: false
     };
   },
-  componentDidMount: function () {
+  componentWillMount: function () {
     this.audio = new Audio();
+  },
+  componentDidMount: function () {
     this.listenTo(PlaylistStore, this.onPlay);
 
     // Load first episode from saved playlist
@@ -42,12 +44,6 @@ var Player = React.createClass({
       });
     }
   },
-  play: function () {
-    this.audio.play();
-  },
-  pause: function () {
-    this.audio.pause();
-  },
   clickNext: function (e) {
     PlaylistActions.next();
     e.preventDefault();
@@ -59,10 +55,7 @@ var Player = React.createClass({
           <div className="title">{this.state.title}</div>
           <div className="controls">
             <a href="#" className="fa fa-fast-backward"></a>
-            <PlayPause
-              autoplay={this.state.autoplay}
-              onPlay={this.play}
-              onPause={this.pause} />
+            <PlayPause autoplay={this.state.autoplay} player={this.audio} />
             <a href="#" onClick={this.clickNext} className="fa fa-fast-forward"></a>
           </div>
         </div>
