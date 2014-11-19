@@ -2,6 +2,7 @@
 
 var React = require('react');
 var PlayPause = require('./play_pause.js');
+var Previous = require('./previous.js');
 var Next = require('./next.js');
 
 var Reflux = require('reflux');
@@ -50,7 +51,7 @@ var Player = React.createClass({
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
           <div className="controls">
-            <a href="#" className="fa fa-fast-backward"></a>
+            <Previous />
             <PlayPause autoplay={this.state.autoplay} player={this.audio} />
             <Next />
           </div>
