@@ -2,10 +2,10 @@
 
 var React = require('react');
 var PlayPause = require('./play_pause.js');
+var Next = require('./next.js');
 
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
-var PlaylistActions = require('../reflux/playlist_actions.js');
 
 var storage = require('../playlist_storage.js');
 
@@ -44,10 +44,6 @@ var Player = React.createClass({
       });
     }
   },
-  clickNext: function (e) {
-    PlaylistActions.next();
-    e.preventDefault();
-  },
   render: function () {
     return (
         <div id="player">
@@ -56,7 +52,7 @@ var Player = React.createClass({
           <div className="controls">
             <a href="#" className="fa fa-fast-backward"></a>
             <PlayPause autoplay={this.state.autoplay} player={this.audio} />
-            <a href="#" onClick={this.clickNext} className="fa fa-fast-forward"></a>
+            <Next />
           </div>
         </div>
         );
