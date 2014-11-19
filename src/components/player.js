@@ -57,12 +57,13 @@ var Player = React.createClass({
         <div id="player">
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
-          <div className="controlls">
+          <div className="controls">
+            <a href="#" className="fa fa-fast-backward disabled"></a>
             <PlayPause
               autoplay={this.state.autoplay}
               onPlay={this.play}
-              onPause={this.pause} /> :
-            : <a href="#" onClick={this.clickNext}>Next</a>
+              onPause={this.pause} />
+            <a href="#" onClick={this.clickNext} className="fa fa-fast-forward"></a>
           </div>
         </div>
         );

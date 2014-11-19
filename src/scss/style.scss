@@ -1,5 +1,11 @@
 @import "includes/settings";
 @import "includes/animation";
+@import "includes/player";
+
+body {
+  font-family: sans-serif;
+  font-weight: 100;
+}
 
 h1 {
   background-color: $red;
@@ -14,10 +20,4 @@ h1 {
 @include keyframes(flash) {
   0%   { background-color: yellow; }
   100% { background-color: white; }
-}
-
-#player {
-  .image img {
-    width: 50px;
-  }
 }
