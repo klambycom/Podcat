@@ -58,7 +58,7 @@ var Player = React.createClass({
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
           <div className="controls">
-            <a href="#" className="fa fa-fast-backward disabled"></a>
+            <a href="#" className="fa fa-fast-backward"></a>
             <PlayPause
               autoplay={this.state.autoplay}
               onPlay={this.play}
