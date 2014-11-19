@@ -2,8 +2,8 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var store = require('../playlist_store.js');
 var actions = require('../playlist_actions.js');
+var storage = require('../playlist_storage.js');
 
 var Player = React.createClass({
   mixins: [Reflux.ListenerMixin],
@@ -16,6 +16,15 @@ var Player = React.createClass({
   componentDidMount: function () {
     this.audio = new Audio();
     this.listenTo(actions.play, this.onPlay);
+
+    // Load first episode from saved playlist
+    storage.all(function (result) {
+      this.setState({
+        title: result[0].title,
+        image: result[0].image
+      });
+      this.audio.src = result[0].audio_url;
+    }.bind(this));
   },
   onPlay: function (episode) {
     this.audio.src = episode.audio_url;
