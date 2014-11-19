@@ -15,3 +15,9 @@ h1 {
   0%   { background-color: yellow; }
   100% { background-color: white; }
 }
+
+#player {
+  .image img {
+    width: 50px;
+  }
+}
