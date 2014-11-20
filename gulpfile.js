@@ -69,9 +69,18 @@ gulp.task('docsindex', ['builddocs'], function () {
   });
 });
 
-gulp.task('deploy', function () {
-  //return gulp.src(['docs', 'dist'])
-  return gulp.src('dist/**/*')
+gulp.task('deploy:dist', ['browserify', 'copyindex'], function () {
+  return gulp.src('dist/**/*.*')
+    .pipe(gulp.dest('.tmp/dist'));
+});
+
+gulp.task('deploy:docs', ['builddocs'], function () {
+  return gulp.src('docs/**/*.*')
+    .pipe(gulp.dest('.tmp/docs'));
+});
+
+gulp.task('deploy', ['deploy:dist', 'deploy:docs'], function () {
+  return gulp.src('.tmp/**/*.*')
     .pipe(deploy());
 });
 
