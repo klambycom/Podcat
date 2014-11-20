@@ -74,7 +74,7 @@ gulp.task('deploy:dist', ['browserify', 'copyindex'], function () {
     .pipe(gulp.dest('.tmp/dist'));
 });
 
-gulp.task('deploy:docs', ['builddocs'], function () {
+gulp.task('deploy:docs', ['docsindex'], function () {
   return gulp.src('docs/**/*.*')
     .pipe(gulp.dest('.tmp/docs'));
 });
