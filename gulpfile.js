@@ -4,11 +4,11 @@ var concat = require('gulp-concat');
 var jest = require('gulp-jest');
 var docco = require('gulp-docco');
 var folderToc = require('folder-toc');
-var git = require('gulp-git');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var jshint = require('gulp-jshint');
 var react = require('gulp-react');
+var deploy = require('gulp-gh-pages');
 
 var paths = {
   dist:   'dist',
@@ -70,16 +70,9 @@ gulp.task('docsindex', ['builddocs'], function () {
 });
 
 gulp.task('deploy', function () {
-  return git.checkout('gh-pages', function (err) {
-    if (err) throw err;
-
-    return gulp.src(['docs', 'dist'])
-      .pipe(git.add())
-      .pipe(git.commit('Update'))
-      .pipe(git.push('origin', 'gh-pages', function (err) {
-        if (err) throw err;
-      }));
-  });
+  //return gulp.src(['docs', 'dist'])
+  return gulp.src('dist/**/*')
+    .pipe(deploy());
 });
 
 gulp.task('sass', function () {
