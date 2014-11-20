@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>episode.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>episode.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
+
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> PlaylistActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_actions'</span>);
+
+<span class="hljs-keyword">var</span> Episode = React.createClass({
+  getDefaultProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> {
+      play: <span class="hljs-literal">true</span>
+    };
+  },
+  propTypes: {
+    title: React.PropTypes.string.isRequired,
+    image: React.PropTypes.string.isRequired,
+    audio_url: React.PropTypes.string.isRequired,
+    play: React.PropTypes.bool
+  },
+  onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    PlaylistActions.play({
+      title: <span class="hljs-keyword">this</span>.props.title,
+      image: <span class="hljs-keyword">this</span>.props.image,
+      audio_url: <span class="hljs-keyword">this</span>.props.audio_url
+    });
+
+    e.preventDefault();
+  },
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onPlay}</span>&gt;</span>Spela avsnittet<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+
+    return (
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>
+            {this.props.title}
+            {play}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        );
+  }
+});
+
+module.exports = Episode;
+
+</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
