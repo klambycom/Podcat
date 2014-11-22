@@ -2,33 +2,27 @@
 
 var React = require('react');
 
+var Reflux = require('reflux');
+var PlayerActions = require('../reflux/player_actions.js');
+var PlayerStore = require('../reflux/player_store.js');
+
 var PlayPause = React.createClass({
-  propTypes: {
-    autoplay: React.PropTypes.bool.isRequired,
-    player: React.PropTypes.object.isRequired
-  },
+  mixins: [Reflux.listenTo(PlayerStore, 'onChange')],
   getInitialState: function () {
     return { play: false };
   },
-  componentWillReceiveProps: function (props) {
-    // Move autoplay prop to play state
-    this.setState({ play: props.autoplay });
+  onChange: function (state) {
+    this.setState({ play: state });
   },
-  onPlay: function (e) {
-    this.props.player.play();
-    this.setState({ play: true });
-    e.preventDefault();
-  },
-  onPause: function (e) {
-    this.props.player.pause();
-    this.setState({ play: false });
+  onClick: function (e) {
+    PlayerActions.toggle();
     e.preventDefault();
   },
   render: function () {
     if (this.state.play) {
-      return (<a href="#" onClick={this.onPause} className="fa fa-pause"></a>);
+      return (<a href="#" onClick={this.onClick} className="fa fa-pause"></a>);
     } else {
-      return (<a href="#" onClick={this.onPlay} className="fa fa-play"></a>);
+      return (<a href="#" onClick={this.onClick} className="fa fa-play"></a>);
     }
   }
 });
