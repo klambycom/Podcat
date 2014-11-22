@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>player_store.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>player_store.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
+<span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./player_actions.js'</span>);
+
+<span class="hljs-keyword">var</span> store = Reflux.createStore({
+  init: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.player = <span class="hljs-keyword">new</span> Audio();
+    <span class="hljs-keyword">this</span>.listenToMany(actions);
+  },
+  onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(url, autoplay)</span> </span>{
+    <span class="hljs-keyword">this</span>.player.src = url;
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> autoplay === <span class="hljs-string">'undefined'</span> || autoplay === <span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">this</span>.player.play();
+    }
+
+    <span class="hljs-keyword">this</span>.trigger(!<span class="hljs-keyword">this</span>.player.paused);
+  },
+  onPause: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.player.pause();
+    <span class="hljs-keyword">this</span>.trigger(<span class="hljs-literal">false</span>);
+  },
+  onToggle: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.player.paused) {
+      <span class="hljs-keyword">this</span>.player.play();
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">this</span>.player.pause();
+    }
+
+    <span class="hljs-keyword">this</span>.trigger(!<span class="hljs-keyword">this</span>.player.paused);
+  }
+});
+
+<span class="hljs-built_in">module</span>.exports = store;</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
