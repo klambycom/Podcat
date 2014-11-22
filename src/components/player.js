@@ -7,6 +7,7 @@ var Next = require('./next.js');
 
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
+var PlayerActions = require('../reflux/player_actions.js');
 
 var storage = require('../playlist_storage.js');
 
@@ -15,41 +16,29 @@ var Player = React.createClass({
   getInitialState: function () {
     return {
       image: '',
-      title: '',
-      autoplay: false
+      title: ''
     };
-  },
-  componentWillMount: function () {
-    this.audio = new Audio();
   },
   componentDidMount: function () {
     // Load first episode from saved playlist
     storage.all(this.changeEpisode);
   },
   onPlay: function (episode) {
-    if (this.audio.src !== episode[0].audio_url) {
-      this.changeEpisode(episode, true);
-      this.audio.play();
-    }
+    this.changeEpisode(episode, true);
   },
   changeEpisode: function (items, autoplay) {
     this.setState({
       title: items[0].title,
-      image: items[0].image,
-      autoplay: !!autoplay
+      image: items[0].image
     });
-    this.audio.src = items[0].audio_url;
+    PlayerActions.play(items[0].audio_url, !!autoplay);
   },
   render: function () {
     return (
         <div id="player">
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
-          <div className="controls">
-            <Previous />
-            <PlayPause autoplay={this.state.autoplay} player={this.audio} />
-            <Next />
-          </div>
+          <div className="controls"><Previous /> <PlayPause /> <Next /></div>
         </div>
         );
   }
