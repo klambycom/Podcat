@@ -30,23 +30,56 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> localforage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'localforage'</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> all = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(storage, id)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">JSON</span>.parse(storage.getItem(id)) || [];
+};
 
-<span class="hljs-keyword">var</span> playlistStorage = {
-  QUEUE_ID: <span class="hljs-string">'playlist.queue'</span>,
-  HISTORY_ID: <span class="hljs-string">'playlist.history'</span>,
-  all: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(callback)</span> </span>{
-    localforage
-      .getItem(<span class="hljs-keyword">this</span>.QUEUE_ID)
-      .then(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result, error)</span> </span>{
-        <span class="hljs-keyword">if</span> (error || !(<span class="hljs-keyword">typeof</span> result !== <span class="hljs-string">'undefined'</span> &amp;&amp; result !== <span class="hljs-literal">null</span> &amp;&amp; result.length &gt; <span class="hljs-number">0</span>)) {
-          callback([]);
-        } <span class="hljs-keyword">else</span> {
-          callback(result);
-        }
-      });
+<span class="hljs-keyword">var</span> removeFirst = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(storage, id)</span> </span>{
+  <span class="hljs-keyword">var</span> queue = all(storage, id);
+  <span class="hljs-keyword">var</span> removed = queue.shift();
+  storage.setItem(id, <span class="hljs-built_in">JSON</span>.stringify(queue));
+  <span class="hljs-keyword">return</span> removed;
+};
+
+<span class="hljs-keyword">var</span> storage = {
+  ID: <span class="hljs-string">'playlist.queue'</span>,
+  all: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> all(localStorage, <span class="hljs-keyword">this</span>.ID); },
+  add: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+    <span class="hljs-keyword">if</span> (item === <span class="hljs-literal">null</span>) { <span class="hljs-keyword">return</span>; }
+
+    <span class="hljs-keyword">var</span> queue = <span class="hljs-keyword">this</span>.all();
+    queue.push(item);
+    localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
   },
-  history: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+  indexOf: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.all().reduce(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(acc, x, i)</span> </span>{
+      <span class="hljs-keyword">return</span> x.audio_url === item.audio_url ? i : acc;
+    }, -<span class="hljs-number">1</span>);
+  },
+  addFirst: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+    <span class="hljs-keyword">var</span> queue = <span class="hljs-keyword">this</span>.all();
+    queue.unshift(item);
+    localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
+  },
+  moveFirst: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(index)</span> </span>{
+    <span class="hljs-keyword">var</span> queue = <span class="hljs-keyword">this</span>.all();
+    <span class="hljs-keyword">var</span> removed = queue.splice(index, <span class="hljs-number">1</span>);
+    queue.unshift(removed[<span class="hljs-number">0</span>]);
+    localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
+  },
+  update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(obj)</span> </span>{
+    <span class="hljs-keyword">var</span> queue = <span class="hljs-keyword">this</span>.all();
+    <span class="hljs-built_in">Object</span>.keys(obj).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key)</span> </span>{
+      queue[<span class="hljs-number">0</span>][key] = obj[key];
+    });
+    localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
+  },
+  remove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> removeFirst(localStorage, <span class="hljs-keyword">this</span>.ID); },
+  history: {
+    ID: <span class="hljs-string">'playlist.history'</span>,
+    all: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> all(sessionStorage, <span class="hljs-keyword">this</span>.ID); },
+    add: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+      <span class="hljs-keyword">if</span> (item === <span class="hljs-literal">null</span>) { <span class="hljs-keyword">return</span>; }</pre></div></div>
             
         </li>
         
@@ -57,17 +90,19 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>TODO sessionStorage?</p>
+              <p>Add first</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  },
-  update: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(queue)</span> </span>{
-    localforage.setItem(<span class="hljs-keyword">this</span>.QUEUE_ID, queue);
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> queue = <span class="hljs-keyword">this</span>.all();
+      queue.unshift(item);
+      sessionStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
+    },
+    remove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> removeFirst(sessionStorage, <span class="hljs-keyword">this</span>.ID); }
   }
 };
 
-<span class="hljs-built_in">module</span>.exports = playlistStorage;</pre></div></div>
+<span class="hljs-built_in">module</span>.exports = storage;</pre></div></div>
             
         </li>
         

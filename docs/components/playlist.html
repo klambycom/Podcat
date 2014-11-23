@@ -41,16 +41,12 @@
 <span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
 <span class="hljs-keyword">var</span> Playlist = React.createClass({
-  mixins: [Reflux.ListenerMixin],
+  mixins: [Reflux.listenTo(PlaylistStore, <span class="hljs-string">'onChange'</span>)],
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> { items: [] };
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    storage.all(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{
-      <span class="hljs-keyword">this</span>.setState({ items: result });
-    }.bind(<span class="hljs-keyword">this</span>));
-
-    <span class="hljs-keyword">this</span>.listenTo(PlaylistStore, <span class="hljs-keyword">this</span>.onChange);
+    <span class="hljs-keyword">this</span>.setState({ items: storage.all() });
   },
   onChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items)</span> </span>{
     <span class="hljs-keyword">this</span>.setState({ items: items });

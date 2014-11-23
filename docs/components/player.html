@@ -66,17 +66,32 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    storage.all(<span class="hljs-keyword">this</span>.changeEpisode);
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.changeEpisode(storage.all(), <span class="hljs-literal">false</span>);
   },
   onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(episode)</span> </span>{
     <span class="hljs-keyword">this</span>.changeEpisode(episode, <span class="hljs-literal">true</span>);
   },
   changeEpisode: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items, autoplay)</span> </span>{
-    <span class="hljs-keyword">this</span>.setState({
+    <span class="hljs-keyword">if</span> (items.length === <span class="hljs-number">0</span>) { <span class="hljs-keyword">return</span>; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Change episode if playlist is not empty</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.setState({
       title: items[<span class="hljs-number">0</span>].title,
       image: items[<span class="hljs-number">0</span>].image
     });
-    PlayerActions.play(items[<span class="hljs-number">0</span>].audio_url, !!autoplay);
+    PlayerActions.play(items[<span class="hljs-number">0</span>].audio_url, autoplay);
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> (
