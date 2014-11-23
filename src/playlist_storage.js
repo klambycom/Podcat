@@ -1,8 +1,7 @@
 var localforage = require('localforage');
 
-var playlistStorage = {
+var storage = {
   QUEUE_ID: 'playlist.queue',
-  HISTORY_ID: 'playlist.history',
   all: function (callback) {
     localforage
       .getItem(this.QUEUE_ID)
@@ -14,12 +13,30 @@ var playlistStorage = {
         }
       });
   },
-  history: function () {
-    // TODO sessionStorage?
-  },
   update: function (queue) {
     localforage.setItem(this.QUEUE_ID, queue);
+  },
+  history: {
+    HISTORY_ID: 'playlist.history',
+    all: function () {
+      return JSON.parse(sessionStorage.getItem(this.HISTORY_ID)) || [];
+    },
+    add: function (item) {
+      if (item == null) return;
+
+      // Add first
+      var queue = this.all();
+      queue.unshift(item);
+      sessionStorage.setItem(this.HISTORY_ID, JSON.stringify(queue));
+    },
+    remove: function () {
+      // Remove first
+      var queue = this.all();
+      var item = queue.shift();
+      sessionStorage.setItem(this.HISTORY_ID, JSON.stringify(queue));
+      return item;
+    }
   }
 };
 
-module.exports = playlistStorage;
+module.exports = storage;

@@ -42,12 +42,18 @@ var store = Reflux.createStore({
   },
   onNext: function () {
     // Remove first episode in queue
-    this.queue.shift();
+    var removed = this.queue.shift();
     storage.update(this.queue);
+
+    // Add removed episode to history
+    storage.history.add(removed);
+
     this.trigger(this.queue);
   },
   onPrevious: function () {
-    // TODO
+    // Remove from history and add first in queue
+    var previous = storage.history.remove();
+    actions.play(previous);
   },
   onAdd: function (episode) {
     // Add last in queue
