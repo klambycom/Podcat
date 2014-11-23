@@ -21,17 +21,20 @@ var Player = React.createClass({
   },
   componentDidMount: function () {
     // Load first episode from saved playlist
-    storage.all(this.changeEpisode);
+    this.changeEpisode(storage.all(), false);
   },
   onPlay: function (episode) {
     this.changeEpisode(episode, true);
   },
   changeEpisode: function (items, autoplay) {
+    if (items.length === 0) { return; }
+
+    // Change episode if playlist is not empty
     this.setState({
       title: items[0].title,
       image: items[0].image
     });
-    PlayerActions.play(items[0].audio_url, !!autoplay);
+    PlayerActions.play(items[0].audio_url, autoplay);
   },
   render: function () {
     return (

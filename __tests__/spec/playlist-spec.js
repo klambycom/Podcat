@@ -7,7 +7,6 @@ jest.dontMock(pathStore);
 describe('Playlist', function () {
   var PlaylistActions = require(pathActions);
   var PlaylistStore   = require(pathStore);
-  var localforage     = require('localforage');
 
   describe('play', function () {
     it('should have play action', function () {
