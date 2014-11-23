@@ -9,16 +9,12 @@ var PlaylistStore = require('../reflux/playlist_store.js');
 var storage = require('../playlist_storage.js');
 
 var Playlist = React.createClass({
-  mixins: [Reflux.ListenerMixin],
+  mixins: [Reflux.listenTo(PlaylistStore, 'onChange')],
   getInitialState: function () {
     return { items: [] };
   },
   componentDidMount: function () {
-    storage.all(function (result) {
-      this.setState({ items: result });
-    }.bind(this));
-
-    this.listenTo(PlaylistStore, this.onChange);
+    this.setState({ items: storage.all() });
   },
   onChange: function (items) {
     this.setState({ items: items });

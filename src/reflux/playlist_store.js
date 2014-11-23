@@ -3,52 +3,35 @@ var actions = require('./playlist_actions.js');
 var storage = require('../playlist_storage.js');
 
 var store = Reflux.createStore({
-  init: function () {
-    this.listenToMany(actions);
-
-    // Queue is saved in localStorage
-    storage.all(this.initQueue.bind(this));
-  },
-  initQueue: function (playlist) {
-    this.queue = playlist;
-  },
+  listenables: actions,
   onPlay: function (episode) {
-    var index = this.queue.reduce(function (acc, x, i) {
-      return x.audio_url === episode.audio_url ? i : acc;
-    }, -1);
+    var index = storage.indexOf(episode);
 
     if (index > -1) {
       // If episode is later in queue, move forward to first
       if (index > 0) {
-        this.queue.splice(index, 1);
-        this.queue.unshift(episode);
+        storage.moveFirst(index);
       }
-      // TODO Save start time
     } else {
       // If episode is not in queue, add first in queue
-      this.queue.unshift(episode);
+      storage.addFirst(episode);
     }
 
-    this.trigger(this.queue);
-
-    // Save new playlist
-    storage.update(this.queue);
+    this.trigger(storage.all());
   },
   onPause: function (time) {
     // Save new start time
-    this.queue[0].start_time = time;
-    storage.update(this.queue);
+    storage.update({ start_time: time });
     this.trigger();
   },
   onNext: function () {
     // Remove first episode in queue
-    var removed = this.queue.shift();
-    storage.update(this.queue);
+    var removed = storage.remove();
 
     // Add removed episode to history
     storage.history.add(removed);
 
-    this.trigger(this.queue);
+    this.trigger(storage.all());
   },
   onPrevious: function () {
     // Remove from history and add first in queue
@@ -57,18 +40,17 @@ var store = Reflux.createStore({
   },
   onAdd: function (episode) {
     // Add last in queue
-    this.queue.push(episode);
-    storage.update(this.queue);
-    this.trigger(this.queue);
+    storage.add(episode);
+    this.trigger(storage.all());
   },
-  onRemove: function (episode) {
+  onRemove: function (/*episode*/) {
     // Remove episode from queue
     // TODO Maybe allow fn as argument
-    this.queue.filter(function (x) {
-      return x.audio_url !== episode.audio_url;
-    });
-    storage.update(this.queue);
-    this.trigger(this.queue);
+    //this.queue.filter(function (x) {
+      //return x.audio_url !== episode.audio_url;
+    //});
+    //storage.update(this.queue);
+    //this.trigger(this.queue);
   }
 });
 
