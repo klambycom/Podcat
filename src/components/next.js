@@ -1,4 +1,4 @@
-var React = require('React');
+var React = require('react');
 var PlaylistActions = require('../reflux/playlist_actions.js');
 
 var Next = React.createClass({
