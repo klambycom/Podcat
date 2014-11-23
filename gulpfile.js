@@ -81,7 +81,9 @@ gulp.task('deploy:docs', ['docsindex'], function () {
 
 gulp.task('deploy', ['deploy:dist', 'deploy:docs'], function () {
   return gulp.src('.tmp/**/*.*')
-    .pipe(deploy());
+    .pipe(deploy({
+      remoteUrl: 'https://' + process.env.GH_TOKEN + '@github.com/klambycom/Podcat.git'
+    }));
 });
 
 gulp.task('sass', function () {

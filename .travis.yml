@@ -3,12 +3,15 @@ node_js:
 - '0.10'
 before_install:
 - npm i -g gulp
+env:
+  global:
+    secure: mgSBUgxhs9rgM6xR2oAkBAHfP4tcDnxYj55eYagadY2CEzDXu9TYZ/vifKotTgIEgeGYpQEqKBO02KTjz3+hG2vhud+Qs0Rly0blE5o9YseY/8rFwH/lgR5qr1vzdq4mZNiFj7G+Ys6sFaqFoKHnjFCFxcTuFk3JmP57mSefJfA=
+before_script:
+  - git config user.name $GIT_NAME
+  - git config user.email $GIT_EMAIL
 scripts: gulp
 branches:
   only:
   - master
-env:
-  global:
-    secure: mgSBUgxhs9rgM6xR2oAkBAHfP4tcDnxYj55eYagadY2CEzDXu9TYZ/vifKotTgIEgeGYpQEqKBO02KTjz3+hG2vhud+Qs0Rly0blE5o9YseY/8rFwH/lgR5qr1vzdq4mZNiFj7G+Ys6sFaqFoKHnjFCFxcTuFk3JmP57mSefJfA=
 after_success:
   - gulp deploy
