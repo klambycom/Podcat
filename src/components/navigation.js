@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var RouteHandler = require('react-router').RouteHandler;
 var Link = require('react-router').Link;
 
 var Navigation = React.createClass({
