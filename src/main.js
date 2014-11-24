@@ -11,8 +11,8 @@ var DefaultRoute = require('react-router').DefaultRoute;
 
 var routes = (
     <Route name="app" path="/" handler={App}>
-      <Route name="Playlist" handler={Playlist} />
-      <Route name="Feed" handler={Feed} />
+      <Route name="playlist" handler={Playlist} />
+      <Route name="feed" handler={Feed} />
       <DefaultRoute handler={Feed} />
     </Route>
 );

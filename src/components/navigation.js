@@ -10,8 +10,8 @@ var Navigation = React.createClass({
         <div id="navigation">
           <h1>Podcat</h1>
           <ul id='nav'>
-            <li><Link to='Playlist'>Playlist</Link></li>
-            <li><Link to='Feed'>Feed</Link></li>
+            <li><Link to='playlist'>Playlist</Link></li>
+            <li><Link to='feed'>Feed</Link></li>
           </ul>
         </div>
         );
