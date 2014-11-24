@@ -7,10 +7,13 @@ var Link = require('react-router').Link;
 var Navigation = React.createClass({
   render: function () {
     return (
-        <ul id='nav'>
-          <li><Link to='Playlist'>Playlist</Link></li>
-          <li><Link to='Feed'>Feed</Link></li>
-        </ul>
+        <div id="navigation">
+          <h1>Podcat</h1>
+          <ul id='nav'>
+            <li><Link to='Playlist'>Playlist</Link></li>
+            <li><Link to='Feed'>Feed</Link></li>
+          </ul>
+        </div>
         );
   }
 });
