@@ -4,13 +4,16 @@ var React = require('react');
 var App = require('./components/app.js');
 var Playlist = require('./components/playlist.js');
 var Feed = require('./components/feed.js');
+var NotFound = require('./components/not_found.js');
 
 var Router = require('react-router');
 var Route = require('react-router').Route;
 var DefaultRoute = require('react-router').DefaultRoute;
+var NotFoundRoute = require('react-router').NotFoundRoute;
 
 var routes = (
     <Route name="app" path="/" handler={App}>
+      <NotFoundRoute handler={NotFound} />
       <Route name="playlist" handler={Playlist} />
       <Route name="feed" handler={Feed} />
       <DefaultRoute handler={Feed} />
