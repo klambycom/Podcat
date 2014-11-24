@@ -4,6 +4,10 @@ var React = require('react');
 var Player = require('./player');
 var Playlist = require('./playlist');
 var Feed = require('./feed');
+var Navigation = require('./navigation');
+
+var RouteHandler = require('react-router').RouteHandler;
+var Link = require('react-router').Link;
 
 var App = React.createClass({
   render: function () {
@@ -11,10 +15,8 @@ var App = React.createClass({
         <div>
           <h1>Podcat</h1>
           <Player />
-          <h2>Playlist</h2>
-          <Playlist />
-          <h2>Feed</h2>
-          <Feed />
+          <Navigation />
+          <RouteHandler />
         </div>
         );
   }
