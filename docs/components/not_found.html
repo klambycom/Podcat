@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>app.js</title>
+  <title>not_found.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../docco.css" />
@@ -15,7 +15,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>app.js</h1>
+                  <h1>not_found.js</h1>
               </div>
           </li>
         
@@ -33,25 +33,19 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-<span class="hljs-keyword">var</span> Player = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./player'</span>);
-<span class="hljs-keyword">var</span> Navigation = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./navigation'</span>);
-<span class="hljs-keyword">var</span> Sidebar = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./sidebar'</span>);
-<span class="hljs-keyword">var</span> RouteHandler = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).RouteHandler;
 
-<span class="hljs-keyword">var</span> App = React.createClass({
+<span class="hljs-keyword">var</span> NotFound = React.createClass({
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">Navigation</span> /&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">Player</span> /&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">RouteHandler</span> /&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">Sidebar</span> /&gt;</span>
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"not-found"</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>404<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Not found!<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }
 });
 
-module.exports = App;
+module.exports = NotFound;
 
 </span></pre></div></div>
             

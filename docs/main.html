@@ -32,10 +32,29 @@
             
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
 
-<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>),
-    App = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/app.js'</span>);
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> App = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/app.js'</span>);
+<span class="hljs-keyword">var</span> Playlist = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/playlist.js'</span>);
+<span class="hljs-keyword">var</span> Feed = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/feed.js'</span>);
+<span class="hljs-keyword">var</span> NotFound = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/not_found.js'</span>);
 
-React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">App</span> /&gt;</span>, document.getElementById('main'));
+<span class="hljs-keyword">var</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>);
+<span class="hljs-keyword">var</span> Route = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).Route;
+<span class="hljs-keyword">var</span> DefaultRoute = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).DefaultRoute;
+<span class="hljs-keyword">var</span> NotFoundRoute = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).NotFoundRoute;
+
+<span class="hljs-keyword">var</span> routes = (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"app"</span> <span class="hljs-attribute">path</span>=<span class="hljs-value">"/"</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{App}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">NotFoundRoute</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{NotFound}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"playlist"</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Playlist}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"feed"</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Feed}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">DefaultRoute</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Feed}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">Route</span>&gt;</span>
+);
+
+Router.run(routes, function (Handler) {
+  React.render(<span class="hljs-tag">&lt;<span class="hljs-title">Handler</span> /&gt;</span>, document.getElementById('main'));
+});
 
 </span></pre></div></div>
             
