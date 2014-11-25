@@ -1,0 +1,39 @@
+#navigation {
+  display: flex;
+  justify-content: space-between;
+
+  background-color: $header-background-color;
+
+  .title {
+    color: white;
+    padding: 10px;
+    font-size: 2em;
+  }
+
+  .links {
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+
+    li {
+      list-style-type: none;
+      margin: auto;
+
+      a {
+        color: white;
+        padding: 20px;
+        text-decoration: none;
+
+        &:hover {
+          background-color: $header-active-link;
+        }
+
+        &.active {
+          text-decoration: underline;
+          background-color: $header-active-link;
+        }
+      }
+    }
+  }
+}

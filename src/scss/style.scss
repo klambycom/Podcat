@@ -1,23 +1,12 @@
+$header-background-color: rgb(34, 34, 34);
+$header-active-link: black;
+
 @import "includes/settings";
 @import "includes/animation";
 @import "includes/player";
+@import "includes/navigation";
 
 body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 100;
-}
-
-h1 {
-  background-color: $red;
-  color: yellow;
-  text-align: center;
-}
-
-.counter {
-  //@include animation(flash .5s 1);
-}
-
-@include keyframes(flash) {
-  0%   { background-color: yellow; }
-  100% { background-color: white; }
 }
