@@ -2,10 +2,11 @@ $header-background-color: rgb(34, 34, 34);
 $header-active-link: black;
 
 @import "includes/main";
-@import "includes/settings";
-@import "includes/animation";
+//@import "includes/settings";
+//@import "includes/animation";
 @import "includes/player";
 @import "includes/navigation";
+@import "includes/content";
 
 @import "includes/background-noise";
 

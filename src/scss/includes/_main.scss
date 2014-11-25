@@ -12,12 +12,25 @@
     float: right;
   }
 
-  #playlist, #feed {
+  .float-left {
     width: 60%;
     float: left;
   }
 
   #footer {
     clear: both;
+    text-align: center;
+    padding: 20px 0 10px 0;
+    color: rgb(97, 97, 97);
+    font-size: .8em;
+
+    a {
+      color: rgb(97, 97, 97);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

@@ -11,12 +11,14 @@ var App = React.createClass({
     return (
         <div>
           <Navigation />
-          <RouteHandler />
+          <div className="float-left">
+            <RouteHandler />
+          </div>
           <div className="float-right">
             <Player />
             <Sidebar />
           </div>
-          <div id='footer'>Created by <a href='http://klamby.com/'>Christian</a></div>
+          <div id='footer'></div>
         </div>
         );
   }
