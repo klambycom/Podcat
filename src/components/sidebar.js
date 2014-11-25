@@ -6,8 +6,9 @@ var Sidebar = React.createClass({
   render: function () {
     return (
         <div id="sidebar">
-          <h2>Sidebar</h2>
-          <p>bla bla bla</p>
+          <h2>Your subscriptions</h2>
+          <p>You have not subscribed to any podcasts yet!</p>
+          <a href="#" className="add-podcast">Add new podcast</a>
         </div>
         );
   }
