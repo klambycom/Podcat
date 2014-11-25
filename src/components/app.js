@@ -11,9 +11,12 @@ var App = React.createClass({
     return (
         <div>
           <Navigation />
-          <Player />
           <RouteHandler />
-          <Sidebar />
+          <div className="float-right">
+            <Player />
+            <Sidebar />
+          </div>
+          <div id='footer'>Created by <a href='http://klamby.com/'>Christian</a></div>
         </div>
         );
   }

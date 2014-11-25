@@ -1,12 +1,17 @@
 $header-background-color: rgb(34, 34, 34);
 $header-active-link: black;
 
+@import "includes/main";
 @import "includes/settings";
 @import "includes/animation";
 @import "includes/player";
 @import "includes/navigation";
 
+@import "includes/background-noise";
+
 body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 100;
+
+  @include background-noise(white);
 }
