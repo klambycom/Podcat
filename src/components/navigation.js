@@ -7,7 +7,7 @@ var Navigation = React.createClass({
   render: function () {
     return (
         <div id="navigation">
-          <div className='title'><Link to='/'>Podcat</Link></div>
+          <div className='title'><Link to='/'>Ninja Podcat</Link></div>
           <ul className='links'>
             <li><Link to='playlist'>Playlist</Link></li>
             <li><Link to='feed'>Feed</Link></li>

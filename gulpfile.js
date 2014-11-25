@@ -18,7 +18,8 @@ var paths = {
   tests:  '__tests__',
   style:  'src/scss/*.scss',
   scss:   'src/scss/**/*.scss',
-  docs:   './docs'
+  docs:   './docs',
+  assets: 'assets/**/*.*'
 };
 
 gulp.task('browserify', function () {
@@ -31,6 +32,11 @@ gulp.task('browserify', function () {
 gulp.task('copyindex', function () {
   return gulp.src(paths.index)
     .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('copyassets', function () {
+  return gulp.src(paths.assets)
+    .pipe(gulp.dest('dist/assets'));
 });
 
 gulp.task('lint', function () {
@@ -69,7 +75,7 @@ gulp.task('docsindex', ['builddocs'], function () {
   });
 });
 
-gulp.task('deploy:dist', ['browserify', 'copyindex'], function () {
+gulp.task('deploy:dist', ['browserify', 'copyindex', 'copyassets'], function () {
   return gulp.src('dist/**/*.*')
     .pipe(gulp.dest('.tmp/dist'));
 });
@@ -96,6 +102,7 @@ gulp.task('sass', function () {
 
 gulp.task('watch', function () {
   gulp.watch(paths.index, ['copyindex']);
+  gulp.watch(paths.assets, ['copyassets']);
   gulp.watch(paths.src, ['browserify']);
   gulp.watch(paths.scss, ['sass']);
 });
