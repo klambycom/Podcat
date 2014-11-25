@@ -3,7 +3,7 @@ var actions = require('./player_actions.js');
 
 var store = Reflux.createStore({
   init: function () {
-    this.player = new Audio();
+    this.player = new window.Audio();
     this.listenToMany(actions);
   },
   onPlay: function (url, autoplay) {
