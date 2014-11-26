@@ -22,7 +22,7 @@ var Playlist = React.createClass({
   render: function () {
     return (
         <div id="playlist">
-          <h2>Playlist</h2>
+          <h1>Playlist</h1>
           {this.state.items.map(function (item, i) {
             return (
                 <Episode

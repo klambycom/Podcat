@@ -1,0 +1,12 @@
+#playlist, #feed, #explore {
+  padding: 10px;
+
+  a {
+    color: #4D80AB;
+    text-decoration: none;
+
+    &:hover {
+      color: #38658B;
+    }
+  }
+}

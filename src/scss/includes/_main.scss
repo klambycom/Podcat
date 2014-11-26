@@ -1,0 +1,36 @@
+#main > div {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+
+  #navigation {
+    width: 100%;
+  }
+
+  .float-right {
+    width: 40%;
+    float: right;
+    background-color: rgb(240, 240, 240);
+  }
+
+  .float-left {
+    width: 60%;
+    float: left;
+  }
+
+  #footer {
+    clear: both;
+    text-align: center;
+    color: rgb(97, 97, 97);
+    font-size: .8em;
+
+    a {
+      color: rgb(97, 97, 97);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

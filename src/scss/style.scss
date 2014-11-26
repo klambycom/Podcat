@@ -1,23 +1,23 @@
-@import "includes/settings";
-@import "includes/animation";
+$header-background-color: rgb(34, 34, 34);
+$header-active-link: black;
+
+$button-color: rgb(42, 113, 42);
+$button-hover-color: #318131;
+
+@import "includes/main";
+//@import "includes/settings";
+//@import "includes/animation";
 @import "includes/player";
+@import "includes/navigation";
+@import "includes/content";
+@import "includes/sidebar";
+@import "includes/explore";
+
+@import "includes/background-noise";
 
 body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 100;
-}
 
-h1 {
-  background-color: $red;
-  color: yellow;
-  text-align: center;
-}
-
-.counter {
-  //@include animation(flash .5s 1);
-}
-
-@include keyframes(flash) {
-  0%   { background-color: yellow; }
-  100% { background-color: white; }
+  @include background-noise(white);
 }

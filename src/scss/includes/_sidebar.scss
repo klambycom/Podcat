@@ -1,0 +1,17 @@
+#sidebar {
+  margin: 10px;
+
+  a {
+    background-color: $button-color;
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    min-width: 100px;
+    text-align: center;
+
+    &:hover {
+      background-color: $button-hover-color;
+    }
+  }
+}

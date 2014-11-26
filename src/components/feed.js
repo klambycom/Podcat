@@ -7,7 +7,7 @@ var Feed = React.createClass({
   render: function () {
     return (
         <div id="feed">
-          <h2>Feed</h2>
+          <h1>Feed</h1>
           <Episode
             key='1'
             title="Avsnitt 12 - Motionen om konungens återkomst"

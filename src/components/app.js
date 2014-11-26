@@ -11,9 +11,14 @@ var App = React.createClass({
     return (
         <div>
           <Navigation />
-          <Player />
-          <RouteHandler />
-          <Sidebar />
+          <div className="float-left">
+            <RouteHandler />
+          </div>
+          <div className="float-right">
+            <Player />
+            <Sidebar />
+          </div>
+          <div id='footer'></div>
         </div>
         );
   }
