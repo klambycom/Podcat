@@ -1,6 +1,9 @@
 $header-background-color: rgb(34, 34, 34);
 $header-active-link: black;
 
+$button-color: rgb(42, 113, 42);
+$button-hover-color: #318131;
+
 @import "includes/main";
 //@import "includes/settings";
 //@import "includes/animation";
@@ -8,6 +11,7 @@ $header-active-link: black;
 @import "includes/navigation";
 @import "includes/content";
 @import "includes/sidebar";
+@import "includes/explore";
 
 @import "includes/background-noise";
 

@@ -1,0 +1,34 @@
+#explore {
+  .search {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .field {
+      width: 90%;
+
+      input[type="text"] {
+        font-size: 1em;
+        padding: 10px;
+        width: 95%;
+      }
+    }
+
+    .button {
+      width: 10%;
+
+      button {
+        background-color: $button-color;
+        border: none;
+        color: white;
+        padding: 5px;
+        width: 100%;
+        cursor: pointer;
+
+        &:hover, &:active {
+          background-color: $button-hover-color;
+        }
+      }
+    }
+  }
+}

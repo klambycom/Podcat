@@ -2,7 +2,7 @@
   margin: 10px;
 
   a {
-    background-color: rgb(42, 113, 42);
+    background-color: $button-color;
     color: white;
     text-decoration: none;
     padding: 15px;
@@ -11,7 +11,7 @@
     text-align: center;
 
     &:hover {
-      background-color: #318131;
+      background-color: $button-hover-color;
     }
   }
 }

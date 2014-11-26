@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Link = require('react-router').Link;
 
 var Sidebar = React.createClass({
   render: function () {
@@ -8,7 +9,7 @@ var Sidebar = React.createClass({
         <div id="sidebar">
           <h2>Your subscriptions</h2>
           <p>You have not subscribed to any podcasts yet!</p>
-          <a href="#" className="add-podcast">Add new podcast</a>
+          <Link to='/' className="add-podcast">Add new podcast</Link>
         </div>
         );
   }
