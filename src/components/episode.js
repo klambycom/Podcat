@@ -17,27 +17,20 @@ var Episode = React.createClass({
     play: React.PropTypes.bool,
     add: React.PropTypes.bool
   },
-  onPlay: function (e) {
-    PlaylistActions.play({
-      title: this.props.title,
-      image: this.props.image,
-      audio_url: this.props.audio_url
-    });
+  onClick: function (fnName) {
+    return function (e) {
+      PlaylistActions[fnName]({
+        title: this.props.title,
+        image: this.props.image,
+        audio_url: this.props.audio_url
+      });
 
-    e.preventDefault();
-  },
-  onAdd: function (e) {
-    PlaylistActions.add({
-      title: this.props.title,
-      image: this.props.image,
-      audio_url: this.props.audio_url
-    });
-
-    e.preventDefault();
+      e.preventDefault();
+    }.bind(this);
   },
   render: function () {
-    var play = this.props.play && (<a href="#" onClick={this.onPlay}>Play</a>);
-    var add = this.props.add && (<a href="#" onClick={this.onAdd}>Queue</a>);
+    var play = this.props.play && (<a href="#" onClick={this.onClick('play')}>Play</a>);
+    var add = this.props.add && (<a href="#" onClick={this.onClick('add')}>Queue</a>);
 
     return (
         <div className="episode">
