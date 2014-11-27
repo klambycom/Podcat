@@ -38,7 +38,23 @@
     <span class="hljs-keyword">this</span>.player = <span class="hljs-keyword">new</span> Audio();
     <span class="hljs-keyword">this</span>.listenToMany(actions);
   },
-  onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(url, autoplay)</span> </span>{
+  onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(url, autoplay)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Don’t change src (or trigger event) if current url is already playing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.player.src === url) { <span class="hljs-keyword">return</span>; }
+
     <span class="hljs-keyword">this</span>.player.src = url;
 
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> autoplay === <span class="hljs-string">'undefined'</span> || autoplay === <span class="hljs-literal">true</span>) {

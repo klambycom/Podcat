@@ -34,6 +34,7 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> Episode = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./episode'</span>);
+<span class="hljs-keyword">var</span> Link = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).Link;
 
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> PlaylistStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_store.js'</span>);
@@ -51,20 +52,60 @@
   onChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items)</span> </span>{
     <span class="hljs-keyword">this</span>.setState({ items: items });
   },
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"playlist"</span>&gt;</span>
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>No queued episodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> episodes = (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+          No episodes queued, add from <span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">"feed"</span>&gt;</span>the feed<span class="hljs-tag">&lt;/<span class="hljs-title">Link</span>&gt;</span>.
+        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        );
+
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>List queued episodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.items.length &gt; <span class="hljs-number">0</span>) {
+      episodes = <span class="hljs-keyword">this</span>.state.items.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item, i)</span> </span>{
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
+              <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>
+              <span class="hljs-attribute">title</span>=<span class="hljs-value">{item.title}</span>
+              <span class="hljs-attribute">image</span>=<span class="hljs-value">{item.image}</span>
+              <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">{item.audio_url}</span>
+              <span class="hljs-attribute">play</span>=<span class="hljs-value">{i</span> !=<span class="hljs-value">=</span> <span class="hljs-attribute">0</span>}
+              <span class="hljs-attribute">add</span>=<span class="hljs-value">{false}</span> /&gt;</span>
+            );
+      }, this);
+    }
+
+    return (
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"playlist"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>Playlist<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
-          {this.state.items.map(function (item, i) {
-            return (
-                <span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
-                  <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>
-                  <span class="hljs-attribute">title</span>=<span class="hljs-value">{item.title}</span>
-                  <span class="hljs-attribute">image</span>=<span class="hljs-value">{item.image}</span>
-                  <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">{item.audio_url}</span>
-                  <span class="hljs-attribute">play</span>=<span class="hljs-value">{i</span> !=<span class="hljs-value">=</span> <span class="hljs-attribute">0</span>} /&gt;</span>
-                );
-          }, this)}
+          {episodes}
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }

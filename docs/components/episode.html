@@ -38,14 +38,16 @@
 <span class="hljs-keyword">var</span> Episode = React.createClass({
   getDefaultProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
-      play: <span class="hljs-literal">true</span>
+      play: <span class="hljs-literal">true</span>,
+      add: <span class="hljs-literal">true</span>
     };
   },
   propTypes: {
     title: React.PropTypes.string.isRequired,
     image: React.PropTypes.string.isRequired,
     audio_url: React.PropTypes.string.isRequired,
-    play: React.PropTypes.bool
+    play: React.PropTypes.bool,
+    add: React.PropTypes.bool
   },
   onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
     PlaylistActions.play({
@@ -56,14 +58,25 @@
 
     e.preventDefault();
   },
+  onAdd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    PlaylistActions.add({
+      title: <span class="hljs-keyword">this</span>.props.title,
+      image: <span class="hljs-keyword">this</span>.props.image,
+      audio_url: <span class="hljs-keyword">this</span>.props.audio_url
+    });
+
+    e.preventDefault();
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onPlay}</span>&gt;</span>Spela avsnittet<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onPlay}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onAdd}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
 
     return (
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>
             {this.props.title}
-            {play}
+            {' '}{play}
+            {' '}{add}
           <span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );

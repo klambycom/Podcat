@@ -48,7 +48,8 @@
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
       image: <span class="hljs-string">''</span>,
-      title: <span class="hljs-string">''</span>
+      title: <span class="hljs-string">''</span>,
+      playing: <span class="hljs-literal">false</span>
     };
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
@@ -89,13 +90,16 @@
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.setState({
       title: items[<span class="hljs-number">0</span>].title,
-      image: items[<span class="hljs-number">0</span>].image
+      image: items[<span class="hljs-number">0</span>].image,
+      playing: <span class="hljs-literal">true</span>
     });
     PlayerActions.play(items[<span class="hljs-number">0</span>].audio_url, autoplay);
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> hide = <span class="hljs-keyword">this</span>.state.playing ? <span class="hljs-string">''</span>: <span class="hljs-string">'hide'</span>;
+
     <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"player"</span>&gt;</span>
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"player"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{hide}</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"image"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"controls"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Previous</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">PlayPause</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">Next</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
