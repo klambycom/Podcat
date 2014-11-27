@@ -30,7 +30,8 @@ var Playlist = React.createClass({
                   title={item.title}
                   image={item.image}
                   audio_url={item.audio_url}
-                  play={i !== 0} />
+                  play={i !== 0}
+                  add={false} />
                 );
           }, this)}
         </div>
