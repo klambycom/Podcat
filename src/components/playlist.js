@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Episode = require('./episode');
+var Link = require('react-router').Link;
 
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
@@ -20,20 +21,32 @@ var Playlist = React.createClass({
     this.setState({ items: items });
   },
   render: function () {
+    // No queued episodes
+    var episodes = (
+        <div>
+          No episodes queued, add from <Link to="feed">the feed</Link>.
+        </div>
+        );
+
+    // List queued episodes
+    if (this.state.items.length > 0) {
+      episodes = this.state.items.map(function (item, i) {
+        return (
+            <Episode
+              key={i}
+              title={item.title}
+              image={item.image}
+              audio_url={item.audio_url}
+              play={i !== 0}
+              add={false} />
+            );
+      }, this);
+    }
+
     return (
         <div id="playlist">
           <h1>Playlist</h1>
-          {this.state.items.map(function (item, i) {
-            return (
-                <Episode
-                  key={i}
-                  title={item.title}
-                  image={item.image}
-                  audio_url={item.audio_url}
-                  play={i !== 0}
-                  add={false} />
-                );
-          }, this)}
+          {episodes}
         </div>
         );
   }
