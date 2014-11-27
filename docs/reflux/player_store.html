@@ -49,16 +49,33 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Don’t change src (or trigger event) if current url is already playing</p>
+              <p>Don’t change src if current url is already playing</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.player.src === url) { <span class="hljs-keyword">return</span>; }
-
-    <span class="hljs-keyword">this</span>.player.src = url;
-
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> autoplay === <span class="hljs-string">'undefined'</span> || autoplay === <span class="hljs-literal">true</span>) {
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.player.src === url) {
       <span class="hljs-keyword">this</span>.player.play();
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Else change, and play unless autoplay is false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">this</span>.player.src = url;
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> autoplay === <span class="hljs-string">'undefined'</span> || autoplay === <span class="hljs-literal">true</span>) {
+        <span class="hljs-keyword">this</span>.player.play();
+      }
     }
 
     <span class="hljs-keyword">this</span>.trigger(!<span class="hljs-keyword">this</span>.player.paused);
