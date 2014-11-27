@@ -16,7 +16,8 @@ var Player = React.createClass({
   getInitialState: function () {
     return {
       image: '',
-      title: ''
+      title: '',
+      playing: false
     };
   },
   componentDidMount: function () {
@@ -32,13 +33,16 @@ var Player = React.createClass({
     // Change episode if playlist is not empty
     this.setState({
       title: items[0].title,
-      image: items[0].image
+      image: items[0].image,
+      playing: true
     });
     PlayerActions.play(items[0].audio_url, autoplay);
   },
   render: function () {
+    var hide = this.state.playing ? '': 'hide';
+
     return (
-        <div id="player">
+        <div id="player" className={hide}>
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
           <div className="controls"><Previous /> <PlayPause /> <Next /></div>

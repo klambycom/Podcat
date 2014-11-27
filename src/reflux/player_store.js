@@ -7,6 +7,9 @@ var store = Reflux.createStore({
     this.listenToMany(actions);
   },
   onPlay: function (url, autoplay) {
+    // Don't change src (or trigger event) if current url is already playing
+    if (this.player.src === url) { return; }
+
     this.player.src = url;
 
     if (typeof autoplay === 'undefined' || autoplay === true) {
