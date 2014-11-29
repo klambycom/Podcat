@@ -9,7 +9,7 @@ var Search = React.createClass({
   mixins: [Reflux.listenTo(SearchStore, 'onSearch')],
   getInitialState: function () {
     return {
-      icon: 'fa fa-2x fa-search',
+      icon: 'fa fa-search',
       useEnter: false
     };
   },
@@ -19,10 +19,10 @@ var Search = React.createClass({
       window.location = '#/podcast/' + result;
     } else if (type === 'url') {
       // User have entered a URL
-      this.setState({ icon: 'fa fa-2x fa-plus', useEnter: true });
+      this.setState({ icon: 'fa fa-plus', useEnter: true });
     } else {
       // User have entered a search term
-      this.setState({ icon: 'fa fa-2x fa-search', useEnter: false });
+      this.setState({ icon: 'fa fa-search', useEnter: false });
     }
   },
   onInput: function (e) {
@@ -30,6 +30,7 @@ var Search = React.createClass({
   },
   onSubmit: function (e) {
     SearchActions.search(e.target.search_term.value);
+    this.setState({ icon: 'fa fa-spinner fa-spin' });
     e.preventDefault();
   },
   render: function () {
