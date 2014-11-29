@@ -2,15 +2,33 @@
 
 var React = require('react');
 var Router = require('react-router');
+var Reflux = require('reflux');
+var PodcastStore = require('../reflux/podcast_store.js');
+var PodcastActions = require('../reflux/podcast_actions.js');
 
 var Podcast = React.createClass({
-  mixins: [ Router.State ],
+  mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
   getInitialState: function () {
-    return { items: [] };
+    return {
+      items: [],
+      subscribed: false
+    };
   },
   componentDidMount: function () {
     var podcast = sessionStorage.getItem(this.getParams().id);
     this.setState(JSON.parse(podcast));
+  },
+  onSubscriptionChange: function (subscribed) {
+    this.setState({ subscribed: subscribed });
+  },
+  onSubscribe: function (e) {
+    if (this.state.subscribed) {
+      PodcastActions.unsubscribe(this.state);
+    } else {
+      PodcastActions.subscribe(this.state);
+    }
+
+    e.preventDefault();
   },
   render: function () {
     return (
@@ -18,7 +36,11 @@ var Podcast = React.createClass({
           <img src={this.state.image} alt={this.state.title} />
           <div className="header">
             <h1>{this.state.title}</h1>
-            <a href="" className="subscribe">Subscribe</a>
+            <a
+              href="#"
+              className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
+              onClick={this.onSubscribe}>
+              {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}</a>
           </div>
           <p>{this.state.summary}</p>
           <small>{this.state.author}</small>
