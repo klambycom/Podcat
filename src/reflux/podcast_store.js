@@ -16,7 +16,8 @@ var store = Reflux.createStore({
     };
 
     localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
-    this.trigger(true, subscriptions[podcast.title]);
+
+    this.trigger(true, subscriptions[podcast.title], subscriptions);
   },
   onUnsubscribe: function (podcast) {
     var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || [];
@@ -27,7 +28,7 @@ var store = Reflux.createStore({
 
     localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
 
-    this.trigger(false, tmp);
+    this.trigger(false, tmp, subscriptions);
   }
 });
 
