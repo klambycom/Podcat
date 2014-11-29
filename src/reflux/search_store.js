@@ -31,7 +31,7 @@ var processFeedData = function (feed) {
       link: x.link,
       explicit: x.explicit,
       file: {
-        length: (x.enclosure && x.enclosure.length) || 0,
+        duration: x.duration,
         type: (x.enclosure && x.enclosure.type),
         url: (x.enclosure && x.enclosure.url)
       },
@@ -42,6 +42,8 @@ var processFeedData = function (feed) {
   return {
     title: feed.title || 'No title',
     author: feed.author || 'No author',
+    copyright: feed.copyright,
+    image: feed.image[0] && feed.image[0].url,
     category: (feed.category && feed.category.text) || 'No category',
     summary: feed.summary || 'No summary',
     description: feed.description || 'No description',
