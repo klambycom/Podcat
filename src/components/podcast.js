@@ -10,7 +10,6 @@ var Podcast = React.createClass({
   },
   componentDidMount: function () {
     var podcast = sessionStorage.getItem(this.getParams().id);
-    console.log(JSON.parse(podcast));
     this.setState(JSON.parse(podcast));
   },
   render: function () {

@@ -16,7 +16,7 @@ var Search = React.createClass({
   onSearch: function (type, result) {
     if (type === 'feed') {
       // Podcast-data downloaded, redirect to page for podcast
-      console.log(result);
+      window.location = '#/podcast/' + result;
     } else if (type === 'url') {
       // User have entered a URL
       this.setState({ icon: 'fa fa-2x fa-plus', useEnter: true });
