@@ -1,12 +1,12 @@
-#playlist, #feed, #explore {
+#playlist, #feed, #explore, #podcast {
   padding: 10px;
 
   a {
-    color: #4D80AB;
+    color: $link-color;
     text-decoration: none;
 
     &:hover {
-      color: #38658B;
+      color: $link-hover-color;
     }
   }
 }

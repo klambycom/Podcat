@@ -1,7 +1,7 @@
 #sidebar {
   margin: 10px;
 
-  a {
+  .add-podcast {
     background-color: $button-color;
     color: white;
     text-decoration: none;
@@ -12,6 +12,21 @@
 
     &:hover {
       background-color: $button-hover-color;
+    }
+  }
+
+  .subscriptions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .item img {
+      width: 100px;
+    }
+
+    .active img {
+      box-sizing: border-box;
+      border: 2px solid $link-color;
     }
   }
 }
