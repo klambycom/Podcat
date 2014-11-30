@@ -34,13 +34,41 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> Link = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).Link;
+<span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
+<span class="hljs-keyword">var</span> PodcastActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_actions.js'</span>);
+<span class="hljs-keyword">var</span> PodcastStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_store.js'</span>);
 
 <span class="hljs-keyword">var</span> Sidebar = React.createClass({
+  mixins: [ Reflux.listenTo(PodcastStore, <span class="hljs-string">'onSubscriptionChange'</span>) ],
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> { items: [] };
+  },
+  componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    PodcastActions.init();
+  },
+  onSubscriptionChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{
+    <span class="hljs-keyword">this</span>.setState({
+      items: <span class="hljs-built_in">Object</span>
+        .keys(result.subscriptions)
+        .map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{ <span class="hljs-keyword">return</span> result.subscriptions[x]; })
+    });
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"sidebar"</span>&gt;</span>
+    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-string">'You have not subscribed to any podcasts yet!'</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.items.length &gt; <span class="hljs-number">0</span>) {
+      subscriptions = <span class="hljs-keyword">this</span>.state.items.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(podcast, i)</span> </span>{
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'podcast'</span> <span class="hljs-attribute">params</span>=<span class="hljs-value">{{id:podcast.title}}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"item"</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{podcast.image}</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">{podcast.title}</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">Link</span>&gt;</span>
+            );
+      });
+    }
+
+    return (
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"sidebar"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>Your subscriptions<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>You have not subscribed to any podcasts yet!<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">p</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"subscriptions"</span>&gt;</span>{subscriptions}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'/'</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"add-podcast"</span>&gt;</span>Add new podcast<span class="hljs-tag">&lt;/<span class="hljs-title">Link</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );

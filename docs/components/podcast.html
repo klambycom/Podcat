@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>podcast.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>podcast.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
+
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>);
+<span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
+<span class="hljs-keyword">var</span> PodcastStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_store.js'</span>);
+<span class="hljs-keyword">var</span> PodcastActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_actions.js'</span>);
+
+<span class="hljs-keyword">var</span> Podcast = React.createClass({
+  mixins: [ Router.State, Reflux.listenTo(PodcastStore, <span class="hljs-string">'onSubscriptionChange'</span>) ],
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> {
+      items: [],
+      subscribed: <span class="hljs-literal">false</span>
+    };
+  },
+  componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    PodcastActions.init(<span class="hljs-keyword">this</span>.getParams().id);
+  },
+  onSubscriptionChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Update subscribe/unsubscribe button</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> result.subscribed !== <span class="hljs-string">'undefined'</span>) {
+      <span class="hljs-keyword">this</span>.setState({ subscribed: result.subscribed });
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Update podcast data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> result.podcast !== <span class="hljs-string">'undefined'</span>) {
+      <span class="hljs-keyword">this</span>.setState(result.podcast);
+    }
+  },
+  onSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.subscribed) {
+      PodcastActions.unsubscribe(<span class="hljs-keyword">this</span>.state);
+    } <span class="hljs-keyword">else</span> {
+      PodcastActions.subscribe(<span class="hljs-keyword">this</span>.state);
+    }
+
+    e.preventDefault();
+  },
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"podcast"</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">{this.state.title}</span> /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">a</span>
+              <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span>
+              <span class="hljs-attribute">className</span>=<span class="hljs-value">{this.state.subscribed</span> ? '<span class="hljs-attribute">unsubscribe</span>' <span class="hljs-attribute">:</span> '<span class="hljs-attribute">subscribe</span>'}
+              <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onSubscribe}</span>&gt;</span>
+              {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{this.state.summary}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">small</span>&gt;</span>{this.state.author}<span class="hljs-tag">&lt;/<span class="hljs-title">small</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"clear"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>Episodes<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">table</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">thead</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">tr</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>Duration<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>Title<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">thead</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">tbody</span>&gt;</span>
+              {this.state.items.map(function (episode, i) {
+                return (
+                    <span class="hljs-tag">&lt;<span class="hljs-title">tr</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>&gt;</span>
+                      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{episode.file.duration}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+                      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{episode.title}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+                      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span>&gt;</span>More<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
+                    <span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span>
+                    );
+              }.bind(this))}
+            <span class="hljs-tag">&lt;/<span class="hljs-title">tbody</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-title">table</span>&gt;</span>
+          
+        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        );
+  }
+});
+
+module.exports = Podcast;
+
+</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

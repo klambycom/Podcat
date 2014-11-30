@@ -38,6 +38,7 @@
 <span class="hljs-keyword">var</span> Feed = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/feed.js'</span>);
 <span class="hljs-keyword">var</span> NotFound = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/not_found.js'</span>);
 <span class="hljs-keyword">var</span> Explore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/explore.js'</span>);
+<span class="hljs-keyword">var</span> Podcast = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./components/podcast.js'</span>);
 
 <span class="hljs-keyword">var</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>);
 <span class="hljs-keyword">var</span> Route = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).Route;
@@ -49,6 +50,7 @@
       <span class="hljs-tag">&lt;<span class="hljs-title">NotFoundRoute</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{NotFound}</span> /&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"playlist"</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Playlist}</span> /&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"feed"</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Feed}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Route</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"podcast"</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Podcast}</span> <span class="hljs-attribute">path</span>=<span class="hljs-value">"podcast/:id"</span> /&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">DefaultRoute</span> <span class="hljs-attribute">handler</span>=<span class="hljs-value">{Explore}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">Route</span>&gt;</span>
 );

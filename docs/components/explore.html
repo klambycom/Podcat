@@ -33,6 +33,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> Search = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./search'</span>);
 
 <span class="hljs-keyword">var</span> Explore = React.createClass({
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
@@ -43,10 +44,7 @@
             Find podcasts that you want to subscribe to. Search for a podcast or
             input url to a podcast-feed.
           <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"search"</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"field"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"button"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"fa fa-search fa-2x"</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Search</span> <span class="hljs-attribute">placeholder</span>=<span class="hljs-value">"Search or url to rss-feed"</span> /&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>New podcasts<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>TODO<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>Popular podcasts<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
