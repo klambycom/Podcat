@@ -5,6 +5,21 @@ var store = Reflux.createStore({
   init: function () {
     this.listenToMany(actions);
   },
+  onInit: function (id) {
+    var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || {};
+
+    if (typeof id === 'undefined') {
+      this.trigger({ subscriptions: subscriptions });
+    } else {
+      var podcastFromSubscriptions = subscriptions[id];
+
+      this.trigger({
+        subscriptions: subscriptions,
+        subscribed: typeof podcastFromSubscriptions !== 'undefined',
+        podcast: JSON.parse(sessionStorage.getItem(id))
+      });
+    }
+  },
   onSubscribe: function (podcast) {
     var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || {};
 
@@ -17,7 +32,11 @@ var store = Reflux.createStore({
 
     localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
 
-    this.trigger(true, subscriptions[podcast.title], subscriptions);
+    this.trigger({
+      subscriptions: subscriptions,
+      subscription: subscriptions[podcast.title],
+      subscribed: true
+    });
   },
   onUnsubscribe: function (podcast) {
     var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || [];
@@ -28,7 +47,11 @@ var store = Reflux.createStore({
 
     localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
 
-    this.trigger(false, tmp, subscriptions);
+    this.trigger({
+      subscriptions: subscriptions,
+      subscription: tmp,
+      subscribed: false
+    });
   }
 });
 

@@ -3,6 +3,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 var Reflux = require('reflux');
+var PodcastActions = require('../reflux/podcast_actions.js');
 var PodcastStore = require('../reflux/podcast_store.js');
 
 var Sidebar = React.createClass({
@@ -11,18 +12,13 @@ var Sidebar = React.createClass({
     return { items: [] };
   },
   componentDidMount: function () {
-    var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || {};
-    this.setState({
-      items: Object
-        .keys(subscriptions)
-        .map(function (x) { return subscriptions[x]; })
-    });
+    PodcastActions.init();
   },
-  onSubscriptionChange: function (_, _, subscriptions) {
+  onSubscriptionChange: function (result) {
     this.setState({
       items: Object
-        .keys(subscriptions)
-        .map(function (x) { return subscriptions[x]; })
+        .keys(result.subscriptions)
+        .map(function (x) { return result.subscriptions[x]; })
     });
   },
   render: function () {

@@ -15,11 +15,18 @@ var Podcast = React.createClass({
     };
   },
   componentDidMount: function () {
-    var podcast = sessionStorage.getItem(this.getParams().id);
-    this.setState(JSON.parse(podcast));
+    PodcastActions.init(this.getParams().id);
   },
-  onSubscriptionChange: function (subscribed) {
-    this.setState({ subscribed: subscribed });
+  onSubscriptionChange: function (result) {
+    // Update subscribe/unsubscribe button
+    if (typeof result.subscribed !== 'undefined') {
+      this.setState({ subscribed: result.subscribed });
+    }
+    
+    // Update podcast data
+    if (typeof result.podcast !== 'undefined') {
+      this.setState(result.podcast);
+    }
   },
   onSubscribe: function (e) {
     if (this.state.subscribed) {
