@@ -23,7 +23,9 @@ var getRSS = function (url, fn) {
 };
 
 var processFeedData = function (feed) {
-  var itemData = function (x) {
+  var itemData, keywords, image, category, description;
+
+  itemData = function (x) {
     return {
       title: x.title || 'No title',
       summary: x.subtitle,
@@ -31,7 +33,7 @@ var processFeedData = function (feed) {
       link: x.link,
       explicit: x.explicit,
       file: {
-        duration: x.duration,
+        duration: x.duration || 0,
         type: (x.enclosure && x.enclosure.type),
         url: (x.enclosure && x.enclosure.url)
       },
@@ -39,18 +41,48 @@ var processFeedData = function (feed) {
     };
   };
 
+  keywords = function(words) {
+    if (Array.isArray(words)) {
+      return words[0].split(',');
+    }
+    return words.split(',');
+  };
+
+  image = function (img) {
+    if (Array.isArray(img) && typeof img[0].url !== 'undefined') {
+      return img[0].url;
+    }
+    if (typeof img.href !== 'undefined') {
+      return img.href;
+    }
+  };
+
+  category = function (category) {
+    if (Array.isArray(category)) {
+      return category[0].content;
+    }
+    return category.text;
+  };
+
+  description = function (desc) {
+    if (Array.isArray(desc)) {
+      return desc[1].content;
+    }
+    return desc;
+  };
+
   return {
     title: feed.title || 'No title',
     author: feed.author || 'No author',
     copyright: feed.copyright,
-    image: feed.image[0] && feed.image[0].url,
-    category: (feed.category && feed.category.text) || 'No category',
+    image: feed.image && image(feed.image),
+    category: (feed.category && category(feed.category)) || 'No category',
     summary: feed.summary || 'No summary',
-    description: feed.description || 'No description',
+    description: description(feed.description) || 'No description',
     subtitle: feed.subtitle || 'No subtitle',
     lastUpdate: feed.lastBuildDate,
     explicit: feed.explicit,
-    keywords: (feed.keywords && feed.keywords.split(',')) || 'No keywords',
+    keywords: feed.keywords && keywords(feed.keywords),
     items: feed.item.map(itemData)
   };
 };
