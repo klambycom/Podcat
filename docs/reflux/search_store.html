@@ -55,7 +55,9 @@
 };
 
 <span class="hljs-keyword">var</span> processFeedData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
-  <span class="hljs-keyword">var</span> itemData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+  <span class="hljs-keyword">var</span> itemData, keywords, image, category, description;
+
+  itemData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
     <span class="hljs-keyword">return</span> {
       title: x.title || <span class="hljs-string">'No title'</span>,
       summary: x.subtitle,
@@ -63,7 +65,7 @@
       link: x.link,
       explicit: x.explicit,
       file: {
-        duration: x.duration,
+        duration: x.duration || <span class="hljs-number">0</span>,
         type: (x.enclosure &amp;&amp; x.enclosure.type),
         url: (x.enclosure &amp;&amp; x.enclosure.url)
       },
@@ -71,18 +73,48 @@
     };
   };
 
+  keywords = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(words)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(words)) {
+      <span class="hljs-keyword">return</span> words[<span class="hljs-number">0</span>].split(<span class="hljs-string">','</span>);
+    }
+    <span class="hljs-keyword">return</span> words.split(<span class="hljs-string">','</span>);
+  };
+
+  image = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(img)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(img) &amp;&amp; <span class="hljs-keyword">typeof</span> img[<span class="hljs-number">0</span>].url !== <span class="hljs-string">'undefined'</span>) {
+      <span class="hljs-keyword">return</span> img[<span class="hljs-number">0</span>].url;
+    }
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> img.href !== <span class="hljs-string">'undefined'</span>) {
+      <span class="hljs-keyword">return</span> img.href;
+    }
+  };
+
+  category = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(category)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(category)) {
+      <span class="hljs-keyword">return</span> category[<span class="hljs-number">0</span>].content;
+    }
+    <span class="hljs-keyword">return</span> category.text;
+  };
+
+  description = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(desc)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(desc)) {
+      <span class="hljs-keyword">return</span> desc[<span class="hljs-number">1</span>].content;
+    }
+    <span class="hljs-keyword">return</span> desc;
+  };
+
   <span class="hljs-keyword">return</span> {
     title: feed.title || <span class="hljs-string">'No title'</span>,
     author: feed.author || <span class="hljs-string">'No author'</span>,
     copyright: feed.copyright,
-    image: feed.image[<span class="hljs-number">0</span>] &amp;&amp; feed.image[<span class="hljs-number">0</span>].url,
-    category: (feed.category &amp;&amp; feed.category.text) || <span class="hljs-string">'No category'</span>,
+    image: feed.image &amp;&amp; image(feed.image),
+    category: (feed.category &amp;&amp; category(feed.category)) || <span class="hljs-string">'No category'</span>,
     summary: feed.summary || <span class="hljs-string">'No summary'</span>,
-    description: feed.description || <span class="hljs-string">'No description'</span>,
+    description: description(feed.description) || <span class="hljs-string">'No description'</span>,
     subtitle: feed.subtitle || <span class="hljs-string">'No subtitle'</span>,
     lastUpdate: feed.lastBuildDate,
     explicit: feed.explicit,
-    keywords: (feed.keywords &amp;&amp; feed.keywords.split(<span class="hljs-string">','</span>)) || <span class="hljs-string">'No keywords'</span>,
+    keywords: feed.keywords &amp;&amp; keywords(feed.keywords),
     items: feed.item.map(itemData)
   };
 };
