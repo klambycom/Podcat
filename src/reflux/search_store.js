@@ -1,3 +1,4 @@
+var Firebase = require('firebase');
 var Reflux = require('reflux');
 var actions = require('./search_actions.js');
 
@@ -28,16 +29,16 @@ var processFeedData = function (feed) {
   itemData = function (x) {
     return {
       title: x.title || 'No title',
-      summary: x.subtitle,
-      pubDate: x.pubDate,
-      link: x.link,
-      explicit: x.explicit,
+      summary: x.subtitle || 'Unknown',
+      pubDate: x.pubDate || 'Unknown',
+      link: x.link || 'Unknown',
+      explicit: x.explicit || 'Unknown',
       file: {
         duration: x.duration || 0,
-        type: (x.enclosure && x.enclosure.type),
-        url: (x.enclosure && x.enclosure.url)
+        type: (x.enclosure && x.enclosure.type) || 'Unknown',
+        url: (x.enclosure && x.enclosure.url) || 'Unknown'
       },
-      image: x.image && x.image.href
+      image: (x.image && x.image.href) || 'Unknown'
     };
   };
 
@@ -74,14 +75,14 @@ var processFeedData = function (feed) {
   return {
     title: feed.title || 'No title',
     author: feed.author || 'No author',
-    copyright: feed.copyright,
+    copyright: feed.copyright || 'No copyright',
     image: feed.image && image(feed.image),
     category: (feed.category && category(feed.category)) || 'No category',
     summary: feed.summary || 'No summary',
     description: description(feed.description) || 'No description',
     subtitle: feed.subtitle || 'No subtitle',
-    lastUpdate: feed.lastBuildDate,
-    explicit: feed.explicit,
+    lastUpdate: feed.lastBuildDate || 'Unknown',
+    explicit: feed.explicit || 'Unknown',
     keywords: feed.keywords && keywords(feed.keywords),
     items: feed.item.map(itemData)
   };
@@ -89,6 +90,7 @@ var processFeedData = function (feed) {
 
 var store = Reflux.createStore({
   listenables: actions,
+  database: new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/'),
   urlPattern: /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
   onTyping: function (input) {
     var url = input.match(this.urlPattern);
@@ -103,15 +105,21 @@ var store = Reflux.createStore({
     var url = input.match(this.urlPattern);
 
     if (url !== null) {
-      getRSS(url[0], function (error, result) {
-        // Save for debugging, TODO remember to remove!
-        sessionStorage.setItem('last_result', JSON.stringify(result));
-
-        var json = processFeedData(result);
-        // TODO Change to firebase later.
-        sessionStorage.setItem(json.title, JSON.stringify(json));
-        this.trigger('feed', json.title);
-      }.bind(this));
+      // Search for podcast in database
+      this.database.orderByChild('url').equalTo(url[0]).once('value', function (data) {
+        if (data.val() === null) {
+          // Podcast not in database
+          getRSS(url[0], function (error, result) {
+            var json = processFeedData(result);
+            json.url = url[0];
+            var post = this.database.push(json);
+            this.trigger('feed', post.key());
+          }.bind(this));
+        } else {
+          // Podcast found in database
+          this.trigger('feed', Object.keys(data.val())[0]);
+        }
+      }, this);
     } else {
       this.trigger('search', input);
     }
