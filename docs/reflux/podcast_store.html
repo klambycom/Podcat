@@ -30,7 +30,8 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'firebase'</span>);
+<span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./podcast_actions.js'</span>);
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
@@ -38,22 +39,12 @@
     <span class="hljs-keyword">this</span>.listenToMany(actions);
   },
   onInit: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> </span>{
-    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'subscriptions'</span>)) || {};
+    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>)) || {};
 
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> id === <span class="hljs-string">'undefined'</span>) {
       <span class="hljs-keyword">this</span>.trigger({ subscriptions: subscriptions });
     } <span class="hljs-keyword">else</span> {
-      <span class="hljs-keyword">var</span> podcastFromSubscriptions = subscriptions[id];
-
-      <span class="hljs-keyword">this</span>.trigger({
-        subscriptions: subscriptions,
-        subscribed: <span class="hljs-keyword">typeof</span> podcastFromSubscriptions !== <span class="hljs-string">'undefined'</span>,
-        podcast: <span class="hljs-built_in">JSON</span>.parse(sessionStorage.getItem(id))
-      });
-    }
-  },
-  onSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(podcast)</span> </span>{
-    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'subscriptions'</span>)) || {};</pre></div></div>
+      <span class="hljs-keyword">var</span> podcastFromSubscriptions = subscriptions[id];</pre></div></div>
             
         </li>
         
@@ -64,17 +55,30 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>TODO Change podcast.title to id from firebase</p>
+              <p>Get podcast data from firebase</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    subscriptions[podcast.title] = {
-      id: podcast.title,
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> database = <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://blinding-torch-6567.firebaseio.com/podcasts/'</span> + id);
+      database.once(<span class="hljs-string">'value'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data)</span> </span>{
+        <span class="hljs-keyword">this</span>.trigger({
+          subscriptions: subscriptions,
+          subscribed: <span class="hljs-keyword">typeof</span> podcastFromSubscriptions !== <span class="hljs-string">'undefined'</span>,
+          podcast: data.val()
+        });
+      }, <span class="hljs-keyword">this</span>);
+    }
+  },
+  onSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key, podcast)</span> </span>{
+    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>)) || {};
+
+    subscriptions[key] = {
+      id: key,
       title: podcast.title,
       image: podcast.image
     };
 
-    localStorage.setItem(<span class="hljs-string">'subscriptions'</span>, <span class="hljs-built_in">JSON</span>.stringify(subscriptions));
+    localStorage.setItem(<span class="hljs-string">'podcat.subscriptions'</span>, <span class="hljs-built_in">JSON</span>.stringify(subscriptions));
 
     <span class="hljs-keyword">this</span>.trigger({
       subscriptions: subscriptions,
@@ -82,8 +86,8 @@
       subscribed: <span class="hljs-literal">true</span>
     });
   },
-  onUnsubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(podcast)</span> </span>{
-    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'subscriptions'</span>)) || [];</pre></div></div>
+  onUnsubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key)</span> </span>{
+    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>)) || [];</pre></div></div>
             
         </li>
         
@@ -94,14 +98,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>TODO Change podcast.title to id from firebase</p>
+              <p>Remove subscription from localStorage</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> tmp = subscriptions[podcast.title];
-    <span class="hljs-keyword">delete</span> subscriptions[podcast.title];
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> tmp = subscriptions[key];
+    <span class="hljs-keyword">delete</span> subscriptions[key];
 
-    localStorage.setItem(<span class="hljs-string">'subscriptions'</span>, <span class="hljs-built_in">JSON</span>.stringify(subscriptions));
+    localStorage.setItem(<span class="hljs-string">'podcat.subscriptions'</span>, <span class="hljs-built_in">JSON</span>.stringify(subscriptions));
 
     <span class="hljs-keyword">this</span>.trigger({
       subscriptions: subscriptions,

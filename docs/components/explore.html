@@ -34,8 +34,34 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> Search = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./search'</span>);
+<span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'firebase'</span>);
+<span class="hljs-keyword">var</span> Link = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).Link;
 
 <span class="hljs-keyword">var</span> Explore = React.createClass({
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> { newestPodcasts: [] };
+  },
+  componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.database = <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://blinding-torch-6567.firebaseio.com/podcasts/'</span>);
+    <span class="hljs-keyword">this</span>.database.limitToFirst(<span class="hljs-number">15</span>).on(<span class="hljs-string">'child_added'</span>, <span class="hljs-keyword">this</span>.onNewPodcast);
+  },
+  componentWillUnmount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.database.off(<span class="hljs-string">'child_added'</span>, <span class="hljs-keyword">this</span>.onNewPodcast);
+  },
+  onNewPodcast: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(snapshot)</span> </span>{
+    <span class="hljs-keyword">var</span> id = snapshot.key();
+    <span class="hljs-keyword">var</span> podcast = snapshot.val();
+    <span class="hljs-keyword">var</span> podcasts = <span class="hljs-keyword">this</span>.state.newestPodcasts;
+
+    podcasts.push({
+      id: id,
+      image: podcast.image,
+      title: podcast.title,
+      subtitle: podcast.subtitle
+    });
+
+    <span class="hljs-keyword">this</span>.setState({ newestPodcasts: podcasts });
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> (
         <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"explore"</span>&gt;</span>
@@ -45,10 +71,27 @@
             input url to a podcast-feed.
           <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">Search</span> <span class="hljs-attribute">placeholder</span>=<span class="hljs-value">"Search or url to rss-feed"</span> /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">p</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"podcast-covers"</span>&gt;</span>
+          {this.state.newestPodcasts.slice(0, 3).map(function (podcast, i) {
+            return (
+                <span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'podcast'</span> <span class="hljs-attribute">params</span>=<span class="hljs-value">{{id:podcast.id}}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"item"</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{podcast.image}</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">{podcast.title}</span> /&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">Link</span>&gt;</span>
+                );
+          })}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+
           <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>New podcasts<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>TODO<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>Popular podcasts<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>TODO<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">p</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"podcasts"</span>&gt;</span>
+          {this.state.newestPodcasts.map(function (podcast, i) {
+            return (
+                <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"item"</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i+4}</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'podcast'</span> <span class="hljs-attribute">params</span>=<span class="hljs-value">{{id:podcast.id}}</span>&gt;</span>{podcast.title}<span class="hljs-tag">&lt;/<span class="hljs-title">Link</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+                  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"subtitle"</span>&gt;</span>{podcast.subtitle}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                );
+          })}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }

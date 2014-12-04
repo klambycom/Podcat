@@ -37,19 +37,22 @@
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> PodcastStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_store.js'</span>);
 <span class="hljs-keyword">var</span> PodcastActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_actions.js'</span>);
+<span class="hljs-keyword">var</span> NotFound = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./not_found.js'</span>);
 
 <span class="hljs-keyword">var</span> Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, <span class="hljs-string">'onSubscriptionChange'</span>) ],
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
       items: [],
-      subscribed: <span class="hljs-literal">false</span>
+      subscribed: <span class="hljs-literal">false</span>,
+      notFound: <span class="hljs-literal">false</span>,
+      selectedPodcast: <span class="hljs-keyword">this</span>.getParams().id
     };
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     PodcastActions.init(<span class="hljs-keyword">this</span>.getParams().id);
   },
-  onSubscriptionChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{</pre></div></div>
+  componentDidUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
             
         </li>
         
@@ -59,6 +62,26 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Update component if params (id) is changed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.selectedPodcast !== <span class="hljs-keyword">this</span>.getParams().id) {
+      <span class="hljs-keyword">this</span>.setState({ selectedPodcast: <span class="hljs-keyword">this</span>.getParams().id });
+      PodcastActions.init(<span class="hljs-keyword">this</span>.getParams().id);
+    }
+  },
+  onSubscriptionChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p>Update subscribe/unsubscribe button</p>
 
@@ -71,32 +94,41 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Update podcast data</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> result.podcast !== <span class="hljs-string">'undefined'</span>) {
-      <span class="hljs-keyword">this</span>.setState(result.podcast);
+      <span class="hljs-keyword">if</span> (result.podcast === <span class="hljs-literal">null</span>) {
+        <span class="hljs-keyword">this</span>.setState({ notFound: <span class="hljs-literal">true</span> });
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">this</span>.setState({ notFound: <span class="hljs-literal">false</span> });
+        <span class="hljs-keyword">this</span>.setState(result.podcast);
+      }
     }
   },
   onSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.subscribed) {
-      PodcastActions.unsubscribe(<span class="hljs-keyword">this</span>.state);
+      PodcastActions.unsubscribe(<span class="hljs-keyword">this</span>.getParams().id);
     } <span class="hljs-keyword">else</span> {
-      PodcastActions.subscribe(<span class="hljs-keyword">this</span>.state);
+      PodcastActions.subscribe(<span class="hljs-keyword">this</span>.getParams().id, <span class="hljs-keyword">this</span>.state);
     }
 
     e.preventDefault();
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"podcast"</span>&gt;</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.notFound) {
+      <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">NotFound</span>&gt;</span>There is no podcast on this url.<span class="hljs-tag">&lt;/<span class="hljs-title">NotFound</span>&gt;</span>);
+    }
+
+    return (
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"podcast"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">{this.state.title}</span> /&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
