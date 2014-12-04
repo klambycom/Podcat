@@ -21,7 +21,7 @@ var Explore = React.createClass({
     var podcast = snapshot.val();
     var podcasts = this.state.newestPodcasts;
 
-    podcasts.push({
+    podcasts.unshift({
       id: id,
       image: podcast.image,
       title: podcast.title,
