@@ -31,4 +31,17 @@
 
     code { padding: 1px 5px; }
   }
+
+  .podcast-covers img {
+    width: 25%;
+    box-sizing: border-box;
+    border-right: 5px solid white;
+  }
+
+  .podcasts .item {
+    h3 {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+  }
 }
