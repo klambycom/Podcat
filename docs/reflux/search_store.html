@@ -56,7 +56,7 @@
 };
 
 <span class="hljs-keyword">var</span> processFeedData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
-  <span class="hljs-keyword">var</span> itemData, keywords, image, category, description;
+  <span class="hljs-keyword">var</span> itemData, keywords, image, category, description, pubDate;
 
   itemData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
     <span class="hljs-keyword">return</span> {
@@ -104,6 +104,10 @@
     <span class="hljs-keyword">return</span> desc;
   };
 
+  pubDate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
+    <span class="hljs-keyword">return</span> feed.lastBuildDate || feed.pubDate;
+  };
+
   <span class="hljs-keyword">return</span> {
     title: feed.title || <span class="hljs-string">'No title'</span>,
     author: feed.author || <span class="hljs-string">'No author'</span>,
@@ -113,7 +117,7 @@
     summary: feed.summary || <span class="hljs-string">'No summary'</span>,
     description: description(feed.description) || <span class="hljs-string">'No description'</span>,
     subtitle: feed.subtitle || <span class="hljs-string">'No subtitle'</span>,
-    lastUpdate: feed.lastBuildDate || <span class="hljs-string">'Unknown'</span>,
+    lastUpdate: pubDate(feed) || <span class="hljs-string">'Unknown'</span>,
     explicit: feed.explicit || <span class="hljs-string">'Unknown'</span>,
     keywords: feed.keywords &amp;&amp; keywords(feed.keywords),
     items: feed.item.map(itemData)
