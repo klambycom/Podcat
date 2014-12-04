@@ -96,10 +96,10 @@
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setState({ icon: <span class="hljs-string">'fa fa-search'</span>, useEnter: <span class="hljs-literal">false</span> });
     }
   },
-  onInput: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+  handleInput: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
     SearchActions.typing(e.target.value);
   },
-  onSubmit: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+  handleSubmit: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
     SearchActions.search(e.target.search_term.value);
     <span class="hljs-keyword">this</span>.setState({ icon: <span class="hljs-string">'fa fa-spinner fa-spin'</span> });
     e.preventDefault();
@@ -113,12 +113,12 @@
     <span class="hljs-keyword">return</span> (
         <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"search"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"field"</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">form</span> <span class="hljs-attribute">action</span>=<span class="hljs-value">"/"</span> <span class="hljs-attribute">onSubmit</span>=<span class="hljs-value">{this.onSubmit}</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">form</span> <span class="hljs-attribute">action</span>=<span class="hljs-value">"/"</span> <span class="hljs-attribute">onSubmit</span>=<span class="hljs-value">{this.handleSubmit}</span>&gt;</span>
               <span class="hljs-tag">&lt;<span class="hljs-title">input</span>
                 <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span>
                 <span class="hljs-attribute">name</span>=<span class="hljs-value">"search_term"</span>
                 <span class="hljs-attribute">id</span>=<span class="hljs-value">"search_term"</span>
-                <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onInput}</span>
+                <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.handleInput}</span>
                 {<span class="hljs-attribute">...this.props</span>} /&gt;</span>
             <span class="hljs-tag">&lt;/<span class="hljs-title">form</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>

@@ -113,7 +113,7 @@
       }
     }
   },
-  onSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+  handleSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.subscribed) {
       PodcastActions.unsubscribe(<span class="hljs-keyword">this</span>.getParams().id);
     } <span class="hljs-keyword">else</span> {
@@ -135,7 +135,7 @@
             <span class="hljs-tag">&lt;<span class="hljs-title">a</span>
               <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span>
               <span class="hljs-attribute">className</span>=<span class="hljs-value">{this.state.subscribed</span> ? '<span class="hljs-attribute">unsubscribe</span>' <span class="hljs-attribute">:</span> '<span class="hljs-attribute">subscribe</span>'}
-              <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onSubscribe}</span>&gt;</span>
+              <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleSubscribe}</span>&gt;</span>
               {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{this.state.summary}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>

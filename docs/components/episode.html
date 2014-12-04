@@ -49,7 +49,7 @@
     play: React.PropTypes.bool,
     add: React.PropTypes.bool
   },
-  onClick: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
+  handleClick: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
       PlaylistActions[fnName]({
         title: <span class="hljs-keyword">this</span>.props.title,
@@ -61,8 +61,8 @@
     }.bind(<span class="hljs-keyword">this</span>);
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onClick('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
-    var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.onClick('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
 
     return (
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
