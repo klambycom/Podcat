@@ -5,6 +5,7 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var PodcastStore = require('../reflux/podcast_store.js');
 var PodcastActions = require('../reflux/podcast_actions.js');
+var NotFound = require('./not_found.js');
 
 var Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
@@ -12,6 +13,7 @@ var Podcast = React.createClass({
     return {
       items: [],
       subscribed: false,
+      notFound: false,
       selectedPodcast: this.getParams().id
     };
   },
@@ -33,7 +35,12 @@ var Podcast = React.createClass({
     
     // Update podcast data
     if (typeof result.podcast !== 'undefined') {
-      this.setState(result.podcast);
+      if (result.podcast === null) {
+        this.setState({ notFound: true });
+      } else {
+        this.setState({ notFound: false });
+        this.setState(result.podcast);
+      }
     }
   },
   onSubscribe: function (e) {
@@ -46,6 +53,10 @@ var Podcast = React.createClass({
     e.preventDefault();
   },
   render: function () {
+    if (this.state.notFound) {
+      return (<NotFound>There is no podcast on this url.</NotFound>);
+    }
+
     return (
         <div id="podcast">
           <img src={this.state.image} alt={this.state.title} />
