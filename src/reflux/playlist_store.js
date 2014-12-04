@@ -41,7 +41,7 @@ var store = Reflux.createStore({
   onAdd: function (episode) {
     // Add last in queue
     storage.add(episode);
-    this.trigger(storage.all());
+    this.trigger(storage.all(), 'add');
   },
   onRemove: function (/*episode*/) {
     // Remove episode from queue

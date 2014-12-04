@@ -44,7 +44,22 @@
           text-decoration: underline;
           background-color: $header-active-link;
         }
+
+        &.highlight {
+          animation: highlight-navigation-link .5s 1;
+        }
       }
     }
   }
+}
+
+$highlight-color-high: rgba(255, 255, 255, .5);
+$highlight-color-low: rgba(255, 255, 255, 0);
+
+@keyframes highlight-navigation-link {
+  0%   { background-color: $highlight-color-low; }
+  20%  { background-color: $highlight-color-high; }
+  40%  { background-color: $highlight-color-low; }
+  60%  { background-color: $highlight-color-high; }
+  100% { background-color: $highlight-color-low; }
 }

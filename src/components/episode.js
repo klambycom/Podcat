@@ -10,6 +10,9 @@ var Episode = React.createClass({
       add: true
     };
   },
+  getInitialState: function () {
+    return { added: false };
+  },
   propTypes: {
     title: React.PropTypes.string.isRequired,
     image: React.PropTypes.string.isRequired,
@@ -19,11 +22,15 @@ var Episode = React.createClass({
   },
   handleClick: function (fnName) {
     return function (e) {
+      // Trigger play or add action
       PlaylistActions[fnName]({
         title: this.props.title,
         image: this.props.image,
         audio_url: this.props.audio_url
       });
+
+      // Change state of added
+      if (fnName === 'add') { this.setState({ added: true }); }
 
       e.preventDefault();
     }.bind(this);
@@ -31,6 +38,8 @@ var Episode = React.createClass({
   render: function () {
     var play = this.props.play && (<a href="#" onClick={this.handleClick('play')}>Play</a>);
     var add = this.props.add && (<a href="#" onClick={this.handleClick('add')}>Queue</a>);
+
+    if (this.state.added) { add = 'Queued'; }
 
     return (
         <div className="episode">

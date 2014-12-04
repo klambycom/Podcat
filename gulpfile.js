@@ -9,6 +9,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var jshint = require('gulp-jshint');
 var react = require('gulp-react');
 var deploy = require('gulp-gh-pages');
+var autoprefixer = require('gulp-autoprefixer');
 
 var paths = {
   dist:   'dist',
@@ -96,6 +97,10 @@ gulp.task('sass', function () {
   return gulp.src(paths.style)
     .pipe(sourcemaps.init())
       .pipe(sass())
+      .pipe(autoprefixer({
+        browser: ['last 2 versions'],
+        cascade: false
+      }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(paths.dist));
 });
