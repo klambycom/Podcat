@@ -72,7 +72,7 @@
           <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">Search</span> <span class="hljs-attribute">placeholder</span>=<span class="hljs-value">"Search or url to rss-feed"</span> /&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">p</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"podcast-covers"</span>&gt;</span>
-          {this.state.newestPodcasts.slice(0, 3).map(function (podcast, i) {
+          {this.state.newestPodcasts.slice(0, 4).map(function (podcast, i) {
             return (
                 <span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'podcast'</span> <span class="hljs-attribute">params</span>=<span class="hljs-value">{{id:podcast.id}}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"item"</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>&gt;</span>
                   <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{podcast.image}</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">{podcast.title}</span> /&gt;</span>
