@@ -43,7 +43,7 @@ var Podcast = React.createClass({
       }
     }
   },
-  onSubscribe: function (e) {
+  handleSubscribe: function (e) {
     if (this.state.subscribed) {
       PodcastActions.unsubscribe(this.getParams().id);
     } else {
@@ -65,7 +65,7 @@ var Podcast = React.createClass({
             <a
               href="#"
               className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
-              onClick={this.onSubscribe}>
+              onClick={this.handleSubscribe}>
               {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}</a>
           </div>
           <p>{this.state.summary}</p>

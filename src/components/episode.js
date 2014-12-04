@@ -17,7 +17,7 @@ var Episode = React.createClass({
     play: React.PropTypes.bool,
     add: React.PropTypes.bool
   },
-  onClick: function (fnName) {
+  handleClick: function (fnName) {
     return function (e) {
       PlaylistActions[fnName]({
         title: this.props.title,
@@ -29,8 +29,8 @@ var Episode = React.createClass({
     }.bind(this);
   },
   render: function () {
-    var play = this.props.play && (<a href="#" onClick={this.onClick('play')}>Play</a>);
-    var add = this.props.add && (<a href="#" onClick={this.onClick('add')}>Queue</a>);
+    var play = this.props.play && (<a href="#" onClick={this.handleClick('play')}>Play</a>);
+    var add = this.props.add && (<a href="#" onClick={this.handleClick('add')}>Queue</a>);
 
     return (
         <div className="episode">
