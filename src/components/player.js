@@ -24,8 +24,8 @@ var Player = React.createClass({
     // Load first episode from saved playlist
     this.changeEpisode(storage.all(), false);
   },
-  onPlay: function (episode) {
-    this.changeEpisode(episode, true);
+  onPlay: function (episode, type) {
+    this.changeEpisode(episode, type !== 'add');
   },
   changeEpisode: function (items, autoplay) {
     if (items.length === 0) { return; }
