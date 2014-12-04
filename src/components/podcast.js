@@ -11,11 +11,19 @@ var Podcast = React.createClass({
   getInitialState: function () {
     return {
       items: [],
-      subscribed: false
+      subscribed: false,
+      selectedPodcast: this.getParams().id
     };
   },
   componentDidMount: function () {
     PodcastActions.init(this.getParams().id);
+  },
+  componentDidUpdate: function () {
+    // Update component if params (id) is changed
+    if (this.state.selectedPodcast !== this.getParams().id) {
+      this.setState({ selectedPodcast: this.getParams().id });
+      PodcastActions.init(this.getParams().id);
+    }
   },
   onSubscriptionChange: function (result) {
     // Update subscribe/unsubscribe button
