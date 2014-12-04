@@ -30,9 +30,9 @@ var Podcast = React.createClass({
   },
   onSubscribe: function (e) {
     if (this.state.subscribed) {
-      PodcastActions.unsubscribe(this.state);
+      PodcastActions.unsubscribe(this.getParams().id);
     } else {
-      PodcastActions.subscribe(this.state);
+      PodcastActions.subscribe(this.getParams().id, this.state);
     }
 
     e.preventDefault();
