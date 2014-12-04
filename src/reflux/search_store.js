@@ -24,7 +24,7 @@ var getRSS = function (url, fn) {
 };
 
 var processFeedData = function (feed) {
-  var itemData, keywords, image, category, description;
+  var itemData, keywords, image, category, description, pubDate;
 
   itemData = function (x) {
     return {
@@ -72,6 +72,10 @@ var processFeedData = function (feed) {
     return desc;
   };
 
+  pubDate = function (feed) {
+    return feed.lastBuildDate || feed.pubDate;
+  };
+
   return {
     title: feed.title || 'No title',
     author: feed.author || 'No author',
@@ -81,7 +85,7 @@ var processFeedData = function (feed) {
     summary: feed.summary || 'No summary',
     description: description(feed.description) || 'No description',
     subtitle: feed.subtitle || 'No subtitle',
-    lastUpdate: feed.lastBuildDate || 'Unknown',
+    lastUpdate: pubDate(feed) || 'Unknown',
     explicit: feed.explicit || 'Unknown',
     keywords: feed.keywords && keywords(feed.keywords),
     items: feed.item.map(itemData)

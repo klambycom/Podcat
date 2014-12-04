@@ -48,7 +48,7 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('test', function () {
+gulp.task('test', ['browserify', 'copyindex', 'sass'], function () {
   return gulp.src(paths.tests)
     .pipe(jest({
       testDirectoryName: 'spec',
