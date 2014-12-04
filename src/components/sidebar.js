@@ -26,7 +26,7 @@ var Sidebar = React.createClass({
     if (this.state.items.length > 0) {
       subscriptions = this.state.items.map(function (podcast, i) {
         return (
-            <Link to='podcast' params={{id:podcast.title}} className="item" key={i}>
+            <Link to='podcast' params={{id:podcast.id}} className="item" key={i}>
               <img src={podcast.image} alt={podcast.title} />
             </Link>
             );

@@ -1,3 +1,4 @@
+var Firebase = require('firebase');
 var Reflux = require('reflux');
 var actions = require('./podcast_actions.js');
 
@@ -6,31 +7,34 @@ var store = Reflux.createStore({
     this.listenToMany(actions);
   },
   onInit: function (id) {
-    var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || {};
+    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
     if (typeof id === 'undefined') {
       this.trigger({ subscriptions: subscriptions });
     } else {
       var podcastFromSubscriptions = subscriptions[id];
 
-      this.trigger({
-        subscriptions: subscriptions,
-        subscribed: typeof podcastFromSubscriptions !== 'undefined',
-        podcast: JSON.parse(sessionStorage.getItem(id))
-      });
+      // Get podcast data from firebase
+      var database = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/' + id);
+      database.once('value', function (data) {
+        this.trigger({
+          subscriptions: subscriptions,
+          subscribed: typeof podcastFromSubscriptions !== 'undefined',
+          podcast: data.val()
+        });
+      }, this);
     }
   },
-  onSubscribe: function (podcast) {
-    var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || {};
+  onSubscribe: function (key, podcast) {
+    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
-    // TODO Change podcast.title to id from firebase
-    subscriptions[podcast.title] = {
-      id: podcast.title,
+    subscriptions[key] = {
+      id: key,
       title: podcast.title,
       image: podcast.image
     };
 
-    localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+    localStorage.setItem('podcat.subscriptions', JSON.stringify(subscriptions));
 
     this.trigger({
       subscriptions: subscriptions,
@@ -38,14 +42,14 @@ var store = Reflux.createStore({
       subscribed: true
     });
   },
-  onUnsubscribe: function (podcast) {
-    var subscriptions = JSON.parse(localStorage.getItem('subscriptions')) || [];
+  onUnsubscribe: function (key) {
+    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || [];
 
-    // TODO Change podcast.title to id from firebase
-    var tmp = subscriptions[podcast.title];
-    delete subscriptions[podcast.title];
+    // Remove subscription from localStorage
+    var tmp = subscriptions[key];
+    delete subscriptions[key];
 
-    localStorage.setItem('subscriptions', JSON.stringify(subscriptions));
+    localStorage.setItem('podcat.subscriptions', JSON.stringify(subscriptions));
 
     this.trigger({
       subscriptions: subscriptions,

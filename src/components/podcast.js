@@ -5,17 +5,27 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var PodcastStore = require('../reflux/podcast_store.js');
 var PodcastActions = require('../reflux/podcast_actions.js');
+var NotFound = require('./not_found.js');
 
 var Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
   getInitialState: function () {
     return {
       items: [],
-      subscribed: false
+      subscribed: false,
+      notFound: false,
+      selectedPodcast: this.getParams().id
     };
   },
   componentDidMount: function () {
     PodcastActions.init(this.getParams().id);
+  },
+  componentDidUpdate: function () {
+    // Update component if params (id) is changed
+    if (this.state.selectedPodcast !== this.getParams().id) {
+      this.setState({ selectedPodcast: this.getParams().id });
+      PodcastActions.init(this.getParams().id);
+    }
   },
   onSubscriptionChange: function (result) {
     // Update subscribe/unsubscribe button
@@ -25,19 +35,28 @@ var Podcast = React.createClass({
     
     // Update podcast data
     if (typeof result.podcast !== 'undefined') {
-      this.setState(result.podcast);
+      if (result.podcast === null) {
+        this.setState({ notFound: true });
+      } else {
+        this.setState({ notFound: false });
+        this.setState(result.podcast);
+      }
     }
   },
   onSubscribe: function (e) {
     if (this.state.subscribed) {
-      PodcastActions.unsubscribe(this.state);
+      PodcastActions.unsubscribe(this.getParams().id);
     } else {
-      PodcastActions.subscribe(this.state);
+      PodcastActions.subscribe(this.getParams().id, this.state);
     }
 
     e.preventDefault();
   },
   render: function () {
+    if (this.state.notFound) {
+      return (<NotFound>There is no podcast on this url.</NotFound>);
+    }
+
     return (
         <div id="podcast">
           <img src={this.state.image} alt={this.state.title} />

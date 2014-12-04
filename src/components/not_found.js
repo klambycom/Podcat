@@ -6,8 +6,8 @@ var NotFound = React.createClass({
   render: function () {
     return (
         <div id="not-found">
-          <h2>404</h2>
-          <p>Not found!</p>
+          <h1>404</h1>
+          <p>{this.props.children}</p>
         </div>
         );
   }
