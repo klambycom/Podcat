@@ -42,6 +42,9 @@
       add: <span class="hljs-literal">true</span>
     };
   },
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> { added: <span class="hljs-literal">false</span> };
+  },
   propTypes: {
     title: React.PropTypes.string.isRequired,
     image: React.PropTypes.string.isRequired,
@@ -50,12 +53,41 @@
     add: React.PropTypes.bool
   },
   handleClick: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
-      PlaylistActions[fnName]({
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Trigger play or add action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      PlaylistActions[fnName]({
         title: <span class="hljs-keyword">this</span>.props.title,
         image: <span class="hljs-keyword">this</span>.props.image,
         audio_url: <span class="hljs-keyword">this</span>.props.audio_url
-      });
+      });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Change state of added</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (fnName === <span class="hljs-string">'add'</span>) { <span class="hljs-keyword">this</span>.setState({ added: <span class="hljs-literal">true</span> }); }
 
       e.preventDefault();
     }.bind(<span class="hljs-keyword">this</span>);
@@ -63,6 +95,8 @@
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+
+    if (this.state.added) { add = 'Queued'; }
 
     return (
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
