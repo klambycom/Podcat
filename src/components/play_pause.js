@@ -14,15 +14,15 @@ var PlayPause = React.createClass({
   onChange: function (state) {
     this.setState({ play: state });
   },
-  onClick: function (e) {
+  handleClick: function (e) {
     PlayerActions.toggle();
     e.preventDefault();
   },
   render: function () {
     if (this.state.play) {
-      return (<a href="#" onClick={this.onClick} className="fa fa-pause"></a>);
+      return (<a href="#" onClick={this.handleClick} className="fa fa-pause"></a>);
     } else {
-      return (<a href="#" onClick={this.onClick} className="fa fa-play"></a>);
+      return (<a href="#" onClick={this.handleClick} className="fa fa-play"></a>);
     }
   }
 });

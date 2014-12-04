@@ -25,10 +25,10 @@ var Search = React.createClass({
       this.setState({ icon: 'fa fa-search', useEnter: false });
     }
   },
-  onInput: function (e) {
+  handleInput: function (e) {
     SearchActions.typing(e.target.value);
   },
-  onSubmit: function (e) {
+  handleSubmit: function (e) {
     SearchActions.search(e.target.search_term.value);
     this.setState({ icon: 'fa fa-spinner fa-spin' });
     e.preventDefault();
@@ -42,12 +42,12 @@ var Search = React.createClass({
     return (
         <div className="search">
           <div className="field">
-            <form action="/" onSubmit={this.onSubmit}>
+            <form action="/" onSubmit={this.handleSubmit}>
               <input
                 type="text"
                 name="search_term"
                 id="search_term"
-                onChange={this.onInput}
+                onChange={this.handleInput}
                 {...this.props} />
             </form>
           </div>
