@@ -40,7 +40,7 @@ var Explore = React.createClass({
           </p>
           <Search placeholder="Search or url to rss-feed" />
           <p className="podcast-covers">
-          {this.state.newestPodcasts.slice(0, 3).map(function (podcast, i) {
+          {this.state.newestPodcasts.slice(0, 4).map(function (podcast, i) {
             return (
                 <Link to='podcast' params={{id:podcast.id}} className="item" key={i}>
                   <img src={podcast.image} alt={podcast.title} />
