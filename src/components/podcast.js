@@ -6,6 +6,7 @@ var Reflux = require('reflux');
 var PodcastStore = require('../reflux/podcast_store.js');
 var PodcastActions = require('../reflux/podcast_actions.js');
 var NotFound = require('./not_found.js');
+var Episode = require('./episode.js');
 
 var Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
@@ -73,26 +74,17 @@ var Podcast = React.createClass({
           <div className="clear"></div>
 
           <h2>Episodes</h2>
-          <table>
-            <thead>
-              <tr>
-                <td>Duration</td>
-                <td>Title</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.items.map(function (episode, i) {
-                return (
-                    <tr key={i}>
-                      <td>{episode.file.duration}</td>
-                      <td>{episode.title}</td>
-                      <td><a href="#">More</a></td>
-                    </tr>
-                    );
-              }.bind(this))}
-            </tbody>
-          </table>
+          <p>
+            {this.state.items.map(function (item, i) {
+              return (
+                  <Episode
+                    key={i}
+                    title={item.title}
+                    image={item.image}
+                    audio_url={item.file.url} />
+                  );
+            }.bind(this))}
+          </p>
           
         </div>
         );
