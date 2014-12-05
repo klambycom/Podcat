@@ -3,9 +3,7 @@ var Reflux = require('reflux');
 var actions = require('./podcast_actions.js');
 
 var store = Reflux.createStore({
-  init: function () {
-    this.listenToMany(actions);
-  },
+  listenables:actions,
   onInit: function (id) {
     var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
