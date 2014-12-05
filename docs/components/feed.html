@@ -36,27 +36,107 @@
 <span class="hljs-keyword">var</span> Episode = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./episode'</span>);
 
 <span class="hljs-keyword">var</span> Feed = React.createClass({
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"feed"</span>&gt;</span>
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> { items: [] };
+  },
+  componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> httpRequest = <span class="hljs-keyword">new</span> XMLHttpRequest();
+    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>));
+    <span class="hljs-keyword">var</span> urls = <span class="hljs-built_in">Object</span>
+      .keys(subscriptions)
+      .map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{ <span class="hljs-keyword">return</span> subscriptions[x].url; });
+
+    httpRequest.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> (httpRequest.readyState === <span class="hljs-number">4</span>) {
+        <span class="hljs-keyword">if</span> (httpRequest.status === <span class="hljs-number">200</span>) {
+          <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(httpRequest.responseText);
+          <span class="hljs-keyword">var</span> items = result.query.results.item.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+            <span class="hljs-keyword">return</span> {
+              title: x.title,
+              subtitle: x.subtitle,
+              image: x.image.href,
+              file: { url: x.enclosure.url }
+            };
+          });
+          self.setState({ items: items });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>array with objects, that have title, subtitle, image.href,
+enclosure.url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        }
+      }
+    };
+
+    httpRequest.open(
+        <span class="hljs-string">'GET'</span>,
+        <span class="hljs-string">"http://query.yahooapis.com/v1/public/yql?q=select * from rss where url in ('"</span> + urls.join(<span class="hljs-string">"', '"</span>) + <span class="hljs-string">"') | sort(field=\"pubdate\", descending=\"true\")&amp;format=json"</span>,
+        <span class="hljs-literal">true</span>);
+    httpRequest.send(<span class="hljs-literal">null</span>);
+  },
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>No episodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> episodes = (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+          You have no episodes in your feed. Have you subscribed to any podcasts?
+        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        );
+
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>List episodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.items.length &gt; <span class="hljs-number">0</span>) {
+      episodes = <span class="hljs-keyword">this</span>.state.items.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item, i)</span> </span>{
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
+              <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>
+              <span class="hljs-attribute">title</span>=<span class="hljs-value">{item.title}</span>
+              <span class="hljs-attribute">image</span>=<span class="hljs-value">{item.image}</span>
+              <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">{item.file.url}</span> /&gt;</span>
+            );
+      });
+    }
+
+    return (
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"feed"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>Feed<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
-            <span class="hljs-attribute">key</span>=<span class="hljs-value">'1'</span>
-            <span class="hljs-attribute">title</span>=<span class="hljs-value">"Avsnitt 12 - Motionen om konungens återkomst"</span>
-            <span class="hljs-attribute">image</span>=<span class="hljs-value">"http://assets.podomatic.net/ts/14/05/32/kmbengtsson88/1400x1400_9885800.jpeg"</span>
-            <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">"http://interasistmen.podomatic.com/enclosure/2014-11-17T15_52_52-08_00.mp3"</span> /&gt;</span>
-
-          <span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
-            <span class="hljs-attribute">key</span>=<span class="hljs-value">'2'</span>
-            <span class="hljs-attribute">title</span>=<span class="hljs-value">"Kodsnack 77 - Ett helt annat universum av saker"</span>
-            <span class="hljs-attribute">image</span>=<span class="hljs-value">"http://static.libsyn.com/p/assets/2/b/3/1/2b31e735b8ae2a54/kodsnack3.png"</span>
-            <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">"http://traffic.libsyn.com/kodsnack/Uppkopplade_prylar.mp3"</span> /&gt;</span>
-
-          <span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
-            <span class="hljs-attribute">key</span>=<span class="hljs-value">'3'</span>
-            <span class="hljs-attribute">title</span>=<span class="hljs-value">"Kodsnack 76 - Fast på en viss punkt i verkligheten"</span>
-            <span class="hljs-attribute">image</span>=<span class="hljs-value">"http://static.libsyn.com/p/assets/2/b/3/1/2b31e735b8ae2a54/kodsnack3.png"</span>
-            <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">"http://traffic.libsyn.com/kodsnack/singulariteten_frsk_2.mp3"</span> /&gt;</span>
+          {episodes}
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }

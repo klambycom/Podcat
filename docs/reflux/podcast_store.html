@@ -75,7 +75,8 @@
     subscriptions[key] = {
       id: key,
       title: podcast.title,
-      image: podcast.image
+      image: podcast.image,
+      url: podcast.url
     };
 
     localStorage.setItem(<span class="hljs-string">'podcat.subscriptions'</span>, <span class="hljs-built_in">JSON</span>.stringify(subscriptions));
