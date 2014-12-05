@@ -38,6 +38,7 @@
 <span class="hljs-keyword">var</span> PodcastStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_store.js'</span>);
 <span class="hljs-keyword">var</span> PodcastActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_actions.js'</span>);
 <span class="hljs-keyword">var</span> NotFound = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./not_found.js'</span>);
+<span class="hljs-keyword">var</span> Episode = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./episode.js'</span>);
 
 <span class="hljs-keyword">var</span> Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, <span class="hljs-string">'onSubscriptionChange'</span>) ],
@@ -143,26 +144,17 @@
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"clear"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
 
           <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>Episodes<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">table</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">thead</span>&gt;</span>
-              <span class="hljs-tag">&lt;<span class="hljs-title">tr</span>&gt;</span>
-                <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>Duration<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
-                <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>Title<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
-                <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
-              <span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span>
-            <span class="hljs-tag">&lt;/<span class="hljs-title">thead</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">tbody</span>&gt;</span>
-              {this.state.items.map(function (episode, i) {
-                return (
-                    <span class="hljs-tag">&lt;<span class="hljs-title">tr</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>&gt;</span>
-                      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{episode.file.duration}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
-                      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span>{episode.title}<span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
-                      <span class="hljs-tag">&lt;<span class="hljs-title">td</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span>&gt;</span>More<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">td</span>&gt;</span>
-                    <span class="hljs-tag">&lt;/<span class="hljs-title">tr</span>&gt;</span>
-                    );
-              }.bind(this))}
-            <span class="hljs-tag">&lt;/<span class="hljs-title">tbody</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">table</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
+            {this.state.items.map(function (item, i) {
+              return (
+                  <span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
+                    <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>
+                    <span class="hljs-attribute">title</span>=<span class="hljs-value">{item.title}</span>
+                    <span class="hljs-attribute">image</span>=<span class="hljs-value">{item.image}</span>
+                    <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">{item.file.url}</span> /&gt;</span>
+                  );
+            }.bind(this))}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
           
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
