@@ -35,9 +35,7 @@
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./podcast_actions.js'</span>);
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
-  init: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">this</span>.listenToMany(actions);
-  },
+  listenables:actions,
   onInit: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> </span>{
     <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>)) || {};
 
