@@ -31,7 +31,8 @@ var store = Reflux.createStore({
     subscriptions[key] = {
       id: key,
       title: podcast.title,
-      image: podcast.image
+      image: podcast.image,
+      url: podcast.url
     };
 
     localStorage.setItem('podcat.subscriptions', JSON.stringify(subscriptions));
