@@ -2,9 +2,9 @@ var Reflux = require('reflux');
 var actions = require('./player_actions.js');
 
 var store = Reflux.createStore({
+  listenables: actions,
   init: function () {
     this.player = new Audio();
-    this.listenToMany(actions);
   },
   onPlay: function (url, autoplay) {
     // Change src if current url is not already playing
