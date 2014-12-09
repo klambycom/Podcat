@@ -6,6 +6,8 @@ var AudioPlayer = require('../audio_player.js');
 var ProgressBar = React.createClass({
   getInitialState: function () {
     return {
+      currentTime: 0,
+      duration: 0,
       bufferedPercent: 0,
       timePercent: 0
     };
@@ -15,7 +17,7 @@ var ProgressBar = React.createClass({
     AudioPlayer.addEventListener('progress', this.updateProgress);
     AudioPlayer.addEventListener('timeupdate', this.updateProgress);
   },
-  updateProgress: function (e) {
+  updateProgress: function () {
     // Get buffered percent
     var buffered = 0;
     if (AudioPlayer.buffered.length > 0) {
@@ -28,15 +30,20 @@ var ProgressBar = React.createClass({
     }
     // Update state, and round to one decimal
     this.setState({
+      currentTime: AudioPlayer.currentTime,
+      duration: AudioPlayer.duration,
       bufferedPercent: +buffered.toFixed(1),
       timePercent: +time.toFixed(1)
     });
   },
   render: function () {
+    var bufferedStyles = { width: this.state.bufferedPercent + '%' };
+    var timeStyles = { width: this.state.timePercent + '%' };
+
     return (
         <div className="progress-bar">
-          <div className="buffered">Buffered: {this.state.bufferedPercent}%</div>
-          <div className="time">Time: {this.state.timePercent}%</div>
+          <div className="buffered" style={bufferedStyles}></div>
+          <div className="time" style={timeStyles}></div>
         </div>
         );
   }

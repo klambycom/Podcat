@@ -27,7 +27,7 @@
   }
 
   .controls {
-    order: 3;
+    order: 4;
 
     display: flex;
     flex-direction: row;
@@ -47,4 +47,28 @@
   }
 
   &.hide { display: none; }
+
+
+  .progress-bar {
+    order: 3;
+    margin-bottom: 15px;
+
+    width: 100%;
+    height: 5px;
+    background-color: rgb(189, 189, 189);
+    position: relative;
+
+    .buffered {
+      height: 5px;
+      background-color: white;
+      position: absolute;
+    }
+
+    .time {
+      height: 5px;
+      min-width: .5%;
+      background-color: rgb(42, 113, 42);
+      position: absolute;
+    }
+  }
 }
