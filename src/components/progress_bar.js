@@ -21,10 +21,16 @@ var ProgressBar = React.createClass({
     if (AudioPlayer.buffered.length > 0) {
       buffered = AudioPlayer.buffered.end(0) / AudioPlayer.duration * 100;
     }
-    // Get current time
-    var time = AudioPlayer.currentTime / AudioPlayer.duration * 100;
-    // Update state
-    this.setState({ bufferedPercent: buffered, timePercent: time });
+    // Get played percent
+    var time = 0;
+    if (!isNaN(AudioPlayer.duration)) {
+      time = AudioPlayer.currentTime / AudioPlayer.duration * 100;
+    }
+    // Update state, and round to one decimal
+    this.setState({
+      bufferedPercent: +buffered.toFixed(1),
+      timePercent: +time.toFixed(1)
+    });
   },
   render: function () {
     return (
