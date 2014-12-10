@@ -36,12 +36,23 @@ var ProgressBar = React.createClass({
       timePercent: +time.toFixed(1)
     });
   },
+  handleClick: function (e) {
+    var offset = e.nativeEvent.offsetX;
+    var width = this.refs.progress_bar.getDOMNode().offsetWidth;
+    var percent = offset / width;
+    // Change time
+    AudioPlayer.currentTime = AudioPlayer.duration * percent;
+  },
   render: function () {
     var bufferedStyles = { width: this.state.bufferedPercent + '%' };
     var timeStyles = { width: this.state.timePercent + '%' };
 
     return (
-        <div className="progress-bar">
+        <div
+          className="progress-bar"
+          ref="progress_bar"
+          onClick={this.handleClick}>
+
           <div className="buffered" style={bufferedStyles}></div>
           <div className="time" style={timeStyles}></div>
         </div>
