@@ -18,7 +18,7 @@
 
   .image {
     order: 2;
-    margin: 10px 0;
+    margin: 10px 0 0 0;
 
     img {
       width: 100%;
@@ -54,21 +54,22 @@
     margin-bottom: 15px;
 
     width: 100%;
-    height: 5px;
+    height: 7px;
     background-color: rgb(189, 189, 189);
     position: relative;
     box-shadow: black 0px 0px 10px 0px;
+    cursor: pointer;
 
     .buffered {
-      height: 5px;
+      height: 7px;
       background-color: white;
       position: absolute;
     }
 
     .time {
-      height: 5px;
+      height: 7px;
       min-width: .5%;
-      background-color: rgb(42, 113, 42);
+      background-color: $link-color;
       position: absolute;
     }
   }
