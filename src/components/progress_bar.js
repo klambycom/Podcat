@@ -21,7 +21,7 @@ var ProgressBar = React.createClass({
     // Get buffered percent
     var buffered = 0;
     if (AudioPlayer.buffered.length > 0) {
-      buffered = AudioPlayer.buffered.end(0) / AudioPlayer.duration * 100;
+      buffered = AudioPlayer.buffered.end(AudioPlayer.buffered.length - 1) / AudioPlayer.duration * 100;
     }
     // Get played percent
     var time = 0;
