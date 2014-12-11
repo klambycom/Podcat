@@ -9,7 +9,8 @@ var ProgressBar = React.createClass({
       currentTime: 0,
       duration: 0,
       bufferedPercent: 0,
-      timePercent: 0
+      timePercent: 0,
+      timeUnderCursor: 0
     };
   },
   componentDidMount: function () {
@@ -43,6 +44,13 @@ var ProgressBar = React.createClass({
     // Change time
     AudioPlayer.currentTime = AudioPlayer.duration * percent;
   },
+  handleMouseMove: function (e) {
+    var offset = e.nativeEvent.offsetX;
+    var width = this.refs.progress_bar.getDOMNode().offsetWidth;
+    var percent = offset / width;
+    var time = AudioPlayer.duration * percent;
+    this.setState({ timeUnderCursor: time });
+  },
   secondsToString: function (time) {
     if (isNaN(time)) { return '00:00'; }
     return Math.round(time / 60) + ':' + Math.round(time % 60);
@@ -55,9 +63,10 @@ var ProgressBar = React.createClass({
         <div
           className="progress-bar"
           ref="progress_bar"
-          onClick={this.handleClick}>
+          onClick={this.handleClick}
+          onMouseMove={this.handleMouseMove}>
 
-          <span className="start-time">00:00</span>
+          <span className="start-time">{this.secondsToString(this.state.timeUnderCursor)}</span>
           <span className="end-time">{this.secondsToString(this.state.duration)}</span>
 
           <div className="buffered" style={bufferedStyles}></div>
