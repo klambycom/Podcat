@@ -1,9 +1,12 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Reflux = require('reflux');
 var AudioPlayer = require('../audio_player.js');
+var ProgressBarStore = require('../reflux/progress_bar_store.js');
 
 var ProgressBar = React.createClass({
+  mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
   getInitialState: function () {
     return {
       currentTime: 0,
@@ -13,29 +16,8 @@ var ProgressBar = React.createClass({
       underCursor: 0
     };
   },
-  componentDidMount: function () {
-    // Update progress bar using progress and timeupdate event
-    AudioPlayer.addEventListener('progress', this.updateProgress);
-    AudioPlayer.addEventListener('timeupdate', this.updateProgress);
-  },
-  updateProgress: function () {
-    // Get buffered percent
-    var buffered = 0;
-    if (AudioPlayer.buffered.length > 0) {
-      buffered = AudioPlayer.buffered.end(AudioPlayer.buffered.length - 1) / AudioPlayer.duration * 100;
-    }
-    // Get played percent
-    var time = 0;
-    if (!isNaN(AudioPlayer.duration)) {
-      time = AudioPlayer.currentTime / AudioPlayer.duration * 100;
-    }
-    // Update state, and round to one decimal
-    this.setState({
-      currentTime: AudioPlayer.currentTime,
-      duration: AudioPlayer.duration,
-      bufferedPercent: +buffered.toFixed(1),
-      timePercent: +time.toFixed(1)
-    });
+  onProgress: function (progress) {
+    this.setState(progress);
   },
   eventToSecs: function (fn) {
     return function (e) {
