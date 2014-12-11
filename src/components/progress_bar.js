@@ -37,18 +37,17 @@ var ProgressBar = React.createClass({
       timePercent: +time.toFixed(1)
     });
   },
-  handleClick: function (e) {
-    var offset = e.nativeEvent.offsetX;
-    var width = this.refs.progress_bar.getDOMNode().offsetWidth;
-    var percent = offset / width;
-    // Change time
-    AudioPlayer.currentTime = AudioPlayer.duration * percent;
+  eventToSecs: function (fn) {
+    return function (e) {
+      var offset = e.nativeEvent.offsetX;
+      var width = this.refs.progress_bar.getDOMNode().offsetWidth;
+      fn(AudioPlayer.duration * (offset / width));
+    }.bind(this);
   },
-  handleMouseMove: function (e) {
-    var offset = e.nativeEvent.offsetX;
-    var width = this.refs.progress_bar.getDOMNode().offsetWidth;
-    var percent = offset / width;
-    var time = AudioPlayer.duration * percent;
+  handleClick: function (time) {
+    AudioPlayer.currentTime = time;
+  },
+  handleMouseMove: function (time) {
     this.setState({ timeUnderCursor: time });
   },
   secondsToString: function (time) {
@@ -63,8 +62,8 @@ var ProgressBar = React.createClass({
         <div
           className="progress-bar"
           ref="progress_bar"
-          onClick={this.handleClick}
-          onMouseMove={this.handleMouseMove}>
+          onClick={this.eventToSecs(this.handleClick)}
+          onMouseMove={this.eventToSecs(this.handleMouseMove)}>
 
           <span className="start-time">{this.secondsToString(this.state.timeUnderCursor)}</span>
           <span className="end-time">{this.secondsToString(this.state.duration)}</span>
