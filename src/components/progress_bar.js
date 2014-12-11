@@ -4,6 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var AudioPlayer = require('../audio_player.js');
 var ProgressBarStore = require('../reflux/progress_bar_store.js');
+var PlayerActions = require('../reflux/player_actions.js');
 
 var ProgressBar = React.createClass({
   mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
@@ -26,9 +27,7 @@ var ProgressBar = React.createClass({
       fn(AudioPlayer.duration * (offset / width));
     }.bind(this);
   },
-  handleClick: function (time) {
-    AudioPlayer.currentTime = time;
-  },
+  handleClick: PlayerActions.updateTime,
   handleMouseMove: function (time) {
     this.setState({ underCursor: time });
   },
