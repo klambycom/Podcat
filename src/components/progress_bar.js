@@ -43,6 +43,10 @@ var ProgressBar = React.createClass({
     // Change time
     AudioPlayer.currentTime = AudioPlayer.duration * percent;
   },
+  secondsToString: function (time) {
+    if (isNaN(time)) { return '00:00'; }
+    return Math.round(time / 60) + ':' + Math.round(time % 60);
+  },
   render: function () {
     var bufferedStyles = { width: this.state.bufferedPercent + '%' };
     var timeStyles = { width: this.state.timePercent + '%' };
@@ -52,6 +56,9 @@ var ProgressBar = React.createClass({
           className="progress-bar"
           ref="progress_bar"
           onClick={this.handleClick}>
+
+          <span className="start-time">00:00</span>
+          <span className="end-time">{this.secondsToString(this.state.duration)}</span>
 
           <div className="buffered" style={bufferedStyles}></div>
           <div className="time" style={timeStyles}></div>
