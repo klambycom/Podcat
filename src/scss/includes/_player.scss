@@ -60,17 +60,23 @@
     box-shadow: black 0px 0px 10px 0px;
     cursor: pointer;
 
-    .buffered {
-      height: 7px;
-      background-color: white;
+    .buffered, .time, .loading {
       position: absolute;
+      height: 7px;
+    }
+
+    .buffered {
+      background-color: white;
     }
 
     .time {
-      height: 7px;
       min-width: .5%;
       background-color: $link-color;
-      position: absolute;
+    }
+
+    .loading {
+      animation: loading-progress-bar .5s infinite;
+      width: 100%;
     }
 
     .start-time, .end-time {
@@ -93,4 +99,13 @@
       top: -20px;
     }
   }
+}
+
+@keyframes loading-progress-bar {
+  0%   { background-color: $link-hover-color; }
+  20%  { background-color: $link-color; }
+  40%  { background-color: $link-hover-color; }
+  60%  { background-color: $link-color; }
+  80%  { background-color: $link-hover-color; }
+  100% { background-color: $link-color; }
 }

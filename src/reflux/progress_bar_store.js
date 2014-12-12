@@ -5,10 +5,20 @@ var AudioPlayer = require('../audio_player.js');
 var store = Reflux.createStore({
   listenables: actions,
   init: function () {
-    AudioPlayer.addEventListener('progress', this.onProgress.bind(this));
-    AudioPlayer.addEventListener('timeupdate', this.onProgress.bind(this));
+    // Events for progress bar
+    AudioPlayer.addEventListener('progress', this.triggerProgress.bind(this));
+    AudioPlayer.addEventListener('timeupdate', this.triggerProgress.bind(this));
+    // Start/stop loading events
+    AudioPlayer.addEventListener('loadstart', this.triggerLoading.bind(this, true));
+    AudioPlayer.addEventListener('canplay', this.triggerLoading.bind(this, false));
   },
-  onProgress: function () {
+  onUpdateTime: function (offset, width) {
+    AudioPlayer.currentTime = AudioPlayer.duration * (offset / width);
+  },
+  onMoveMouse: function (offset, width) {
+    this.trigger({ underCursor: AudioPlayer.duration * (offset / width) });
+  },
+  triggerProgress: function () {
     // Get buffered percent
     var buffered = 0;
     if (AudioPlayer.buffered.length > 0) {
@@ -28,11 +38,8 @@ var store = Reflux.createStore({
       timePercent: +time.toFixed(1)
     });
   },
-  onUpdateTime: function (offset, width) {
-    AudioPlayer.currentTime = AudioPlayer.duration * (offset / width);
-  },
-  onMoveMouse: function (offset, width) {
-    this.trigger({ underCursor: AudioPlayer.duration * (offset / width) });
+  triggerLoading: function (loading) {
+    this.trigger({ loading: loading });
   }
 });
 
