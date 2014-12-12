@@ -1,0 +1,66 @@
+/** @jsx React.DOM */
+
+var React = require('react');
+var Reflux = require('reflux');
+var ProgressBarStore = require('../reflux/progress_bar_store.js');
+var ProgressBarActions = require('../reflux/progress_bar_actions.js');
+
+var secsToStr = function (time) {
+  if (isNaN(time)) { return '00:00'; }
+  var min = Math.round(time / 60);
+  var sec = Math.round(time % 60);
+  return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
+};
+
+var ProgressBar = React.createClass({
+  mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
+  getInitialState: function () {
+    return {
+      // Time in seconds
+      currentTime: 0,
+      duration: 0,
+      // Percent of progress bar
+      bufferedPercent: 0,
+      timePercent: 0,
+      // Seconds under cursor
+      underCursor: 0,
+      // Is data loading?
+      loading: false
+    };
+  },
+  onProgress: function (progress) {
+    this.setState(progress);
+  },
+  eventOffset: function (fn) {
+    return function (e) {
+      fn(e.nativeEvent.offsetX, this.refs.progress_bar.getDOMNode().offsetWidth);
+    }.bind(this);
+  },
+  handleClick: ProgressBarActions.updateTime,
+  handleMouseMove: ProgressBarActions.moveMouse,
+  renderLoading: function () {
+    if (this.state.loading) { return <div className="loading"></div>; }
+  },
+  render: function () {
+    var bufferedStyles = { width: this.state.bufferedPercent + '%' };
+    var timeStyles = { width: this.state.timePercent + '%' };
+
+    return (
+        <div
+          className="progress-bar"
+          ref="progress_bar"
+          onClick={this.eventOffset(this.handleClick)}
+          onMouseMove={this.eventOffset(this.handleMouseMove)}>
+
+          <span className="start-time">{secsToStr(this.state.underCursor)}</span>
+          <span className="end-time">{secsToStr(this.state.duration)}</span>
+
+          <div className="buffered" style={bufferedStyles}></div>
+          <div className="time" style={timeStyles}></div>
+          {this.renderLoading()}
+        </div>
+        );
+  }
+});
+
+module.exports = ProgressBar;

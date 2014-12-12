@@ -4,6 +4,7 @@ var React = require('react');
 var PlayPause = require('./play_pause.js');
 var Previous = require('./previous.js');
 var Next = require('./next.js');
+var ProgressBar = require('./progress_bar.js');
 
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
@@ -45,6 +46,7 @@ var Player = React.createClass({
         <div id="player" className={hide}>
           <div className="image"><img src={this.state.image} /></div>
           <div className="title">{this.state.title}</div>
+          <ProgressBar />
           <div className="controls"><Previous /> <PlayPause /> <Next /></div>
         </div>
         );

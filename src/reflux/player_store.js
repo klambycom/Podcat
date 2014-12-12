@@ -1,36 +1,34 @@
 var Reflux = require('reflux');
 var actions = require('./player_actions.js');
+var AudioPlayer = require('../audio_player.js');
 
 var store = Reflux.createStore({
-  init: function () {
-    this.player = new Audio();
-    this.listenToMany(actions);
-  },
+  listenables: actions,
   onPlay: function (url, autoplay) {
     // Change src if current url is not already playing
-    if (this.player.src !== url) {
-      this.player.src = url;
+    if (AudioPlayer.src !== url) {
+      AudioPlayer.src = url;
     }
 
     // And play unless autoplay is false
     if (typeof autoplay === 'undefined' || autoplay === true) {
-      this.player.play();
+      AudioPlayer.play();
     }
 
-    this.trigger(!this.player.paused);
+    this.trigger(!AudioPlayer.paused);
   },
   onPause: function () {
-    this.player.pause();
+    AudioPlayer.pause();
     this.trigger(false);
   },
   onToggle: function() {
-    if (this.player.paused) {
-      this.player.play();
+    if (AudioPlayer.paused) {
+      AudioPlayer.play();
     } else {
-      this.player.pause();
+      AudioPlayer.pause();
     }
 
-    this.trigger(!this.player.paused);
+    this.trigger(!AudioPlayer.paused);
   }
 });
 
