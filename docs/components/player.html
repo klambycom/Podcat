@@ -36,6 +36,7 @@
 <span class="hljs-keyword">var</span> PlayPause = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./play_pause.js'</span>);
 <span class="hljs-keyword">var</span> Previous = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./previous.js'</span>);
 <span class="hljs-keyword">var</span> Next = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./next.js'</span>);
+<span class="hljs-keyword">var</span> ProgressBar = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./progress_bar.js'</span>);
 
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> PlaylistStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_store.js'</span>);
@@ -102,6 +103,7 @@
         <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"player"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{hide}</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"image"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">ProgressBar</span> /&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"controls"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Previous</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">PlayPause</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">Next</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );

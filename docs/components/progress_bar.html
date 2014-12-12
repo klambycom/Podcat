@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>progress_bar.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>progress_bar.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
+
+<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
+<span class="hljs-keyword">var</span> ProgressBarStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/progress_bar_store.js'</span>);
+<span class="hljs-keyword">var</span> ProgressBarActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/progress_bar_actions.js'</span>);
+
+<span class="hljs-keyword">var</span> secsToStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(time)</span> </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isNaN</span>(time)) { <span class="hljs-keyword">return</span> <span class="hljs-string">'00:00'</span>; }
+  <span class="hljs-keyword">var</span> min = <span class="hljs-built_in">Math</span>.round(time / <span class="hljs-number">60</span>);
+  <span class="hljs-keyword">var</span> sec = <span class="hljs-built_in">Math</span>.round(time % <span class="hljs-number">60</span>);
+  <span class="hljs-keyword">return</span> (min &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">'0'</span> + min : min) + <span class="hljs-string">':'</span> + (sec &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">'0'</span> + sec : sec);
+};
+
+<span class="hljs-keyword">var</span> ProgressBar = React.createClass({
+  mixins: [Reflux.listenTo(ProgressBarStore, <span class="hljs-string">'onProgress'</span>)],
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Time in seconds</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      currentTime: <span class="hljs-number">0</span>,
+      duration: <span class="hljs-number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Percent of progress bar</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      bufferedPercent: <span class="hljs-number">0</span>,
+      timePercent: <span class="hljs-number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Seconds under cursor</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      underCursor: <span class="hljs-number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Is data loading?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      loading: <span class="hljs-literal">false</span>
+    };
+  },
+  onProgress: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(progress)</span> </span>{
+    <span class="hljs-keyword">this</span>.setState(progress);
+  },
+  eventOffset: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fn)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+      fn(e.nativeEvent.offsetX, <span class="hljs-keyword">this</span>.refs.progress_bar.getDOMNode().offsetWidth);
+    }.bind(<span class="hljs-keyword">this</span>);
+  },
+  handleClick: ProgressBarActions.updateTime,
+  handleMouseMove: ProgressBarActions.moveMouse,
+  renderLoading: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.loading) { <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"loading"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span> }
+  },
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> bufferedStyles = { width: <span class="hljs-keyword">this</span>.state.bufferedPercent + <span class="hljs-string">'%'</span> };
+    <span class="hljs-keyword">var</span> timeStyles = { width: <span class="hljs-keyword">this</span>.state.timePercent + <span class="hljs-string">'%'</span> };
+
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>
+          <span class="hljs-attribute">className</span>=<span class="hljs-value">"progress-bar"</span>
+          <span class="hljs-attribute">ref</span>=<span class="hljs-value">"progress_bar"</span>
+          <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.eventOffset(this.handleClick)}</span>
+          <span class="hljs-attribute">onMouseMove</span>=<span class="hljs-value">{this.eventOffset(this.handleMouseMove)}</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"start-time"</span>&gt;</span>{secsToStr(this.state.underCursor)}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"end-time"</span>&gt;</span>{secsToStr(this.state.duration)}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"buffered"</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{bufferedStyles}</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"time"</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{timeStyles}</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          {this.renderLoading()}
+        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        );
+  }
+});
+
+module.exports = ProgressBar;
+
+</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
