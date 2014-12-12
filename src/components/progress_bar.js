@@ -9,17 +9,20 @@ var ProgressBar = React.createClass({
   mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
   getInitialState: function () {
     return {
+      // Time in seconds
       currentTime: 0,
       duration: 0,
+      // Percent of progress bar
       bufferedPercent: 0,
       timePercent: 0,
+      // Seconds under cursor
       underCursor: 0
     };
   },
   onProgress: function (progress) {
     this.setState(progress);
   },
-  eventToSecs: function (fn) {
+  eventOffset: function (fn) {
     return function (e) {
       fn(e.nativeEvent.offsetX, this.refs.progress_bar.getDOMNode().offsetWidth);
     }.bind(this);
@@ -28,8 +31,8 @@ var ProgressBar = React.createClass({
   handleMouseMove: ProgressBarActions.moveMouse,
   secsToStr: function (time) {
     if (isNaN(time)) { return '00:00'; }
-    var sec = Math.round(time % 60);
     var min = Math.round(time / 60);
+    var sec = Math.round(time % 60);
     return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
   },
   render: function () {
@@ -40,8 +43,8 @@ var ProgressBar = React.createClass({
         <div
           className="progress-bar"
           ref="progress_bar"
-          onClick={this.eventToSecs(this.handleClick)}
-          onMouseMove={this.eventToSecs(this.handleMouseMove)}>
+          onClick={this.eventOffset(this.handleClick)}
+          onMouseMove={this.eventOffset(this.handleMouseMove)}>
 
           <span className="start-time">{this.secsToStr(this.state.underCursor)}</span>
           <span className="end-time">{this.secsToStr(this.state.duration)}</span>
