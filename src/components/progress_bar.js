@@ -2,9 +2,8 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var AudioPlayer = require('../audio_player.js');
 var ProgressBarStore = require('../reflux/progress_bar_store.js');
-var PlayerActions = require('../reflux/player_actions.js');
+var ProgressBarActions = require('../reflux/progress_bar_actions.js');
 
 var ProgressBar = React.createClass({
   mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
@@ -22,15 +21,11 @@ var ProgressBar = React.createClass({
   },
   eventToSecs: function (fn) {
     return function (e) {
-      var offset = e.nativeEvent.offsetX;
-      var width = this.refs.progress_bar.getDOMNode().offsetWidth;
-      fn(AudioPlayer.duration * (offset / width));
+      fn(e.nativeEvent.offsetX, this.refs.progress_bar.getDOMNode().offsetWidth);
     }.bind(this);
   },
-  handleClick: PlayerActions.updateTime,
-  handleMouseMove: function (time) {
-    this.setState({ underCursor: time });
-  },
+  handleClick: ProgressBarActions.updateTime,
+  handleMouseMove: ProgressBarActions.moveMouse,
   secsToStr: function (time) {
     if (isNaN(time)) { return '00:00'; }
     var sec = Math.round(time % 60);

@@ -1,7 +1,9 @@
 var Reflux = require('reflux');
 
 var actions = Reflux.createActions([
-  'progress'
+  'progress',
+  'updateTime',
+  'moveMouse'
 ]);
 
 module.exports = actions;

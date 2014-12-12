@@ -3,7 +3,7 @@ var actions = require('./progress_bar_actions.js');
 var AudioPlayer = require('../audio_player.js');
 
 var store = Reflux.createStore({
-  listenables: actions, // TODO Needed?
+  listenables: actions,
   init: function () {
     AudioPlayer.addEventListener('progress', this.onProgress.bind(this));
     AudioPlayer.addEventListener('timeupdate', this.onProgress.bind(this));
@@ -23,10 +23,16 @@ var store = Reflux.createStore({
 
     this.trigger({
       currentTime: AudioPlayer.currentTime,
-      duration: AudioPlayer.durationa,
+      duration: AudioPlayer.duration,
       bufferedPercent: +buffered.toFixed(1),
       timePercent: +time.toFixed(1)
     });
+  },
+  onUpdateTime: function (offset, width) {
+    AudioPlayer.currentTime = AudioPlayer.duration * (offset / width);
+  },
+  onMoveMouse: function (offset, width) {
+    this.trigger({ underCursor: AudioPlayer.duration * (offset / width) });
   }
 });
 

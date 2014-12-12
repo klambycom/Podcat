@@ -29,9 +29,6 @@ var store = Reflux.createStore({
     }
 
     this.trigger(!AudioPlayer.paused);
-  },
-  onUpdateTime: function (time) {
-    AudioPlayer.currentTime = time;
   }
 });
 
