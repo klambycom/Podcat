@@ -34,7 +34,7 @@ var Player = React.createClass({
   onTimeUpdate: function (data) {
     // Get information about next episode, if only a couple of seconds left on
     // this episode
-    if (typeof data.nearEnd !== "undefined") {
+    if (typeof data.nearEnd !== "undefined" && data.nextEpisode.title) {
       this.setState({ nearEnd: !!data.nearEnd, nextEpisode: data.nextEpisode });
     }
   },
