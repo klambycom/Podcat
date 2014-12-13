@@ -43,6 +43,8 @@ var storage = {
     localStorage.setItem(this.ID, JSON.stringify(queue));
   },
   remove: function () { return removeFirst(localStorage, this.ID); },
+  peek: function () { return this.all()[1]; },
+  empty: function () { return this.all() < 1; },
   history: {
     ID: 'playlist.history',
     all: function () { return all(sessionStorage, this.ID); },
