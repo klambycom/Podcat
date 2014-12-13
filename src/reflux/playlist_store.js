@@ -1,9 +1,13 @@
 var Reflux = require('reflux');
 var actions = require('./playlist_actions.js');
 var storage = require('../playlist_storage.js');
+var AudioPlayer = require('../audio_player.js');
 
 var store = Reflux.createStore({
   listenables: actions,
+  init: function () {
+    AudioPlayer.addEventListener('ended', this.onNext.bind(this));
+  },
   onPlay: function (episode) {
     var index = storage.indexOf(episode);
 

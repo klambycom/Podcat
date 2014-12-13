@@ -33,7 +33,7 @@ var store = Reflux.createStore({
     }
 
     // Get next episode
-    var nearEnd = AudioPlayer.duration - AudioPlayer.currentTime < 15;
+    var nearEnd = AudioPlayer.duration - AudioPlayer.currentTime < 30;
     var nextEpisode = nearEnd ? storage.peek() : {};
 
     this.trigger({
