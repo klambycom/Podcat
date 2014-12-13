@@ -33,16 +33,24 @@ var Player = React.createClass({
   },
   onTimeUpdate: function (data) {
     // Get information about next episode, if only a couple of seconds left on
-    // this episode
-    if (typeof data.nearEnd !== "undefined" && data.nextEpisode.title) {
-      this.setState({ nearEnd: !!data.nearEnd, nextEpisode: data.nextEpisode });
+    // this episode and there is a next episode
+    if (typeof data.nearEnd !== "undefined") {
+      this.setState({ nearEnd: false });
+
+      if (data.nextEpisode && data.nextEpisode.title) {
+        this.setState({ nearEnd: !!data.nearEnd, nextEpisode: data.nextEpisode });
+      }
     }
   },
   onPlay: function (episode, type) {
     this.changeEpisode(episode, type !== 'add');
   },
   changeEpisode: function (items, autoplay) {
-    if (items.length === 0) { return; }
+    // Stop playing if playlist is empty
+    if (items.length === 0) {
+      this.setState({ playing: false });
+      return;
+    }
 
     // Change episode if playlist is not empty
     this.setState({
