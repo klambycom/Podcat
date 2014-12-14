@@ -33,6 +33,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./progress_bar_actions.js'</span>);
 <span class="hljs-keyword">var</span> AudioPlayer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../audio_player.js'</span>);
+<span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
   listenables: actions,
@@ -112,13 +113,31 @@
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> time = <span class="hljs-number">0</span>;
     <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">isNaN</span>(AudioPlayer.duration)) {
       time = AudioPlayer.currentTime / AudioPlayer.duration * <span class="hljs-number">100</span>;
-    }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Get next episode</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> nearEnd = AudioPlayer.duration - AudioPlayer.currentTime &lt; <span class="hljs-number">30</span>;
+    <span class="hljs-keyword">var</span> nextEpisode = nearEnd ? storage.peek() : {};
 
     <span class="hljs-keyword">this</span>.trigger({
       currentTime: AudioPlayer.currentTime,
       duration: AudioPlayer.duration,
       bufferedPercent: +buffered.toFixed(<span class="hljs-number">1</span>),
-      timePercent: +time.toFixed(<span class="hljs-number">1</span>)
+      timePercent: +time.toFixed(<span class="hljs-number">1</span>),
+      nearEnd: nearEnd,
+      nextEpisode: nextEpisode
     });
   },
   triggerLoading: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(loading)</span> </span>{

@@ -75,6 +75,9 @@
     localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
   },
   remove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> removeFirst(localStorage, <span class="hljs-keyword">this</span>.ID); },
+  peek: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.all()[<span class="hljs-number">1</span>]; },
+  empty: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.all().length &lt;= <span class="hljs-number">1</span>; },
+  clear: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ localStorage.removeItem(<span class="hljs-keyword">this</span>.ID); },
   history: {
     ID: <span class="hljs-string">'playlist.history'</span>,
     all: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> all(sessionStorage, <span class="hljs-keyword">this</span>.ID); },

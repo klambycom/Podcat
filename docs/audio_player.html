@@ -27,10 +27,20 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <p>Stupid tests fails without this because i don’t understund how automock
+works, I tink.</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = <span class="hljs-keyword">new</span> Audio();</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> audio = {
+  addEventListener: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{}
+};
+
+<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span>.Audio !== <span class="hljs-string">'undefined'</span>) {
+  audio = <span class="hljs-keyword">new</span> Audio();
+}
+
+<span class="hljs-built_in">module</span>.exports = audio;</pre></div></div>
             
         </li>
         

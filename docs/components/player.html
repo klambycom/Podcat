@@ -40,17 +40,23 @@
 
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> PlaylistStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_store.js'</span>);
+<span class="hljs-keyword">var</span> ProgressBarStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/progress_bar_store.js'</span>);
 <span class="hljs-keyword">var</span> PlayerActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/player_actions.js'</span>);
 
 <span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
 <span class="hljs-keyword">var</span> Player = React.createClass({
-  mixins: [Reflux.listenTo(PlaylistStore, <span class="hljs-string">'onPlay'</span>)],
+  mixins: [
+    Reflux.listenTo(PlaylistStore, <span class="hljs-string">'onPlay'</span>),
+    Reflux.listenTo(ProgressBarStore, <span class="hljs-string">'onTimeUpdate'</span>)
+  ],
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
       image: <span class="hljs-string">''</span>,
       title: <span class="hljs-string">''</span>,
-      playing: <span class="hljs-literal">false</span>
+      playing: <span class="hljs-literal">false</span>,
+      nearEnd: <span class="hljs-literal">false</span>,
+      nextEpisode: {}
     };
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
@@ -70,11 +76,7 @@
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.changeEpisode(storage.all(), <span class="hljs-literal">false</span>);
   },
-  onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(episode, type)</span> </span>{
-    <span class="hljs-keyword">this</span>.changeEpisode(episode, type !== <span class="hljs-string">'add'</span>);
-  },
-  changeEpisode: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items, autoplay)</span> </span>{
-    <span class="hljs-keyword">if</span> (items.length === <span class="hljs-number">0</span>) { <span class="hljs-keyword">return</span>; }</pre></div></div>
+  onTimeUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -84,6 +86,51 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Get information about next episode, if only a couple of seconds left on
+this episode and there is a next episode</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> data.nearEnd !== <span class="hljs-string">"undefined"</span>) {
+      <span class="hljs-keyword">this</span>.setState({ nearEnd: <span class="hljs-literal">false</span> });
+
+      <span class="hljs-keyword">if</span> (data.nextEpisode &amp;&amp; data.nextEpisode.title) {
+        <span class="hljs-keyword">this</span>.setState({ nearEnd: !!data.nearEnd, nextEpisode: data.nextEpisode });
+      }
+    }
+  },
+  onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(episode, type)</span> </span>{
+    <span class="hljs-keyword">this</span>.changeEpisode(episode, type !== <span class="hljs-string">'add'</span>);
+  },
+  changeEpisode: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items, autoplay)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Stop playing if playlist is empty</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (items.length === <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">this</span>.setState({ playing: <span class="hljs-literal">false</span> });
+      <span class="hljs-keyword">return</span>;
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>Change episode if playlist is not empty</p>
 
@@ -98,13 +145,19 @@
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> hide = <span class="hljs-keyword">this</span>.state.playing ? <span class="hljs-string">''</span>: <span class="hljs-string">'hide'</span>;
+    <span class="hljs-keyword">var</span> nextEpisode = <span class="hljs-keyword">this</span>.state.nearEnd ? <span class="hljs-string">'next-episode'</span> : <span class="hljs-string">'next-episode hide'</span>;
 
     <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"player"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{hide}</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"image"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">ProgressBar</span> /&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"controls"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Previous</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">PlayPause</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">Next</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"player"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{hide}</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"image"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">ProgressBar</span> /&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"controls"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Previous</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">PlayPause</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">Next</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{nextEpisode}</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>Next:<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span> {this.state.nextEpisode.title}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }

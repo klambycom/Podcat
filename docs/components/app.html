@@ -36,6 +36,7 @@
 <span class="hljs-keyword">var</span> Player = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./player'</span>);
 <span class="hljs-keyword">var</span> Navigation = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./navigation'</span>);
 <span class="hljs-keyword">var</span> Sidebar = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./sidebar'</span>);
+<span class="hljs-keyword">var</span> Alert = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./alert'</span>);
 <span class="hljs-keyword">var</span> RouteHandler = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).RouteHandler;
 
 <span class="hljs-keyword">var</span> App = React.createClass({
@@ -43,6 +44,7 @@
     <span class="hljs-keyword">return</span> (
         <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">Navigation</span> /&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">Alert</span> /&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"float-left"</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">RouteHandler</span> /&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
