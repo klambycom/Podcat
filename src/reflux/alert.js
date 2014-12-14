@@ -32,8 +32,6 @@ var store = Reflux.createStore({
   }
 });
 
-window.actions = actions;
-
 module.exports = {
   actions: actions,
   store: store
