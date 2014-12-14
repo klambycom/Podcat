@@ -1,6 +1,7 @@
 var Reflux = require('reflux');
 var actions = require('./progress_bar_actions.js');
 var AudioPlayer = require('../audio_player.js');
+var storage = require('../playlist_storage.js');
 
 var store = Reflux.createStore({
   listenables: actions,
@@ -31,11 +32,17 @@ var store = Reflux.createStore({
       time = AudioPlayer.currentTime / AudioPlayer.duration * 100;
     }
 
+    // Get next episode
+    var nearEnd = AudioPlayer.duration - AudioPlayer.currentTime < 30;
+    var nextEpisode = nearEnd ? storage.peek() : {};
+
     this.trigger({
       currentTime: AudioPlayer.currentTime,
       duration: AudioPlayer.duration,
       bufferedPercent: +buffered.toFixed(1),
-      timePercent: +time.toFixed(1)
+      timePercent: +time.toFixed(1),
+      nearEnd: nearEnd,
+      nextEpisode: nextEpisode
     });
   },
   triggerLoading: function (loading) {

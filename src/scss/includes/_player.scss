@@ -109,3 +109,16 @@
   80%  { background-color: $link-hover-color; }
   100% { background-color: $link-color; }
 }
+
+.next-episode {
+  background-color: rgb(215, 215, 215);
+  padding: 5px;
+  font-size: .9em;
+
+  .title {
+    font-weight: bold;
+    font-family: sans-serif;
+  }
+
+  &.hide { display: none; }
+}
