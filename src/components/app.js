@@ -4,6 +4,7 @@ var React = require('react');
 var Player = require('./player');
 var Navigation = require('./navigation');
 var Sidebar = require('./sidebar');
+var Alert = require('./alert');
 var RouteHandler = require('react-router').RouteHandler;
 
 var App = React.createClass({
@@ -11,6 +12,7 @@ var App = React.createClass({
     return (
         <div>
           <Navigation />
+          <Alert />
           <div className="float-left">
             <RouteHandler />
           </div>
