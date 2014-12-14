@@ -33,12 +33,16 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-comment">/** @jsx React.DOM */</span>
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> Router = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>);
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> SearchStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/search_store.js'</span>);
 <span class="hljs-keyword">var</span> SearchActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/search_actions.js'</span>);
 
 <span class="hljs-keyword">var</span> Search = React.createClass({
-  mixins: [Reflux.listenTo(SearchStore, <span class="hljs-string">'onSearch'</span>)],
+  mixins: [
+    Router.Navigation,
+    Reflux.listenTo(SearchStore, <span class="hljs-string">'onSearch'</span>)
+  ],
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
       icon: <span class="hljs-string">'fa fa-search'</span>,
@@ -61,7 +65,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-built_in">window</span>.location = <span class="hljs-string">'#/podcast/'</span> + result;
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.transitionTo(<span class="hljs-string">'podcast'</span>, { id: result });
     } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type === <span class="hljs-string">'url'</span>) {</pre></div></div>
             
         </li>
