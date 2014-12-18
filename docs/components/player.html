@@ -34,14 +34,13 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> PlayPause = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./play_pause.js'</span>);
-<span class="hljs-keyword">var</span> Previous = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./previous.js'</span>);
-<span class="hljs-keyword">var</span> Next = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./next.js'</span>);
 <span class="hljs-keyword">var</span> ProgressBar = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./progress_bar.js'</span>);
 
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> PlaylistStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_store.js'</span>);
 <span class="hljs-keyword">var</span> ProgressBarStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/progress_bar_store.js'</span>);
 <span class="hljs-keyword">var</span> PlayerActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/player_actions.js'</span>);
+<span class="hljs-keyword">var</span> PlaylistActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_actions.js'</span>);
 
 <span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
@@ -143,6 +142,14 @@ this episode and there is a next episode</p>
     });
     PlayerActions.play(items[<span class="hljs-number">0</span>].audio_url, autoplay);
   },
+  handlePrevious: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    PlaylistActions.previous();
+    e.preventDefault();
+  },
+  handleNext: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    PlaylistActions.next();
+    e.preventDefault();
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> hide = <span class="hljs-keyword">this</span>.state.playing ? <span class="hljs-string">''</span>: <span class="hljs-string">'hide'</span>;
     <span class="hljs-keyword">var</span> nextEpisode = <span class="hljs-keyword">this</span>.state.nearEnd ? <span class="hljs-string">'next-episode'</span> : <span class="hljs-string">'next-episode hide'</span>;
@@ -153,7 +160,11 @@ this episode and there is a next episode</p>
             <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"image"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">ProgressBar</span> /&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"controls"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Previous</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">PlayPause</span> /&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-title">Next</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"controls"</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handlePrevious}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"fa fa-fast-backward"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">PlayPause</span> /&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleNext}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"fa fa-fast-forward"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{nextEpisode}</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">span</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>Next:<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span> {this.state.nextEpisode.title}
