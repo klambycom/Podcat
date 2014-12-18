@@ -76,15 +76,8 @@ var Podcast = React.createClass({
           <h2>Episodes</h2>
           <p>
             {this.state.items.map(function (item, i) {
-              return (
-                  <Episode
-                    key={i}
-                    queued={item.queued}
-                    title={item.title}
-                    image={item.image}
-                    audio_url={item.file.url} />
-                  );
-            }.bind(this))}
+              return <Episode key={i} data={item} />;
+            })}
           </p>
           
         </div>

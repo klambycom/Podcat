@@ -52,13 +52,7 @@ var Feed = React.createClass({
     // List episodes
     if (this.state.items.length > 0) {
       episodes = this.state.items.map(function (item, i) {
-        return (
-            <Episode
-              key={i}
-              title={item.title}
-              image={item.image}
-              audio_url={item.file.url} />
-            );
+        return <Episode key={i} data={item} />;
       });
     }
 
