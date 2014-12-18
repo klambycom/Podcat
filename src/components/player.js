@@ -2,14 +2,13 @@
 
 var React = require('react');
 var PlayPause = require('./play_pause.js');
-var Previous = require('./previous.js');
-var Next = require('./next.js');
 var ProgressBar = require('./progress_bar.js');
 
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
 var ProgressBarStore = require('../reflux/progress_bar_store.js');
 var PlayerActions = require('../reflux/player_actions.js');
+var PlaylistActions = require('../reflux/playlist_actions.js');
 
 var storage = require('../playlist_storage.js');
 
@@ -60,6 +59,14 @@ var Player = React.createClass({
     });
     PlayerActions.play(items[0].audio_url, autoplay);
   },
+  handlePrevious: function (e) {
+    PlaylistActions.previous();
+    e.preventDefault();
+  },
+  handleNext: function (e) {
+    PlaylistActions.next();
+    e.preventDefault();
+  },
   render: function () {
     var hide = this.state.playing ? '': 'hide';
     var nextEpisode = this.state.nearEnd ? 'next-episode' : 'next-episode hide';
@@ -70,7 +77,11 @@ var Player = React.createClass({
             <div className="image"><img src={this.state.image} /></div>
             <div className="title">{this.state.title}</div>
             <ProgressBar />
-            <div className="controls"><Previous /> <PlayPause /> <Next /></div>
+            <div className="controls">
+              <a href="#" onClick={this.handlePrevious} className="fa fa-fast-backward"></a>
+              <PlayPause />
+              <a href="#" onClick={this.handleNext} className="fa fa-fast-forward"></a>
+            </div>
           </div>
           <div className={nextEpisode}>
             <span className="title">Next:</span> {this.state.nextEpisode.title}
