@@ -79,6 +79,7 @@ var Podcast = React.createClass({
               return (
                   <Episode
                     key={i}
+                    queued={item.queued}
                     title={item.title}
                     image={item.image}
                     audio_url={item.file.url} />

@@ -3,9 +3,6 @@ var actions = require('./playlist_actions.js');
 var storage = require('../playlist_storage.js');
 var AudioPlayer = require('../audio_player.js');
 
-// TODO Remove
-window.storage = storage;
-
 var store = Reflux.createStore({
   listenables: actions,
   init: function () {

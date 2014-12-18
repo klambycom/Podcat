@@ -18,7 +18,8 @@ var Episode = React.createClass({
     image: React.PropTypes.string.isRequired,
     audio_url: React.PropTypes.string.isRequired,
     play: React.PropTypes.bool,
-    add: React.PropTypes.bool
+    add: React.PropTypes.bool,
+    queued: React.PropTypes.bool
   },
   handleClick: function (fnName) {
     return function (e) {
@@ -39,7 +40,7 @@ var Episode = React.createClass({
     var play = this.props.play && (<a href="#" onClick={this.handleClick('play')}>Play</a>);
     var add = this.props.add && (<a href="#" onClick={this.handleClick('add')}>Queue</a>);
 
-    if (this.state.added) { add = 'Queued'; }
+    if (this.state.added || this.props.queued) { add = 'Queued'; }
 
     return (
         <div className="episode">
