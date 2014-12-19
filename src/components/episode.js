@@ -24,11 +24,12 @@ var Episode = React.createClass({
       PlaylistActions[fnName]({
         title: this.props.data.title,
         image: this.props.data.image,
+        // this.props.data.audio_url is when episode already is in playlist
         audio_url: this.props.data.audio_url || this.props.data.file.url
       });
 
       // Change state of added
-      if (fnName === 'add') { this.setState({ added: true }); }
+      this.setState({ added: true });
 
       e.preventDefault();
     }.bind(this);
