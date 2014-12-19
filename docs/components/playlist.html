@@ -90,20 +90,12 @@
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.items.length &gt; <span class="hljs-number">0</span>) {
       episodes = <span class="hljs-keyword">this</span>.state.items.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item, i)</span> </span>{
-        <span class="hljs-keyword">return</span> (
-            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
-              <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>
-              <span class="hljs-attribute">title</span>=<span class="hljs-value">{item.title}</span>
-              <span class="hljs-attribute">image</span>=<span class="hljs-value">{item.image}</span>
-              <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">{item.audio_url}</span>
-              <span class="hljs-attribute">play</span>=<span class="hljs-value">{i</span> !=<span class="hljs-value">=</span> <span class="hljs-attribute">0</span>}
-              <span class="hljs-attribute">add</span>=<span class="hljs-value">{false}</span> /&gt;</span>
-            );
-      }, this);
+        <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Episode</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span> <span class="hljs-attribute">data</span>=<span class="hljs-value">{item}</span> <span class="hljs-attribute">play</span>=<span class="hljs-value">{i</span> !=<span class="hljs-value">=</span> <span class="hljs-attribute">0</span>} <span class="hljs-attribute">add</span>=<span class="hljs-value">{false}</span> /&gt;</span>;</span>
+      });
     }
 
-    return (
-        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"playlist"</span>&gt;</span>
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"playlist"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>Playlist<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
           {episodes}
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>

@@ -33,9 +33,10 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'firebase'</span>);
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./podcast_actions.js'</span>);
+<span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
-  listenables:actions,
+  listenables: actions,
   onInit: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> </span>{
     <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>)) || {};
 
@@ -59,10 +60,29 @@
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> database = <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://blinding-torch-6567.firebaseio.com/podcasts/'</span> + id);
       database.once(<span class="hljs-string">'value'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data)</span> </span>{
+        <span class="hljs-keyword">var</span> podcast = data.val();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Find queued episodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        podcast.items.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+          item.queued = storage.indexOf({ audio_url: item.file.url }) &gt;= <span class="hljs-number">0</span>;
+        });
+
         <span class="hljs-keyword">this</span>.trigger({
           subscriptions: subscriptions,
           subscribed: <span class="hljs-keyword">typeof</span> podcastFromSubscriptions !== <span class="hljs-string">'undefined'</span>,
-          podcast: data.val()
+          podcast: podcast
         });
       }, <span class="hljs-keyword">this</span>);
     }
@@ -91,11 +111,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <p>Remove subscription from localStorage</p>
 

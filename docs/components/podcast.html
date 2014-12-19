@@ -105,65 +105,57 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> result.podcast !== <span class="hljs-string">'undefined'</span>) {
-      <span class="hljs-keyword">if</span> (result.podcast === <span class="hljs-literal">null</span>) {
-        <span class="hljs-keyword">this</span>.setState({ notFound: <span class="hljs-literal">true</span> });
-      } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">this</span>.setState({ notFound: <span class="hljs-literal">false</span> });
-        <span class="hljs-keyword">this</span>.setState(result.podcast);
+            <div class="content"><div class='highlight'><pre>    if (typeof result.podcast !== 'undefined') {
+      if (result.podcast === null) {
+        this.setState({ notFound: true });
+      } else {
+        this.setState({ notFound: false });
+        this.setState(result.podcast);
       }
     }
   },
-  handleSubscribe: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.subscribed) {
-      PodcastActions.unsubscribe(<span class="hljs-keyword">this</span>.getParams().id);
-    } <span class="hljs-keyword">else</span> {
-      PodcastActions.subscribe(<span class="hljs-keyword">this</span>.getParams().id, <span class="hljs-keyword">this</span>.state);
+  handleSubscribe: function (e) {
+    if (this.state.subscribed) {
+      PodcastActions.unsubscribe(this.getParams().id);
+    } else {
+      PodcastActions.subscribe(this.getParams().id, this.state);
     }
 
     e.preventDefault();
   },
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.notFound) {
-      <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">NotFound</span>&gt;</span>There is no podcast on this url.<span class="hljs-tag">&lt;/<span class="hljs-title">NotFound</span>&gt;</span>);
+  render: function () {
+    if (this.state.notFound) {
+      return (&lt;NotFound&gt;There is no podcast on this url.&lt;/NotFound&gt;);
     }
 
     return (
-        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"podcast"</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{this.state.image}</span> <span class="hljs-attribute">alt</span>=<span class="hljs-value">{this.state.title}</span> /&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">a</span>
-              <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span>
-              <span class="hljs-attribute">className</span>=<span class="hljs-value">{this.state.subscribed</span> ? '<span class="hljs-attribute">unsubscribe</span>' <span class="hljs-attribute">:</span> '<span class="hljs-attribute">subscribe</span>'}
-              <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleSubscribe}</span>&gt;</span>
-              {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{this.state.summary}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">small</span>&gt;</span>{this.state.author}<span class="hljs-tag">&lt;/<span class="hljs-title">small</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"clear"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        &lt;div id="podcast"&gt;
+          &lt;img src={this.state.image} alt={this.state.title} /&gt;
+          &lt;div className="header"&gt;
+            &lt;h1&gt;{this.state.title}&lt;/h1&gt;
+            &lt;a
+              href="#"
+              className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
+              onClick={this.handleSubscribe}&gt;
+              {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}&lt;/a&gt;
+          &lt;/div&gt;
+          &lt;p&gt;{this.state.summary}&lt;/p&gt;
+          &lt;small&gt;{this.state.author}&lt;/small&gt;
+          &lt;div className="clear"&gt;&lt;/div&gt;
 
-          <span class="hljs-tag">&lt;<span class="hljs-title">h2</span>&gt;</span>Episodes<span class="hljs-tag">&lt;/<span class="hljs-title">h2</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>
+          &lt;h2&gt;Episodes&lt;/h2&gt;
+          &lt;p&gt;
             {this.state.items.map(function (item, i) {
-              return (
-                  <span class="hljs-tag">&lt;<span class="hljs-title">Episode</span>
-                    <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span>
-                    <span class="hljs-attribute">title</span>=<span class="hljs-value">{item.title}</span>
-                    <span class="hljs-attribute">image</span>=<span class="hljs-value">{item.image}</span>
-                    <span class="hljs-attribute">audio_url</span>=<span class="hljs-value">{item.file.url}</span> /&gt;</span>
-                  );
-            }.bind(this))}
-          <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+              return &lt;Episode key={i} data={item} /&gt;;
+            })}
+          &lt;/p&gt;
           
-        <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        &lt;/div&gt;
         );
   }
 });
 
-module.exports = Podcast;
-
-</span></pre></div></div>
+module.exports = Podcast;</pre></div></div>
             
         </li>
         
