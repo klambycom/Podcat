@@ -1,9 +1,10 @@
 var Firebase = require('firebase');
 var Reflux = require('reflux');
 var actions = require('./podcast_actions.js');
+var storage = require('../playlist_storage.js');
 
 var store = Reflux.createStore({
-  listenables:actions,
+  listenables: actions,
   onInit: function (id) {
     var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
@@ -15,10 +16,17 @@ var store = Reflux.createStore({
       // Get podcast data from firebase
       var database = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/' + id);
       database.once('value', function (data) {
+        var podcast = data.val();
+
+        // Find queued episodes
+        podcast.items.forEach(function (item) {
+          item.queued = storage.indexOf({ audio_url: item.file.url }) >= 0;
+        });
+
         this.trigger({
           subscriptions: subscriptions,
           subscribed: typeof podcastFromSubscriptions !== 'undefined',
-          podcast: data.val()
+          podcast: podcast
         });
       }, this);
     }
