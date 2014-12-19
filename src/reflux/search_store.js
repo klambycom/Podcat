@@ -1,101 +1,7 @@
 var Firebase = require('firebase');
 var Reflux = require('reflux');
 var actions = require('./search_actions.js');
-
-var getRSS = function (url, fn) {
-  var httpRequest = new XMLHttpRequest();
-
-  httpRequest.onreadystatechange = function () {
-    if (httpRequest.readyState === 4) {
-      if (httpRequest.status === 200) {
-        var result = JSON.parse(httpRequest.responseText);
-        fn(null, result.query.results.rss.channel);
-      } else {
-        fn('ERROR', null);
-      }
-    }
-  };
-
-  httpRequest.open(
-      'GET',
-      "http://query.yahooapis.com/v1/public/yql?q=select * from xml where url='" + url + "'&format=json",
-      true);
-  httpRequest.send(null);
-};
-
-var processFeedData = function (feed) {
-  var itemData, keywords, image, category, description, pubDate, podcastImage;
-
-  keywords = function(words) {
-    if (Array.isArray(words)) {
-      return words[0].split(',');
-    }
-    return words.split(',');
-  };
-
-  image = function (img) {
-    if (Array.isArray(img) && typeof img[0].url !== 'undefined') {
-      return img[0].url;
-    }
-    if (typeof img.href !== 'undefined') {
-      return img.href;
-    }
-  };
-
-  category = function (category) {
-    if (Array.isArray(category)) {
-      return category[0].content;
-    }
-    return category.text;
-  };
-
-  description = function (desc) {
-    if (Array.isArray(desc)) {
-      return desc[1].content;
-    }
-    return desc;
-  };
-
-  pubDate = function (feed) {
-    return feed.lastBuildDate || feed.pubDate;
-  };
-
-  podcastImage = feed.image && image(feed.image);
-
-  itemData = function (x) {
-    return {
-      title: x.title || 'No title',
-      summary: x.subtitle || 'Unknown',
-      pubDate: x.pubDate || 'Unknown',
-      link: x.link || 'Unknown',
-      explicit: x.explicit || 'Unknown',
-      file: {
-        duration: x.duration || 0,
-        type: (x.enclosure && x.enclosure.type) || 'Unknown',
-        url: (x.enclosure && x.enclosure.url) || 'Unknown'
-      },
-      image: {
-        episode: (x.image && x.image.href) || podcastImage,
-        podcast: podcastImage
-      }
-    };
-  };
-
-  return {
-    title: feed.title || 'No title',
-    author: feed.author || 'No author',
-    copyright: feed.copyright || 'No copyright',
-    image: podcastImage,
-    category: (feed.category && category(feed.category)) || 'No category',
-    summary: feed.summary || 'No summary',
-    description: description(feed.description) || 'No description',
-    subtitle: feed.subtitle || 'No subtitle',
-    lastUpdate: pubDate(feed) || 'Unknown',
-    explicit: feed.explicit || 'Unknown',
-    keywords: feed.keywords && keywords(feed.keywords),
-    items: feed.item.map(itemData)
-  };
-};
+var rss = require('../rss.js');
 
 var store = Reflux.createStore({
   listenables: actions,
@@ -118,8 +24,8 @@ var store = Reflux.createStore({
       this.database.orderByChild('url').equalTo(url[0]).once('value', function (data) {
         if (data.val() === null) {
           // Podcast not in database
-          getRSS(url[0], function (error, result) {
-            var json = processFeedData(result);
+          rss.get(url[0], function (error, result) {
+            var json = rss.parse(result);
             json.url = url[0];
             var post = this.database.push(json);
             this.trigger('feed', post.key());
