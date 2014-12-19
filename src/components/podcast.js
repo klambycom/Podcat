@@ -8,6 +8,18 @@ var PodcastActions = require('../reflux/podcast_actions.js');
 var NotFound = require('./not_found.js');
 var Episode = require('./episode.js');
 
+var hashCode = function(str) {
+  // Source: http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+  var hash = 0, i, chr, len;
+  if (str.length == 0) return hash;
+  for (i = 0, len = str.length; i < len; i++) {
+    chr = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+
 var Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
   getInitialState: function () {
@@ -43,6 +55,12 @@ var Podcast = React.createClass({
         this.setState(result.podcast);
       }
     }
+
+    // Add new episode
+    if (typeof result.episode !== 'undefined') {
+      this.state.items.unshift(result.episode);
+      this.forceUpdate();
+    }
   },
   handleSubscribe: function (e) {
     if (this.state.subscribed) {
@@ -75,8 +93,8 @@ var Podcast = React.createClass({
 
           <h2>Episodes</h2>
           <p>
-            {this.state.items.map(function (item, i) {
-              return <Episode key={i} data={item} />;
+            {this.state.items.map(function (item) {
+              return <Episode key={hashCode(item.file.url)} data={item} />;
             })}
           </p>
           

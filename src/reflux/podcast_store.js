@@ -1,4 +1,6 @@
 var Firebase = require('firebase');
+var moment = require('moment');
+var rss = require('../rss.js');
 var Reflux = require('reflux');
 var actions = require('./podcast_actions.js');
 var storage = require('../playlist_storage.js');
@@ -28,6 +30,24 @@ var store = Reflux.createStore({
           subscribed: typeof podcastFromSubscriptions !== 'undefined',
           podcast: podcast
         });
+
+        // Update podcast from rss-feed if older than one hour
+        if (moment(podcast.lastUpdate).utc().isBefore(moment.utc().subtract(1, 'hours'))) {
+          rss.get(podcast.url, function (error, result) {
+            rss
+              .parseEpisodes(result)
+              .filter(function (x) {
+                return moment(new Date(x.pubDate))
+                  .isAfter(moment(new Date(podcast.items[0].pubDate)));
+              })
+              .reverse()
+              .forEach(function (x) {
+                this.trigger({ episode: x });
+                // Add to firebase
+              }, this);
+              // Update lastUpdate date
+          }.bind(this));
+        }
       }, this);
     }
   },

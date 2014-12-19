@@ -15,11 +15,13 @@ var Sidebar = React.createClass({
     PodcastActions.init();
   },
   onSubscriptionChange: function (result) {
-    this.setState({
-      items: Object
-        .keys(result.subscriptions)
-        .map(function (x) { return result.subscriptions[x]; })
-    });
+    if (typeof result.subscriptions !== 'undefined') {
+      this.setState({
+        items: Object
+          .keys(result.subscriptions)
+          .map(function (x) { return result.subscriptions[x]; })
+      });
+    }
   },
   render: function () {
     var subscriptions = 'You have not subscribed to any podcasts yet!';
