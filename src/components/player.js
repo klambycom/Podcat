@@ -54,10 +54,19 @@ var Player = React.createClass({
     // Change episode if playlist is not empty
     this.setState({
       title: items[0].title,
-      image: items[0].image,
       playing: true
     });
     PlayerActions.play(items[0].audio_url, autoplay);
+
+    // Find cover image
+    var img = new Image();
+    img.addEventListener('load', function () {
+      this.setState({ image: items[0].image.episode });
+    }.bind(this));
+    img.addEventListener('error', function () {
+      this.setState({ image: items[0].image.podcast });
+    }.bind(this));
+    img.src = items[0].image.episode;
   },
   handlePrevious: function (e) {
     PlaylistActions.previous();

@@ -24,23 +24,7 @@ var getRSS = function (url, fn) {
 };
 
 var processFeedData = function (feed) {
-  var itemData, keywords, image, category, description, pubDate;
-
-  itemData = function (x) {
-    return {
-      title: x.title || 'No title',
-      summary: x.subtitle || 'Unknown',
-      pubDate: x.pubDate || 'Unknown',
-      link: x.link || 'Unknown',
-      explicit: x.explicit || 'Unknown',
-      file: {
-        duration: x.duration || 0,
-        type: (x.enclosure && x.enclosure.type) || 'Unknown',
-        url: (x.enclosure && x.enclosure.url) || 'Unknown'
-      },
-      image: (x.image && x.image.href) || 'Unknown'
-    };
-  };
+  var itemData, keywords, image, category, description, pubDate, podcastImage;
 
   keywords = function(words) {
     if (Array.isArray(words)) {
@@ -76,11 +60,32 @@ var processFeedData = function (feed) {
     return feed.lastBuildDate || feed.pubDate;
   };
 
+  podcastImage = feed.image && image(feed.image);
+
+  itemData = function (x) {
+    return {
+      title: x.title || 'No title',
+      summary: x.subtitle || 'Unknown',
+      pubDate: x.pubDate || 'Unknown',
+      link: x.link || 'Unknown',
+      explicit: x.explicit || 'Unknown',
+      file: {
+        duration: x.duration || 0,
+        type: (x.enclosure && x.enclosure.type) || 'Unknown',
+        url: (x.enclosure && x.enclosure.url) || 'Unknown'
+      },
+      image: {
+        episode: (x.image && x.image.href) || podcastImage,
+        podcast: podcastImage
+      }
+    };
+  };
+
   return {
     title: feed.title || 'No title',
     author: feed.author || 'No author',
     copyright: feed.copyright || 'No copyright',
-    image: feed.image && image(feed.image),
+    image: podcastImage,
     category: (feed.category && category(feed.category)) || 'No category',
     summary: feed.summary || 'No summary',
     description: description(feed.description) || 'No description',
