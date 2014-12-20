@@ -2,44 +2,50 @@
 
 var React = require('react');
 var Episode = require('./episode');
+var Firebase = require('firebase');
+var moment = require('moment');
+
+var reverseDot = function (a) { return function (b) { return a[b]; }; };
 
 var Feed = React.createClass({
   getInitialState: function () {
     return { items: [] };
   },
   componentDidMount: function () {
-    var self = this;
-    var httpRequest = new XMLHttpRequest();
-    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions'));
-    var urls = Object
-      .keys(subscriptions)
-      .map(function (x) { return subscriptions[x].url; });
+    this.firebase = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts');
+    this.subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
-    httpRequest.onreadystatechange = function () {
-      if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-          var result = JSON.parse(httpRequest.responseText);
-          var items = result.query.results.item.map(function (x) {
-            return {
-              title: x.title,
-              subtitle: x.subtitle,
-              image: x.image.href,
-              file: { url: x.enclosure.url }
-            };
-          });
-          self.setState({ items: items });
+    // Init data
+    var nrOfSubs = Object.keys(this.subscriptions).length;
+    var counter = 0;
+    var items = [];
+    Object.keys(this.subscriptions).forEach(function (x) {
+      this.firebase
+        .child(x)
+        .child('items')
+        .limitToLast(10)
+        .once('value', function (snapshot) {
+          var data = snapshot.val();
+          items = items.concat(Object.keys(data).map(reverseDot(data)));
 
-          // array with objects, that have title, subtitle, image.href,
-          // enclosure.url
-        }
-      }
-    };
+          if ((counter += 1) === nrOfSubs) {
+            // Sort items
+            items.sort(function (a, b) {
+              var aa = moment.utc(a.pubDate);
+              var bb = moment.utc(b.pubDate);
 
-    httpRequest.open(
-        'GET',
-        "http://query.yahooapis.com/v1/public/yql?q=select * from rss where url in ('" + urls.join("', '") + "') | sort(field=\"pubdate\", descending=\"true\")&format=json",
-        true);
-    httpRequest.send(null);
+              if (aa.isBefore(bb)) {
+                return 1;
+              }
+              if (aa.isAfter(bb)) {
+                return -1;
+              }
+              return 0;
+            });
+            this.setState({ items: items });
+          }
+        }.bind(this));
+    }, this);
   },
   render: function () {
     // No episodes
