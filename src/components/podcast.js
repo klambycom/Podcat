@@ -57,7 +57,8 @@ var Podcast = React.createClass({
     item.queued = storage.indexOf({ audio_url: item.file.url }) >= 0;
     item.id = data.key();
     this.state.items.unshift(item);
-    this.forceUpdate();
+    // TODO forceUpdate later when new episodes
+    if (this.state.items.length < 11) { this.forceUpdate(); }
   },
   onSubscriptionChange: function (result) {
     // Update subscribe/unsubscribe button
@@ -106,7 +107,7 @@ var Podcast = React.createClass({
 
           <h2>Episodes</h2>
           <p>
-            {this.state.items.map(function (item, i) {
+            {this.state.items.slice(0, 10).map(function (item, i) {
               return <Episode key={hashCode(item.file.url) + i} data={item} />;
             })}
           </p>
