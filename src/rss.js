@@ -103,8 +103,7 @@ var parsePodcast = function (feed) {
     subtitle: feed.subtitle || 'No subtitle',
     lastUpdate: moment.utc().format(),
     explicit: feed.explicit || 'Unknown',
-    keywords: (feed.keywords && keywords(feed.keywords)) || [],
-    items: parseEpisodes(feed)
+    keywords: (feed.keywords && keywords(feed.keywords)) || []
   };
 };
 
