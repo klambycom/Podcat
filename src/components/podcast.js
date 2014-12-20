@@ -104,8 +104,8 @@ var Podcast = React.createClass({
 
           <h2>Episodes</h2>
           <p>
-            {this.state.items.map(function (item) {
-              return <Episode key={hashCode(item.file.url)} data={item} />;
+            {this.state.items.map(function (item, i) {
+              return <Episode key={hashCode(item.file.url) + i} data={item} />;
             })}
           </p>
           
