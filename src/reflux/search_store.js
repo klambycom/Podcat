@@ -27,7 +27,20 @@ var store = Reflux.createStore({
           rss.get(url[0], function (error, result) {
             var json = rss.parse(result);
             json.url = url[0];
+
+            // Save podcast
             var post = this.database.push(json);
+
+            // Save episodes
+            var itemsRef = this.database
+              .child(post.key())
+              .child('items');
+
+            rss.parseEpisodes(result).forEach(function (x, i, arr) {
+              var newItemRef = itemsRef.push();
+              newItemRef.setWithPriority(x, arr.length - i);
+            });
+
             this.trigger('feed', post.key());
           }.bind(this));
         } else {
