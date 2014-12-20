@@ -23,10 +23,18 @@ var Feed = React.createClass({
       this.firebase
         .child(x)
         .child('items')
-        .limitToLast(10)
+        .limitToLast(50)
         .once('value', function (snapshot) {
           var data = snapshot.val();
-          items = items.concat(Object.keys(data).map(reverseDot(data)));
+          items = items.concat(
+              Object
+                .keys(data)
+                .map(reverseDot(data))
+                .filter(function (x) {
+                  return moment
+                    .utc(x.pubDate)
+                    .isAfter(moment.utc().subtract(2, 'month'));
+                }));
 
           if ((counter += 1) === nrOfSubs) {
             // Sort items
