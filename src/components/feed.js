@@ -4,6 +4,7 @@ var React = require('react');
 var Episode = require('./episode');
 var Firebase = require('firebase');
 var moment = require('moment');
+var storage = require('../playlist_storage.js');
 
 var reverseDot = function (a) { return function (b) { return a[b]; }; };
 
@@ -29,11 +30,18 @@ var Feed = React.createClass({
           items = items.concat(
               Object
                 .keys(data)
+                // Convert object to array
                 .map(reverseDot(data))
+                // Only episodes newer than 2 months
                 .filter(function (x) {
                   return moment
                     .utc(x.pubDate)
                     .isAfter(moment.utc().subtract(2, 'month'));
+                })
+                // Check if episode is queued
+                .map(function (x) {
+                  x.queued = storage.indexOf({ audio_url: x.file.url }) >= 0;
+                  return x;
                 }));
 
           if ((counter += 1) === nrOfSubs) {
