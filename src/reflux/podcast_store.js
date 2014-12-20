@@ -42,6 +42,7 @@ var store = Reflux.createStore({
                 newItemRef.setWithPriority(x, Date.now());
               }, this);
               // Update lastUpdate date
+              database.update({ lastUpdate: moment.utc().format() });
           }.bind(this));
         }
       }, this);
