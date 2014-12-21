@@ -1,0 +1,30 @@
+.episode {
+  padding: 10px 0;
+  border-bottom: 5px rgb(226, 226, 226) solid;
+
+  .header {
+    .title {
+      font-weight: bold;
+      float: left;
+      width: 80%;
+    }
+
+    .date {
+      font-size: .8em;
+      color: gray;
+      float: right;
+      text-align: right;
+      width: 20%;
+    }
+  }
+
+  .summary {
+    font-size: .85em;
+    padding: 3px 0;
+    clear: both;
+  }
+
+  .footer a {
+    margin-right: 10px;
+  }
+}

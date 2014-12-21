@@ -47,7 +47,7 @@ var parseEpisodes = function (feed) {
   return feed.item.map(function (x) {
     return {
       title: x.title || 'No title',
-      summary: x.subtitle || 'Unknown',
+      summary: x.subtitle || '',
       pubDate: moment.utc(new Date(x.pubDate)).format() || 'Unknown',
       link: x.link || 'Unknown',
       explicit: x.explicit || 'Unknown',
