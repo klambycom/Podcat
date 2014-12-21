@@ -24,6 +24,9 @@ var Search = React.createClass({
     } else if (type === 'url') {
       // User have entered a URL
       this.setState({ icon: 'fa fa-plus', useEnter: true });
+    } else if (type === 'error') {
+      // Stop spinning
+      this.setState({ icon: 'fa fa-' + (this.state.useEnter ? 'plus' : 'search') });
     } else {
       // User have entered a search term
       this.setState({ icon: 'fa fa-search', useEnter: false });
