@@ -34,6 +34,7 @@
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./search_actions.js'</span>);
 <span class="hljs-keyword">var</span> rss = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../rss.js'</span>);
+<span class="hljs-keyword">var</span> Alert = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./alert.js'</span>).actions;
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
   listenables: actions,
@@ -83,8 +84,9 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>          rss.get(url[<span class="hljs-number">0</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, result)</span> </span>{
-            <span class="hljs-keyword">var</span> json = rss.parse(result);
-            json.url = url[<span class="hljs-number">0</span>];</pre></div></div>
+            <span class="hljs-keyword">if</span> (!error) {
+              <span class="hljs-keyword">var</span> json = rss.parse(result);
+              json.url = url[<span class="hljs-number">0</span>];</pre></div></div>
             
         </li>
         
@@ -99,7 +101,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> post = <span class="hljs-keyword">this</span>.database.push(json);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>              <span class="hljs-keyword">var</span> post = <span class="hljs-keyword">this</span>.database.push(json);</pre></div></div>
             
         </li>
         
@@ -114,16 +116,23 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> itemsRef = <span class="hljs-keyword">this</span>.database
-              .child(post.key())
-              .child(<span class="hljs-string">'items'</span>);
+            <div class="content"><div class='highlight'><pre>              <span class="hljs-keyword">var</span> itemsRef = <span class="hljs-keyword">this</span>.database
+                .child(post.key())
+                .child(<span class="hljs-string">'items'</span>);
 
-            rss.parseEpisodes(result).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x, i, arr)</span> </span>{
-              <span class="hljs-keyword">var</span> newItemRef = itemsRef.push();
-              newItemRef.setWithPriority(x, arr.length - i);
-            });
+              rss.parseEpisodes(result).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x, i, arr)</span> </span>{
+                <span class="hljs-keyword">var</span> newItemRef = itemsRef.push();
+                newItemRef.setWithPriority(x, arr.length - i);
+              });
 
-            <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">'feed'</span>, post.key());
+              <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">'feed'</span>, post.key());
+            } <span class="hljs-keyword">else</span> {
+              Alert.warning(
+                  <span class="hljs-string">'Podcast'</span>,
+                  <span class="hljs-string">'Could not parse the RSS-feed. Wrong URL?'</span>,
+                  <span class="hljs-string">'podcast.rss'</span>);
+              <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">'error'</span>);
+            }
           }.bind(<span class="hljs-keyword">this</span>));
         } <span class="hljs-keyword">else</span> {</pre></div></div>
             

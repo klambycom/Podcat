@@ -54,7 +54,8 @@
             
             <div class="content"><div class='highlight'><pre>    AudioPlayer.addEventListener(
         <span class="hljs-string">'error'</span>,
-        <span class="hljs-keyword">this</span>.onWarning.bind(<span class="hljs-keyword">this</span>, <span class="hljs-string">'Error!'</span>, <span class="hljs-string">'Something went wrong when loading audio.'</span>));</pre></div></div>
+        <span class="hljs-keyword">this</span>.onWarning.bind(
+          <span class="hljs-keyword">this</span>, <span class="hljs-string">'Error!'</span>, <span class="hljs-string">'Something went wrong when loading audio.'</span>, <span class="hljs-string">'player.src'</span>));</pre></div></div>
             
         </li>
         
@@ -71,22 +72,23 @@
             
             <div class="content"><div class='highlight'><pre>    AudioPlayer.addEventListener(
         <span class="hljs-string">'stalled'</span>,
-        <span class="hljs-keyword">this</span>.onWarning.bind(<span class="hljs-keyword">this</span>, <span class="hljs-string">'Error!'</span>, <span class="hljs-string">'Media data is not available.'</span>));
+        <span class="hljs-keyword">this</span>.onWarning.bind(
+          <span class="hljs-keyword">this</span>, <span class="hljs-string">'Error!'</span>, <span class="hljs-string">'Media data is not available.'</span>, <span class="hljs-string">'player.src'</span>));
   },
-  onSuccess: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message)</span> </span>{
-    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'success'</span>, title: title, message: message });
+  onSuccess: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message, source)</span> </span>{
+    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'success'</span>, title: title, message: message, source: source });
   },
-  onInfo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message)</span> </span>{
-    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'info'</span>, title: title, message: message });
+  onInfo: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message, source)</span> </span>{
+    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'info'</span>, title: title, message: message, source: source });
   },
-  onWarning: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message)</span> </span>{
-    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'warning'</span>, title: title, message: message });
+  onWarning: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message, source)</span> </span>{
+    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'warning'</span>, title: title, message: message, source: source });
   },
-  onDanger: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message)</span> </span>{
-    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'danger'</span>, title: title, message: message });
+  onDanger: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(title, message, source)</span> </span>{
+    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'danger'</span>, title: title, message: message, source: source });
   },
   onClose: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'hide'</span>, title: <span class="hljs-string">''</span>, message: <span class="hljs-string">''</span> });
+    <span class="hljs-keyword">this</span>.trigger({ type: <span class="hljs-string">'hide'</span>, title: <span class="hljs-string">''</span>, message: <span class="hljs-string">''</span>, source: <span class="hljs-string">''</span> });
   }
 });
 

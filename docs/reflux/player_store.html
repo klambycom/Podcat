@@ -33,9 +33,29 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./player_actions.js'</span>);
 <span class="hljs-keyword">var</span> AudioPlayer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../audio_player.js'</span>);
+<span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
+
+<span class="hljs-keyword">var</span> saveCurrentTime = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">var</span> playlist = storage.all();
+  playlist[<span class="hljs-number">0</span>].currentTime = AudioPlayer.currentTime;
+  storage.save(playlist);
+};
+
+<span class="hljs-keyword">var</span> changeCurrentTime = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">var</span> playlist = storage.all();
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> playlist[<span class="hljs-number">0</span>].currentTime !== <span class="hljs-string">'undefined'</span>) {
+    AudioPlayer.currentTime = playlist[<span class="hljs-number">0</span>].currentTime;
+    <span class="hljs-keyword">delete</span> playlist[<span class="hljs-number">0</span>].currentTime;
+    storage.save(playlist);
+  }
+};
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
   listenables: actions,
+  init: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">'beforeunload'</span>, saveCurrentTime);
+    AudioPlayer.addEventListener(<span class="hljs-string">'canplay'</span>, changeCurrentTime);
+  },
   onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(url, autoplay)</span> </span>{</pre></div></div>
             
         </li>
@@ -86,6 +106,11 @@
     }
 
     <span class="hljs-keyword">this</span>.trigger(!AudioPlayer.paused);
+  },
+  onReload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> url = AudioPlayer.src;
+    AudioPlayer.src = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">this</span>.onPlay(url, <span class="hljs-literal">true</span>);
   }
 });
 

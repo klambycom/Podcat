@@ -39,9 +39,16 @@
 
 <span class="hljs-keyword">var</span> secsToStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(time)</span> </span>{
   <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isNaN</span>(time)) { <span class="hljs-keyword">return</span> <span class="hljs-string">'00:00'</span>; }
+  <span class="hljs-keyword">var</span> hour = <span class="hljs-string">''</span>;
   <span class="hljs-keyword">var</span> min = <span class="hljs-built_in">Math</span>.round(time / <span class="hljs-number">60</span>);
   <span class="hljs-keyword">var</span> sec = <span class="hljs-built_in">Math</span>.round(time % <span class="hljs-number">60</span>);
-  <span class="hljs-keyword">return</span> (min &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">'0'</span> + min : min) + <span class="hljs-string">':'</span> + (sec &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">'0'</span> + sec : sec);
+
+  <span class="hljs-keyword">if</span> (min &gt; <span class="hljs-number">59</span>) {
+    hour = <span class="hljs-built_in">Math</span>.round(min / <span class="hljs-number">60</span>) + <span class="hljs-string">':'</span>;
+    min = <span class="hljs-built_in">Math</span>.round(min % <span class="hljs-number">60</span>);
+  }
+
+  <span class="hljs-keyword">return</span> hour + (min &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">'0'</span> + min : min) + <span class="hljs-string">':'</span> + (sec &lt; <span class="hljs-number">10</span> ? <span class="hljs-string">'0'</span> + sec : sec);
 };
 
 <span class="hljs-keyword">var</span> ProgressBar = React.createClass({

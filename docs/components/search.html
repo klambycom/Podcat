@@ -82,7 +82,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setState({ icon: <span class="hljs-string">'fa fa-plus'</span>, useEnter: <span class="hljs-literal">true</span> });
-    } <span class="hljs-keyword">else</span> {</pre></div></div>
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (type === <span class="hljs-string">'error'</span>) {</pre></div></div>
             
         </li>
         
@@ -92,6 +92,22 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Stop spinning</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.setState({ icon: <span class="hljs-string">'fa fa-'</span> + (<span class="hljs-keyword">this</span>.state.useEnter ? <span class="hljs-string">'plus'</span> : <span class="hljs-string">'search'</span>) });
+    } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>User have entered a search term</p>
 

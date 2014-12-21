@@ -39,7 +39,11 @@
     <span class="hljs-keyword">if</span> (httpRequest.readyState === <span class="hljs-number">4</span>) {
       <span class="hljs-keyword">if</span> (httpRequest.status === <span class="hljs-number">200</span>) {
         <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(httpRequest.responseText);
-        fn(<span class="hljs-literal">null</span>, result.query.results.rss.channel);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> result.query.results === <span class="hljs-string">'undefined'</span> || result.query.results === <span class="hljs-literal">null</span>) {
+          fn({ error: <span class="hljs-string">'no results'</span> }, <span class="hljs-literal">null</span>);
+        } <span class="hljs-keyword">else</span> {
+          fn(<span class="hljs-literal">null</span>, result.query.results.rss.channel);
+        }
         <span class="hljs-built_in">window</span>.latestPodcast = result.query.results.rss.channel;
       } <span class="hljs-keyword">else</span> {
         fn(<span class="hljs-string">'ERROR'</span>, <span class="hljs-literal">null</span>);

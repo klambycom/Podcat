@@ -35,6 +35,7 @@
 <span class="hljs-keyword">var</span> rss = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../rss.js'</span>);
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./podcast_actions.js'</span>);
+<span class="hljs-keyword">var</span> Alert = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./alert.js'</span>).actions;
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
   listenables: actions,
@@ -86,14 +87,15 @@
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (moment(podcast.lastUpdate).utc().isBefore(moment.utc().subtract(<span class="hljs-number">1</span>, <span class="hljs-string">'hours'</span>))) {
           rss.get(podcast.url, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, result)</span> </span>{
-            rss
-              .parseEpisodes(result)
-              .filter(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
-                <span class="hljs-keyword">return</span> moment(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(x.pubDate))
-                  .isAfter(moment(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(lastEpisode)));
-              })
-              .reverse()
-              .forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{</pre></div></div>
+            <span class="hljs-keyword">if</span> (!error) {
+              rss
+                .parseEpisodes(result)
+                .filter(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+                  <span class="hljs-keyword">return</span> moment(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(x.pubDate))
+                    .isAfter(moment(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(lastEpisode)));
+                })
+                .reverse()
+                .forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -108,9 +110,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">var</span> newItemRef = database.child(<span class="hljs-string">'items'</span>).push();
-                newItemRef.setWithPriority(x, <span class="hljs-built_in">Date</span>.now());
-              }, <span class="hljs-keyword">this</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                  <span class="hljs-keyword">var</span> newItemRef = database.child(<span class="hljs-string">'items'</span>).push();
+                  newItemRef.setWithPriority(x, <span class="hljs-built_in">Date</span>.now());
+                }, <span class="hljs-keyword">this</span>);</pre></div></div>
             
         </li>
         
@@ -125,7 +127,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>              database.update({ lastUpdate: moment.utc().format() });
+            <div class="content"><div class='highlight'><pre>                database.update({ lastUpdate: moment.utc().format() });
+            } <span class="hljs-keyword">else</span> {
+              Alert.warning(<span class="hljs-string">'Podcast'</span>, <span class="hljs-string">'Could not parse the RSS-feed'</span>, <span class="hljs-string">'podcast.rss'</span>);
+            }
           }.bind(<span class="hljs-keyword">this</span>));
         }
       }, <span class="hljs-keyword">this</span>);

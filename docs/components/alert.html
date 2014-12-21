@@ -35,11 +35,12 @@
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> AlertStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/alert.js'</span>).store;
+<span class="hljs-keyword">var</span> PlayerActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/player_actions.js'</span>);
 
 <span class="hljs-keyword">var</span> Alert = React.createClass({
   mixins: [Reflux.listenTo(AlertStore, <span class="hljs-string">'onAlert'</span>)],
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> { type: <span class="hljs-string">'hide'</span>, title: <span class="hljs-string">''</span>, message: <span class="hljs-string">''</span> };
+    <span class="hljs-keyword">return</span> { type: <span class="hljs-string">'hide'</span>, title: <span class="hljs-string">''</span>, message: <span class="hljs-string">''</span>, source: <span class="hljs-string">''</span> };
   },
   onAlert: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(obj)</span> </span>{
     <span class="hljs-keyword">this</span>.setState(obj);
@@ -48,12 +49,22 @@
     <span class="hljs-keyword">this</span>.setState({ type: <span class="hljs-string">'hide'</span> });
     e.preventDefault();
   },
+  handleReload: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    <span class="hljs-keyword">this</span>.setState({ type: <span class="hljs-string">'hide'</span> });
+    PlayerActions.reload();
+    e.preventDefault();
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">var</span> more = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.source === <span class="hljs-string">'player.src'</span>) {
+      more = <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleReload}</span>&gt;</span>Try to reload<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>;</span>
+    }
+
     <span class="hljs-keyword">return</span> (
         <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"alert"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{this.state.type}</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClose}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"fa fa-close close"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span> {' '}
           <span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>{this.state.title}<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span> {' '}
-          {this.state.message}
+          {this.state.message} {more}
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }
