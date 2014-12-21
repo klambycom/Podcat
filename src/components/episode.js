@@ -2,6 +2,7 @@
 
 var React = require('react');
 var PlaylistActions = require('../reflux/playlist_actions');
+var moment = require('moment');
 
 var Episode = React.createClass({
   getInitialState: function () {
@@ -37,16 +38,21 @@ var Episode = React.createClass({
   render: function () {
     var play = this.props.play && (<a href="#" onClick={this.handleClick('play')}>Play</a>);
     var add = this.props.add && (<a href="#" onClick={this.handleClick('add')}>Queue</a>);
-
     if (this.state.added) { add = 'Queued'; }
+
+    var date = '';
+    if (typeof this.props.data.pubDate !== 'undefined') {
+      date = moment(this.props.data.pubDate).fromNow();
+    }
 
     return (
         <div className="episode">
-          <h3>
-            {this.props.data.title}
-            {' '}{play}
-            {' '}{add}
-          </h3>
+          <div className="header">
+            <div className="title">{this.props.data.title}</div>
+            <div className="date">{date}</div>
+          </div>
+          <div className="summary">{this.props.data.summary}</div>
+          <div className="footer">{play} {add}</div>
         </div>
         );
   }
