@@ -100,7 +100,7 @@ this episode and there is a next episode</p>
     }
   },
   onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(episode, type)</span> </span>{
-    <span class="hljs-keyword">this</span>.changeEpisode(episode, type !== <span class="hljs-string">'add'</span>);
+    <span class="hljs-keyword">this</span>.changeEpisode(episode, (type !== <span class="hljs-string">'add'</span> &amp;&amp; type !== <span class="hljs-string">'remove'</span>));
   },
   changeEpisode: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items, autoplay)</span> </span>{</pre></div></div>
             

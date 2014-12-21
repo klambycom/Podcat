@@ -74,7 +74,13 @@
     });
     localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(queue));
   },
-  remove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> removeFirst(localStorage, <span class="hljs-keyword">this</span>.ID); },
+  remove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+    <span class="hljs-keyword">var</span> index = <span class="hljs-keyword">this</span>.indexOf(item);
+    <span class="hljs-keyword">var</span> items = <span class="hljs-keyword">this</span>.all();
+    items.splice(index, <span class="hljs-number">1</span>);
+    localStorage.setItem(<span class="hljs-keyword">this</span>.ID, <span class="hljs-built_in">JSON</span>.stringify(items));
+  },
+  removeFirst: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> removeFirst(localStorage, <span class="hljs-keyword">this</span>.ID); },
   peek: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.all()[<span class="hljs-number">1</span>]; },
   empty: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.all().length &lt;= <span class="hljs-number">1</span>; },
   clear: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ localStorage.removeItem(<span class="hljs-keyword">this</span>.ID); },

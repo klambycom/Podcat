@@ -115,7 +115,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> removed = storage.remove();</pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> removed = storage.removeFirst();</pre></div></div>
             
         </li>
         
@@ -171,7 +171,12 @@
             <div class="content"><div class='highlight'><pre>    storage.add(episode);
     <span class="hljs-keyword">this</span>.trigger(storage.all(), <span class="hljs-string">'add'</span>);
   },
-  onRemove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-comment">/*episode*/</span>)</span> </span>{</pre></div></div>
+  onRemove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(episode)</span> </span>{
+    storage.remove(episode);
+    <span class="hljs-keyword">this</span>.trigger(storage.all(), <span class="hljs-string">'remove'</span>);
+  },
+  ended: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (storage.empty()) {</pre></div></div>
             
         </li>
         
@@ -181,29 +186,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>Remove episode from queue
-TODO Maybe allow fn as argument
-this.queue.filter(function (x) {
-return x.audio_url !== episode.audio_url;
-});
-storage.update(this.queue);
-this.trigger(this.queue);</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  },
-  ended: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">if</span> (storage.empty()) {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Remove playlist if last episode in playlist just ended</p>
 
@@ -216,11 +198,11 @@ this.trigger(this.queue);</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Else play next episode in playlist</p>
 

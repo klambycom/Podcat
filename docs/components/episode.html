@@ -41,17 +41,18 @@
     <span class="hljs-keyword">return</span> { added: <span class="hljs-literal">false</span> };
   },
   getDefaultProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> { play: <span class="hljs-literal">true</span>, add: <span class="hljs-literal">true</span> };
+    <span class="hljs-keyword">return</span> { play: <span class="hljs-literal">true</span>, add: <span class="hljs-literal">true</span>, remove: <span class="hljs-literal">false</span> };
   },
   propTypes: {
     data: React.PropTypes.object.isRequired,
     play: React.PropTypes.bool,
-    add: React.PropTypes.bool
+    add: React.PropTypes.bool,
+    remove: React.PropTypes.bool
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.setState({ added: <span class="hljs-keyword">this</span>.props.data.queued });
   },
-  handleClick: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
+  handleAdd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
     <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{</pre></div></div>
             
         </li>
@@ -105,9 +106,14 @@
       e.preventDefault();
     }.bind(<span class="hljs-keyword">this</span>);
   },
+  handleRemove: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    PlaylistActions.remove(<span class="hljs-keyword">this</span>.props.data);
+    e.preventDefault();
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
-    var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    <span class="hljs-keyword">var</span> remove = <span class="hljs-keyword">this</span>.props.remove &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleRemove}</span>&gt;</span>Remove<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    var play = this.props.play &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     if (this.state.added) { add = 'Queued'; }
 
     var date = '';
@@ -122,7 +128,7 @@
             <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"date"</span>&gt;</span>{date}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"summary"</span>&gt;</span>{this.props.data.summary}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"footer"</span>&gt;</span>{play} {add}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"footer"</span>&gt;</span>{play} {add} {remove}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }
