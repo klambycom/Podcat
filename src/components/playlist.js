@@ -31,7 +31,13 @@ var Playlist = React.createClass({
     // List queued episodes
     if (this.state.items.length > 0) {
       episodes = this.state.items.map(function (item, i) {
-        return <Episode key={i} data={item} play={i !== 0} add={false} />;
+        return (
+            <Episode
+              key={i}
+              data={item}
+              play={i !== 0}
+              add={false}
+              remove={i !== 0} />);
       });
     }
 

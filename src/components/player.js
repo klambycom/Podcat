@@ -42,7 +42,7 @@ var Player = React.createClass({
     }
   },
   onPlay: function (episode, type) {
-    this.changeEpisode(episode, type !== 'add');
+    this.changeEpisode(episode, (type !== 'add' && type !== 'remove'));
   },
   changeEpisode: function (items, autoplay) {
     // Stop playing if playlist is empty
