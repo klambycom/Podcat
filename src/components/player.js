@@ -18,13 +18,7 @@ var Player = React.createClass({
     Reflux.listenTo(ProgressBarStore, 'onTimeUpdate')
   ],
   getInitialState: function () {
-    return {
-      image: '',
-      title: '',
-      playing: false,
-      nearEnd: false,
-      nextEpisode: {}
-    };
+    return { image: '', title: '', playing: false, nearEnd: false, nextEpisode: {} };
   },
   componentDidMount: function () {
     // Load first episode from saved playlist
