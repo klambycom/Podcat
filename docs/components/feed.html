@@ -34,32 +34,19 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> Episode = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./episode'</span>);
+<span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'firebase'</span>);
+<span class="hljs-keyword">var</span> moment = <span class="hljs-built_in">require</span>(<span class="hljs-string">'moment'</span>);
+<span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
+
+<span class="hljs-keyword">var</span> reverseDot = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(a)</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(b)</span> </span>{ <span class="hljs-keyword">return</span> a[b]; }; };
 
 <span class="hljs-keyword">var</span> Feed = React.createClass({
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> { items: [] };
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
-    <span class="hljs-keyword">var</span> httpRequest = <span class="hljs-keyword">new</span> XMLHttpRequest();
-    <span class="hljs-keyword">var</span> subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>));
-    <span class="hljs-keyword">var</span> urls = <span class="hljs-built_in">Object</span>
-      .keys(subscriptions)
-      .map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{ <span class="hljs-keyword">return</span> subscriptions[x].url; });
-
-    httpRequest.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-keyword">if</span> (httpRequest.readyState === <span class="hljs-number">4</span>) {
-        <span class="hljs-keyword">if</span> (httpRequest.status === <span class="hljs-number">200</span>) {
-          <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(httpRequest.responseText);
-          <span class="hljs-keyword">var</span> items = result.query.results.item.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
-            <span class="hljs-keyword">return</span> {
-              title: x.title,
-              subtitle: x.subtitle,
-              image: x.image.href,
-              file: { url: x.enclosure.url }
-            };
-          });
-          self.setState({ items: items });</pre></div></div>
+    <span class="hljs-keyword">this</span>.firebase = <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://blinding-torch-6567.firebaseio.com/podcasts'</span>);
+    <span class="hljs-keyword">this</span>.subscriptions = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'podcat.subscriptions'</span>)) || {};</pre></div></div>
             
         </li>
         
@@ -70,22 +57,23 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>array with objects, that have title, subtitle, image.href,
-enclosure.url</p>
+              <p>Init data</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        }
-      }
-    };
-
-    httpRequest.open(
-        <span class="hljs-string">'GET'</span>,
-        <span class="hljs-string">"http://query.yahooapis.com/v1/public/yql?q=select * from rss where url in ('"</span> + urls.join(<span class="hljs-string">"', '"</span>) + <span class="hljs-string">"') | sort(field=\"pubdate\", descending=\"true\")&amp;format=json"</span>,
-        <span class="hljs-literal">true</span>);
-    httpRequest.send(<span class="hljs-literal">null</span>);
-  },
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> nrOfSubs = <span class="hljs-built_in">Object</span>.keys(<span class="hljs-keyword">this</span>.subscriptions).length;
+    <span class="hljs-keyword">var</span> counter = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">var</span> items = [];
+    <span class="hljs-built_in">Object</span>.keys(<span class="hljs-keyword">this</span>.subscriptions).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+      <span class="hljs-keyword">this</span>.firebase
+        .child(x)
+        .child(<span class="hljs-string">'items'</span>)
+        .limitToLast(<span class="hljs-number">50</span>)
+        .once(<span class="hljs-string">'value'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(snapshot)</span> </span>{
+          <span class="hljs-keyword">var</span> data = snapshot.val();
+          items = items.concat(
+              <span class="hljs-built_in">Object</span>
+                .keys(data)</pre></div></div>
             
         </li>
         
@@ -95,6 +83,92 @@ enclosure.url</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Convert object to array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                .map(reverseDot(data))</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Only episodes newer than 2 months</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                .filter(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+                  <span class="hljs-keyword">return</span> moment
+                    .utc(x.pubDate)
+                    .isAfter(moment.utc().subtract(<span class="hljs-number">2</span>, <span class="hljs-string">'month'</span>));
+                })</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Check if episode is queued</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                .map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+                  x.queued = storage.indexOf({ audio_url: x.file.url }) &gt;= <span class="hljs-number">0</span>;
+                  <span class="hljs-keyword">return</span> x;
+                }));
+
+          <span class="hljs-keyword">if</span> ((counter += <span class="hljs-number">1</span>) === nrOfSubs) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Sort items</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            items.sort(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(a, b)</span> </span>{
+              <span class="hljs-keyword">var</span> aa = moment.utc(a.pubDate);
+              <span class="hljs-keyword">var</span> bb = moment.utc(b.pubDate);
+
+              <span class="hljs-keyword">if</span> (aa.isBefore(bb)) {
+                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+              }
+              <span class="hljs-keyword">if</span> (aa.isAfter(bb)) {
+                <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+              }
+              <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+            });
+            <span class="hljs-keyword">this</span>.setState({ items: items });
+          }
+        }.bind(<span class="hljs-keyword">this</span>));
+    }, <span class="hljs-keyword">this</span>);
+  },
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>No episodes</p>
 
@@ -111,11 +185,11 @@ enclosure.url</p>
         </li>
         
         
-        <li id="section-4">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>List episodes</p>
 

@@ -34,6 +34,7 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> PlaylistActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_actions'</span>);
+<span class="hljs-keyword">var</span> moment = <span class="hljs-built_in">require</span>(<span class="hljs-string">'moment'</span>);
 
 <span class="hljs-keyword">var</span> Episode = React.createClass({
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
@@ -107,16 +108,21 @@
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> play = <span class="hljs-keyword">this</span>.props.play &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleClick('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
-
     if (this.state.added) { add = 'Queued'; }
+
+    var date = '';
+    if (typeof this.props.data.pubDate !== 'undefined') {
+      date = moment(this.props.data.pubDate).fromNow();
+    }
 
     return (
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>
-            {this.props.data.title}
-            {' '}{play}
-            {' '}{add}
-          <span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.props.data.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"date"</span>&gt;</span>{date}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"summary"</span>&gt;</span>{this.props.data.summary}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"footer"</span>&gt;</span>{play} {add}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }

@@ -137,10 +137,31 @@ this episode and there is a next episode</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.setState({
       title: items[<span class="hljs-number">0</span>].title,
-      image: items[<span class="hljs-number">0</span>].image,
       playing: <span class="hljs-literal">true</span>
     });
-    PlayerActions.play(items[<span class="hljs-number">0</span>].audio_url, autoplay);
+    PlayerActions.play(items[<span class="hljs-number">0</span>].audio_url, autoplay);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Find cover image</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> img = <span class="hljs-keyword">new</span> Image();
+    img.addEventListener(<span class="hljs-string">'load'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.setState({ image: items[<span class="hljs-number">0</span>].image.episode });
+    }.bind(<span class="hljs-keyword">this</span>));
+    img.addEventListener(<span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.setState({ image: items[<span class="hljs-number">0</span>].image.podcast });
+    }.bind(<span class="hljs-keyword">this</span>));
+    img.src = items[<span class="hljs-number">0</span>].image.episode;
   },
   handlePrevious: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
     PlaylistActions.previous();

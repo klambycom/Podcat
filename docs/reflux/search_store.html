@@ -33,96 +33,7 @@
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'firebase'</span>);
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
 <span class="hljs-keyword">var</span> actions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./search_actions.js'</span>);
-
-<span class="hljs-keyword">var</span> getRSS = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(url, fn)</span> </span>{
-  <span class="hljs-keyword">var</span> httpRequest = <span class="hljs-keyword">new</span> XMLHttpRequest();
-
-  httpRequest.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">if</span> (httpRequest.readyState === <span class="hljs-number">4</span>) {
-      <span class="hljs-keyword">if</span> (httpRequest.status === <span class="hljs-number">200</span>) {
-        <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(httpRequest.responseText);
-        fn(<span class="hljs-literal">null</span>, result.query.results.rss.channel);
-      } <span class="hljs-keyword">else</span> {
-        fn(<span class="hljs-string">'ERROR'</span>, <span class="hljs-literal">null</span>);
-      }
-    }
-  };
-
-  httpRequest.open(
-      <span class="hljs-string">'GET'</span>,
-      <span class="hljs-string">"http://query.yahooapis.com/v1/public/yql?q=select * from xml where url='"</span> + url + <span class="hljs-string">"'&amp;format=json"</span>,
-      <span class="hljs-literal">true</span>);
-  httpRequest.send(<span class="hljs-literal">null</span>);
-};
-
-<span class="hljs-keyword">var</span> processFeedData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
-  <span class="hljs-keyword">var</span> itemData, keywords, image, category, description, pubDate;
-
-  itemData = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
-    <span class="hljs-keyword">return</span> {
-      title: x.title || <span class="hljs-string">'No title'</span>,
-      summary: x.subtitle || <span class="hljs-string">'Unknown'</span>,
-      pubDate: x.pubDate || <span class="hljs-string">'Unknown'</span>,
-      link: x.link || <span class="hljs-string">'Unknown'</span>,
-      explicit: x.explicit || <span class="hljs-string">'Unknown'</span>,
-      file: {
-        duration: x.duration || <span class="hljs-number">0</span>,
-        type: (x.enclosure &amp;&amp; x.enclosure.type) || <span class="hljs-string">'Unknown'</span>,
-        url: (x.enclosure &amp;&amp; x.enclosure.url) || <span class="hljs-string">'Unknown'</span>
-      },
-      image: (x.image &amp;&amp; x.image.href) || <span class="hljs-string">'Unknown'</span>
-    };
-  };
-
-  keywords = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(words)</span> </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(words)) {
-      <span class="hljs-keyword">return</span> words[<span class="hljs-number">0</span>].split(<span class="hljs-string">','</span>);
-    }
-    <span class="hljs-keyword">return</span> words.split(<span class="hljs-string">','</span>);
-  };
-
-  image = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(img)</span> </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(img) &amp;&amp; <span class="hljs-keyword">typeof</span> img[<span class="hljs-number">0</span>].url !== <span class="hljs-string">'undefined'</span>) {
-      <span class="hljs-keyword">return</span> img[<span class="hljs-number">0</span>].url;
-    }
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> img.href !== <span class="hljs-string">'undefined'</span>) {
-      <span class="hljs-keyword">return</span> img.href;
-    }
-  };
-
-  category = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(category)</span> </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(category)) {
-      <span class="hljs-keyword">return</span> category[<span class="hljs-number">0</span>].content;
-    }
-    <span class="hljs-keyword">return</span> category.text;
-  };
-
-  description = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(desc)</span> </span>{
-    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(desc)) {
-      <span class="hljs-keyword">return</span> desc[<span class="hljs-number">1</span>].content;
-    }
-    <span class="hljs-keyword">return</span> desc;
-  };
-
-  pubDate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
-    <span class="hljs-keyword">return</span> feed.lastBuildDate || feed.pubDate;
-  };
-
-  <span class="hljs-keyword">return</span> {
-    title: feed.title || <span class="hljs-string">'No title'</span>,
-    author: feed.author || <span class="hljs-string">'No author'</span>,
-    copyright: feed.copyright || <span class="hljs-string">'No copyright'</span>,
-    image: feed.image &amp;&amp; image(feed.image),
-    category: (feed.category &amp;&amp; category(feed.category)) || <span class="hljs-string">'No category'</span>,
-    summary: feed.summary || <span class="hljs-string">'No summary'</span>,
-    description: description(feed.description) || <span class="hljs-string">'No description'</span>,
-    subtitle: feed.subtitle || <span class="hljs-string">'No subtitle'</span>,
-    lastUpdate: pubDate(feed) || <span class="hljs-string">'Unknown'</span>,
-    explicit: feed.explicit || <span class="hljs-string">'Unknown'</span>,
-    keywords: feed.keywords &amp;&amp; keywords(feed.keywords),
-    items: feed.item.map(itemData)
-  };
-};
+<span class="hljs-keyword">var</span> rss = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../rss.js'</span>);
 
 <span class="hljs-keyword">var</span> store = Reflux.createStore({
   listenables: actions,
@@ -171,13 +82,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>          getRSS(url[<span class="hljs-number">0</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, result)</span> </span>{
-            <span class="hljs-keyword">var</span> json = processFeedData(result);
-            json.url = url[<span class="hljs-number">0</span>];
-            <span class="hljs-keyword">var</span> post = <span class="hljs-keyword">this</span>.database.push(json);
-            <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">'feed'</span>, post.key());
-          }.bind(<span class="hljs-keyword">this</span>));
-        } <span class="hljs-keyword">else</span> {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>          rss.get(url[<span class="hljs-number">0</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, result)</span> </span>{
+            <span class="hljs-keyword">var</span> json = rss.parse(result);
+            json.url = url[<span class="hljs-number">0</span>];</pre></div></div>
             
         </li>
         
@@ -187,6 +94,47 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Save podcast</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> post = <span class="hljs-keyword">this</span>.database.push(json);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Save episodes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> itemsRef = <span class="hljs-keyword">this</span>.database
+              .child(post.key())
+              .child(<span class="hljs-string">'items'</span>);
+
+            rss.parseEpisodes(result).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x, i, arr)</span> </span>{
+              <span class="hljs-keyword">var</span> newItemRef = itemsRef.push();
+              newItemRef.setWithPriority(x, arr.length - i);
+            });
+
+            <span class="hljs-keyword">this</span>.trigger(<span class="hljs-string">'feed'</span>, post.key());
+          }.bind(<span class="hljs-keyword">this</span>));
+        } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Podcast found in database</p>
 

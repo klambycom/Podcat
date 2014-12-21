@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>rss.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>rss.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> moment = <span class="hljs-built_in">require</span>(<span class="hljs-string">'moment'</span>);
+
+<span class="hljs-keyword">var</span> getRSS = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(url, fn)</span> </span>{
+  <span class="hljs-keyword">var</span> httpRequest = <span class="hljs-keyword">new</span> XMLHttpRequest();
+
+  httpRequest.onreadystatechange = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (httpRequest.readyState === <span class="hljs-number">4</span>) {
+      <span class="hljs-keyword">if</span> (httpRequest.status === <span class="hljs-number">200</span>) {
+        <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(httpRequest.responseText);
+        fn(<span class="hljs-literal">null</span>, result.query.results.rss.channel);
+        <span class="hljs-built_in">window</span>.latestPodcast = result.query.results.rss.channel;
+      } <span class="hljs-keyword">else</span> {
+        fn(<span class="hljs-string">'ERROR'</span>, <span class="hljs-literal">null</span>);
+      }
+    }
+  };
+
+  httpRequest.open(
+      <span class="hljs-string">'GET'</span>,
+      <span class="hljs-string">"http://query.yahooapis.com/v1/public/yql?q=select * from xml where url='"</span> + url + <span class="hljs-string">"'&amp;format=json"</span>,
+      <span class="hljs-literal">true</span>);
+  httpRequest.send(<span class="hljs-literal">null</span>);
+};
+
+<span class="hljs-keyword">var</span> image = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(img)</span> </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(img)) {
+    <span class="hljs-keyword">var</span> imgurl = img.reduce(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(acc, x)</span> </span>{
+      <span class="hljs-keyword">return</span> (<span class="hljs-keyword">typeof</span> x.href !== <span class="hljs-string">'undefined'</span>) ? x.href : acc;
+    }, <span class="hljs-string">''</span>);
+
+    <span class="hljs-keyword">if</span> (imgurl === <span class="hljs-string">''</span>) {
+      imgurl = img.reduce(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(acc, x)</span> </span>{
+        <span class="hljs-keyword">return</span> (<span class="hljs-keyword">typeof</span> x.url !== <span class="hljs-string">'undefined'</span>) ? x.href : acc;
+      }, <span class="hljs-string">''</span>);
+    }
+
+    <span class="hljs-keyword">return</span> imgurl;
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> img.href !== <span class="hljs-string">'undefined'</span>) {
+    <span class="hljs-keyword">return</span> img.href;
+  }
+};
+
+<span class="hljs-keyword">var</span> parseEpisodes = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
+  <span class="hljs-keyword">var</span> podcastImage = feed.image &amp;&amp; image(feed.image);
+
+  <span class="hljs-keyword">return</span> feed.item.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(x)</span> </span>{
+    <span class="hljs-keyword">return</span> {
+      title: x.title || <span class="hljs-string">'No title'</span>,
+      summary: x.subtitle || <span class="hljs-string">''</span>,
+      pubDate: moment.utc(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(x.pubDate)).format() || <span class="hljs-string">'Unknown'</span>,
+      link: x.link || <span class="hljs-string">'Unknown'</span>,
+      explicit: x.explicit || <span class="hljs-string">'Unknown'</span>,
+      file: {
+        duration: x.duration || <span class="hljs-number">0</span>,
+        type: (x.enclosure &amp;&amp; x.enclosure.type) || <span class="hljs-string">'Unknown'</span>,
+        url: (x.enclosure &amp;&amp; x.enclosure.url) || <span class="hljs-string">'Unknown'</span>
+      },
+      image: {
+        episode: (x.image &amp;&amp; x.image.href) || podcastImage,
+        podcast: podcastImage
+      }
+    };
+  });
+};
+
+<span class="hljs-keyword">var</span> parsePodcast = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
+  <span class="hljs-keyword">var</span> keywords, category, description, pubDate;
+
+  keywords = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(words)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(words)) {
+      <span class="hljs-keyword">return</span> words[<span class="hljs-number">0</span>].split(<span class="hljs-string">','</span>);
+    }
+    <span class="hljs-keyword">return</span> words.split(<span class="hljs-string">','</span>);
+  };
+
+  category = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(category)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(category)) {
+      <span class="hljs-keyword">return</span> category[<span class="hljs-number">0</span>].content;
+    }
+    <span class="hljs-keyword">return</span> category.text;
+  };
+
+  description = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(desc)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(desc)) {
+      <span class="hljs-keyword">return</span> desc[<span class="hljs-number">1</span>].content;
+    }
+    <span class="hljs-keyword">return</span> desc;
+  };
+
+  pubDate = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
+    <span class="hljs-keyword">return</span> feed.lastBuildDate || feed.pubDate;
+  };
+
+  <span class="hljs-keyword">return</span> {
+    title: feed.title || <span class="hljs-string">'No title'</span>,
+    author: feed.author || <span class="hljs-string">'No author'</span>,
+    copyright: feed.copyright || <span class="hljs-string">'No copyright'</span>,
+    image: feed.image &amp;&amp; image(feed.image),
+    category: (feed.category &amp;&amp; category(feed.category)) || <span class="hljs-string">'No category'</span>,
+    summary: feed.summary || <span class="hljs-string">'No summary'</span>,
+    description: description(feed.description) || <span class="hljs-string">'No description'</span>,
+    subtitle: feed.subtitle || <span class="hljs-string">'No subtitle'</span>,
+    lastUpdate: moment.utc().format(),
+    explicit: feed.explicit || <span class="hljs-string">'Unknown'</span>,
+    keywords: (feed.keywords &amp;&amp; keywords(feed.keywords)) || []
+  };
+};
+
+<span class="hljs-built_in">module</span>.exports = {
+  get: getRSS,
+  parse: parsePodcast,
+  parseEpisodes: parseEpisodes
+};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
