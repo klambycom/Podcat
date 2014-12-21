@@ -29,6 +29,11 @@ var store = Reflux.createStore({
     }
 
     this.trigger(!AudioPlayer.paused);
+  },
+  onReload: function () {
+    var url = AudioPlayer.src;
+    AudioPlayer.src = '';
+    this.onPlay(url, true);
   }
 });
 
