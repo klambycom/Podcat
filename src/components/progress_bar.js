@@ -7,9 +7,16 @@ var ProgressBarActions = require('../reflux/progress_bar_actions.js');
 
 var secsToStr = function (time) {
   if (isNaN(time)) { return '00:00'; }
+  var hour = '';
   var min = Math.round(time / 60);
   var sec = Math.round(time % 60);
-  return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
+
+  if (min > 59) {
+    hour = Math.round(min / 60) + ':';
+    min = Math.round(min % 60);
+  }
+
+  return hour + (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
 };
 
 var ProgressBar = React.createClass({

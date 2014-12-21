@@ -1,9 +1,29 @@
 var Reflux = require('reflux');
 var actions = require('./player_actions.js');
 var AudioPlayer = require('../audio_player.js');
+var storage = require('../playlist_storage.js');
+
+var saveCurrentTime = function () {
+  var playlist = storage.all();
+  playlist[0].currentTime = AudioPlayer.currentTime;
+  storage.save(playlist);
+};
+
+var changeCurrentTime = function () {
+  var playlist = storage.all();
+  if (typeof playlist[0].currentTime !== 'undefined') {
+    AudioPlayer.currentTime = playlist[0].currentTime;
+    delete playlist[0].currentTime;
+    storage.save(playlist);
+  }
+};
 
 var store = Reflux.createStore({
   listenables: actions,
+  init: function () {
+    window.addEventListener('beforeunload', saveCurrentTime);
+    AudioPlayer.addEventListener('canplay', changeCurrentTime);
+  },
   onPlay: function (url, autoplay) {
     // Change src if current url is not already playing
     if (AudioPlayer.src !== url) {
@@ -29,6 +49,11 @@ var store = Reflux.createStore({
     }
 
     this.trigger(!AudioPlayer.paused);
+  },
+  onReload: function () {
+    var url = AudioPlayer.src;
+    AudioPlayer.src = '';
+    this.onPlay(url, true);
   }
 });
 

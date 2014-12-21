@@ -2,6 +2,7 @@ var Firebase = require('firebase');
 var Reflux = require('reflux');
 var actions = require('./search_actions.js');
 var rss = require('../rss.js');
+var Alert = require('./alert.js').actions;
 
 var store = Reflux.createStore({
   listenables: actions,
@@ -25,23 +26,31 @@ var store = Reflux.createStore({
         if (data.val() === null) {
           // Podcast not in database
           rss.get(url[0], function (error, result) {
-            var json = rss.parse(result);
-            json.url = url[0];
+            if (!error) {
+              var json = rss.parse(result);
+              json.url = url[0];
 
-            // Save podcast
-            var post = this.database.push(json);
+              // Save podcast
+              var post = this.database.push(json);
 
-            // Save episodes
-            var itemsRef = this.database
-              .child(post.key())
-              .child('items');
+              // Save episodes
+              var itemsRef = this.database
+                .child(post.key())
+                .child('items');
 
-            rss.parseEpisodes(result).forEach(function (x, i, arr) {
-              var newItemRef = itemsRef.push();
-              newItemRef.setWithPriority(x, arr.length - i);
-            });
+              rss.parseEpisodes(result).forEach(function (x, i, arr) {
+                var newItemRef = itemsRef.push();
+                newItemRef.setWithPriority(x, arr.length - i);
+              });
 
-            this.trigger('feed', post.key());
+              this.trigger('feed', post.key());
+            } else {
+              Alert.warning(
+                  'Podcast',
+                  'Could not parse the RSS-feed. Wrong URL?',
+                  'podcast.rss');
+              this.trigger('error');
+            }
           }.bind(this));
         } else {
           // Podcast found in database

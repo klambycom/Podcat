@@ -7,7 +7,11 @@ var getRSS = function (url, fn) {
     if (httpRequest.readyState === 4) {
       if (httpRequest.status === 200) {
         var result = JSON.parse(httpRequest.responseText);
-        fn(null, result.query.results.rss.channel);
+        if (typeof result.query.results === 'undefined' || result.query.results === null) {
+          fn({ error: 'no results' }, null);
+        } else {
+          fn(null, result.query.results.rss.channel);
+        }
         window.latestPodcast = result.query.results.rss.channel;
       } else {
         fn('ERROR', null);

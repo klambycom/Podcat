@@ -49,7 +49,8 @@ var Podcast = React.createClass({
     // Update component if params (id) is changed
     if (this.state.selectedPodcast !== this.getParams().id) {
       this.setState({ selectedPodcast: this.getParams().id });
-      PodcastActions.init(this.getParams().id);
+      this.itemsRef.off('child_added', this.onItemAdded);
+      this.componentDidMount();
     }
   },
   onItemAdded: function (data) {
