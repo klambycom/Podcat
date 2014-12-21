@@ -3,7 +3,7 @@
 var React = require('react');
 var Reflux = require('reflux');
 var AlertStore = require('../reflux/alert.js').store;
-var PlayerStore = require('../reflux/player_store.js');
+var PlayerActions = require('../reflux/player_actions.js');
 
 var Alert = React.createClass({
   mixins: [Reflux.listenTo(AlertStore, 'onAlert')],
@@ -19,7 +19,7 @@ var Alert = React.createClass({
   },
   handleReload: function (e) {
     this.setState({ type: 'hide' });
-    PlayerStore.reload();
+    PlayerActions.reload();
     e.preventDefault();
   },
   render: function () {
