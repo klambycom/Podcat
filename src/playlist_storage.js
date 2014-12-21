@@ -12,12 +12,15 @@ var removeFirst = function (storage, id) {
 var storage = {
   ID: 'playlist.queue',
   all: function () { return all(localStorage, this.ID); },
+  save: function (items) {
+    localStorage.setItem(this.ID, JSON.stringify(items));
+  },
   add: function (item) {
     if (item === null) { return; }
 
     var queue = this.all();
     queue.push(item);
-    localStorage.setItem(this.ID, JSON.stringify(queue));
+    this.save(queue);
   },
   indexOf: function (item) {
     return this.all().reduce(function (acc, x, i) {
@@ -27,26 +30,26 @@ var storage = {
   addFirst: function (item) {
     var queue = this.all();
     queue.unshift(item);
-    localStorage.setItem(this.ID, JSON.stringify(queue));
+    this.save(queue);
   },
   moveFirst: function (index) {
     var queue = this.all();
     var removed = queue.splice(index, 1);
     queue.unshift(removed[0]);
-    localStorage.setItem(this.ID, JSON.stringify(queue));
+    this.save(queue);
   },
   update: function (obj) {
     var queue = this.all();
     Object.keys(obj).forEach(function (key) {
       queue[0][key] = obj[key];
     });
-    localStorage.setItem(this.ID, JSON.stringify(queue));
+    this.save(queue);
   },
   remove: function (item) {
     var index = this.indexOf(item);
     var items = this.all();
     items.splice(index, 1);
-    localStorage.setItem(this.ID, JSON.stringify(items));
+    this.save(items);
   },
   removeFirst: function () { return removeFirst(localStorage, this.ID); },
   peek: function () { return this.all()[1]; },
@@ -61,7 +64,7 @@ var storage = {
       // Add first
       var queue = this.all();
       queue.unshift(item);
-      sessionStorage.setItem(this.ID, JSON.stringify(queue));
+      this.save(queue);
     },
     remove: function () { return removeFirst(sessionStorage, this.ID); }
   }
