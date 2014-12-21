@@ -9,17 +9,18 @@ var Episode = React.createClass({
     return { added: false };
   },
   getDefaultProps: function () {
-    return { play: true, add: true };
+    return { play: true, add: true, remove: false };
   },
   propTypes: {
     data: React.PropTypes.object.isRequired,
     play: React.PropTypes.bool,
-    add: React.PropTypes.bool
+    add: React.PropTypes.bool,
+    remove: React.PropTypes.bool
   },
   componentDidMount: function () {
     this.setState({ added: this.props.data.queued });
   },
-  handleClick: function (fnName) {
+  handleAdd: function (fnName) {
     return function (e) {
       // Trigger play or add action
       PlaylistActions[fnName]({
@@ -35,9 +36,14 @@ var Episode = React.createClass({
       e.preventDefault();
     }.bind(this);
   },
+  handleRemove: function (e) {
+    PlaylistActions.remove(this.props.data);
+    e.preventDefault();
+  },
   render: function () {
-    var play = this.props.play && (<a href="#" onClick={this.handleClick('play')}>Play</a>);
-    var add = this.props.add && (<a href="#" onClick={this.handleClick('add')}>Queue</a>);
+    var remove = this.props.remove && (<a href="#" onClick={this.handleRemove}>Remove</a>);
+    var play = this.props.play && (<a href="#" onClick={this.handleAdd('play')}>Play</a>);
+    var add = this.props.add && (<a href="#" onClick={this.handleAdd('add')}>Queue</a>);
     if (this.state.added) { add = 'Queued'; }
 
     var date = '';
@@ -52,7 +58,7 @@ var Episode = React.createClass({
             <div className="date">{date}</div>
           </div>
           <div className="summary">{this.props.data.summary}</div>
-          <div className="footer">{play} {add}</div>
+          <div className="footer">{play} {add} {remove}</div>
         </div>
         );
   }

@@ -31,7 +31,7 @@ var store = Reflux.createStore({
   onNext: function () {
     if (!storage.empty()) {
       // Remove first episode in queue
-      var removed = storage.remove();
+      var removed = storage.removeFirst();
 
       // Add removed episode to history
       storage.history.add(removed);
@@ -49,14 +49,9 @@ var store = Reflux.createStore({
     storage.add(episode);
     this.trigger(storage.all(), 'add');
   },
-  onRemove: function (/*episode*/) {
-    // Remove episode from queue
-    // TODO Maybe allow fn as argument
-    //this.queue.filter(function (x) {
-      //return x.audio_url !== episode.audio_url;
-    //});
-    //storage.update(this.queue);
-    //this.trigger(this.queue);
+  onRemove: function (episode) {
+    storage.remove(episode);
+    this.trigger(storage.all(), 'remove');
   },
   ended: function () {
     if (storage.empty()) {

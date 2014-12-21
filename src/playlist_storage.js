@@ -42,7 +42,13 @@ var storage = {
     });
     localStorage.setItem(this.ID, JSON.stringify(queue));
   },
-  remove: function () { return removeFirst(localStorage, this.ID); },
+  remove: function (item) {
+    var index = this.indexOf(item);
+    var items = this.all();
+    items.splice(index, 1);
+    localStorage.setItem(this.ID, JSON.stringify(items));
+  },
+  removeFirst: function () { return removeFirst(localStorage, this.ID); },
   peek: function () { return this.all()[1]; },
   empty: function () { return this.all().length <= 1; },
   clear: function () { localStorage.removeItem(this.ID); },
