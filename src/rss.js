@@ -11,10 +11,10 @@ var getRSS = function (url, fn) {
           fn({ error: 'no results' }, null);
         } else {
           fn(null, result.query.results.rss.channel);
+          window.latestPodcast = result.query.results.rss.channel;
         }
-        window.latestPodcast = result.query.results.rss.channel;
       } else {
-        fn('ERROR', null);
+        fn({ error: 'failed request', statusCode: httpRequest.status }, null);
       }
     }
   };

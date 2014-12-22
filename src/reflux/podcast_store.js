@@ -29,7 +29,7 @@ var store = Reflux.createStore({
 
         // Update podcast from rss-feed if older than one hour
         if (moment(podcast.lastUpdate).utc().isBefore(moment.utc().subtract(1, 'hours'))) {
-          rss.get(podcast.url, function (error, result) {
+          rss.get(podcast.links.rss, function (error, result) {
             if (!error) {
               rss
                 .parseEpisodes(result)
