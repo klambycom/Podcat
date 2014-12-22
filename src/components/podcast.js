@@ -60,8 +60,11 @@ var Podcast = React.createClass({
     item.queued = storage.indexOf({ audio_url: item.file.url }) >= 0;
     item.id = data.key();
     this.state.items.unshift(item);
-    // TODO forceUpdate later when new episodes
-    if (this.state.items.length < 11) { this.forceUpdate(); }
+    this.delayedForceUpdate();
+  },
+  delayedForceUpdate: function () {
+    clearTimeout(this.delayID);
+    this.delayID = setTimeout(this.forceUpdate.bind(this), 100);
   },
   onSubscriptionChange: function (result) {
     // Update subscribe/unsubscribe button
