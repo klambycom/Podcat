@@ -39,6 +39,7 @@ var Podcast = React.createClass({
     PodcastActions.init(this.getParams().id);
 
     // Get episodes from firebase
+    this.setState({ items: [] });
     this.itemsRef = new Firebase(
         'https://blinding-torch-6567.firebaseio.com/podcasts/' + this.getParams().id + '/items');
     this.itemsRef.orderByPriority().on('child_added', this.onItemAdded);
