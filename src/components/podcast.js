@@ -29,6 +29,7 @@ var Podcast = React.createClass({
   getInitialState: function () {
     return {
       items: [],
+      links: {},
       subscribed: false,
       notFound: false,
       selectedPodcast: this.getParams().id
@@ -107,6 +108,10 @@ var Podcast = React.createClass({
             <p>{this.state.summary}</p>
             <small>{this.state.author}</small>
             <div className="links">
+              <div className="left">
+                <a href={this.state.links.rss}><span className="fa fa-rss"></span></a>
+                <a href={this.state.links.web}><span className="fa fa-link"></span></a>
+              </div>
               <a
                 href="#"
                 className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}

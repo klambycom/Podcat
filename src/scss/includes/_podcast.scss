@@ -33,36 +33,37 @@
     .links {
       background-color: rgb(226, 226, 226);
       margin-top: 10px;
-      padding: 5px;
+      //padding: 5px;
+
+      display: flex;
+      justify-content: space-between;
+
+      .left {
+        display: flex;
+
+        a {
+          padding: 10px 15px;
+          border-right: 3px white solid;
+          display: block;
+          color: black;
+        }
+      }
+
+      .subscribe, .unsubscribe {
+        padding: 10px 15px;
+        border-left: 3px white solid;
+        color: white;
+      }
+
+      .subscribe {
+        background-color: $button-color;
+        &:hover { background-color: $button-hover-color; }
+      }
+
+      .unsubscribe {
+        background-color: #A64B43;
+        &:hover { background-color: #BB625A; }
+      }
     }
   }
-
-  //.header {
-  //  display: flex;
-  //  justify-content: space-between;
-
-  //  .subscribe, .unsubscribe {
-  //    padding: 10px 25px;
-  //    height: 16px;
-  //    margin-top: 25px;
-  //    font-size: .8em;
-  //    color: white;
-  //  }
-
-  //  .subscribe {
-  //    background-color: $button-color;
-  //    &:hover { background-color: $button-hover-color; }
-  //  }
-
-  //  .unsubscribe {
-  //    background-color: #A64B43;
-  //    &:hover { background-color: #BB625A; }
-  //  }
-  //}
-
-  //img {
-  //  width: 250px;
-  //  float: left;
-  //  margin-right: 10px;
-  //}
 }

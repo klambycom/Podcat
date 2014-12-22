@@ -29,7 +29,7 @@ var store = Reflux.createStore({
           rss.get(url[0], function (error, result) {
             if (!error) {
               var json = rss.parse(result);
-              json.url = url[0];
+              json.links.rss = url[0];
 
               // Most common colors in cover image
               findColors(json.image, function (colors) {
