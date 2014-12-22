@@ -101,7 +101,7 @@
 };
 
 <span class="hljs-keyword">var</span> parsePodcast = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(feed)</span> </span>{
-  <span class="hljs-keyword">var</span> keywords, category, description, pubDate;
+  <span class="hljs-keyword">var</span> keywords, category, description, pubDate, link;
 
   keywords = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(words)</span> </span>{
     <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(words)) {
@@ -128,6 +128,15 @@
     <span class="hljs-keyword">return</span> feed.lastBuildDate || feed.pubDate;
   };
 
+  link = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(link)</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Array</span>.isArray(link)) {
+      <span class="hljs-keyword">return</span> link.reduce(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(acc, x)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> x === <span class="hljs-string">'string'</span> ? x : acc;
+      }, <span class="hljs-string">''</span>);
+    }
+    <span class="hljs-keyword">return</span> link;
+  };
+
   <span class="hljs-keyword">return</span> {
     title: feed.title || <span class="hljs-string">'No title'</span>,
     author: feed.author || <span class="hljs-string">'No author'</span>,
@@ -139,7 +148,10 @@
     subtitle: feed.subtitle || <span class="hljs-string">'No subtitle'</span>,
     lastUpdate: moment.utc().format(),
     explicit: feed.explicit || <span class="hljs-string">'Unknown'</span>,
-    keywords: (feed.keywords &amp;&amp; keywords(feed.keywords)) || []
+    keywords: (feed.keywords &amp;&amp; keywords(feed.keywords)) || [],
+    links: {
+      web: link(feed.link) || <span class="hljs-string">''</span>
+    }
   };
 };
 

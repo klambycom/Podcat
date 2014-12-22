@@ -74,6 +74,7 @@
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
       items: [],
+      links: {},
       subscribed: <span class="hljs-literal">false</span>,
       notFound: <span class="hljs-literal">false</span>,
       selectedPodcast: <span class="hljs-keyword">this</span>.getParams().id
@@ -199,28 +200,44 @@
       return (&lt;NotFound&gt;There is no podcast on this url.&lt;/NotFound&gt;);
     }
 
+    var bgColor = {};
+    if (typeof this.state.colors !== 'undefined') {
+      var rgb = this.state.colors[0];
+      bgColor = {
+        backgroundColor: 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')'
+      };
+    }
+
     return (
         &lt;div id="podcast"&gt;
-          &lt;img src={this.state.image} alt={this.state.title} /&gt;
-          &lt;div className="header"&gt;
+          &lt;div className="info" style={bgColor}&gt;
+            &lt;img src={this.state.image} alt={this.state.title} /&gt;
             &lt;h1&gt;{this.state.title}&lt;/h1&gt;
-            &lt;a
-              href="#"
-              className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
-              onClick={this.handleSubscribe}&gt;
-              {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}&lt;/a&gt;
+            &lt;p&gt;{this.state.summary}&lt;/p&gt;
+            &lt;small&gt;{this.state.author}&lt;/small&gt;
+            &lt;div className="links"&gt;
+              &lt;div className="left"&gt;
+                &lt;a&gt;&lt;span className="fa fa-microphone"&gt;&lt;/span&gt; {this.state.items.length}&lt;/a&gt;
+                &lt;a href={this.state.links.rss}&gt;&lt;span className="fa fa-rss"&gt;&lt;/span&gt;&lt;/a&gt;
+                &lt;a href={this.state.links.web}&gt;&lt;span className="fa fa-link"&gt;&lt;/span&gt;&lt;/a&gt;
+              &lt;/div&gt;
+              &lt;a
+                href="#"
+                className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
+                onClick={this.handleSubscribe}&gt;
+                {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}&lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div className="clear"&gt;&lt;/div&gt;
           &lt;/div&gt;
-          &lt;p&gt;{this.state.summary}&lt;/p&gt;
-          &lt;small&gt;{this.state.author}&lt;/small&gt;
-          &lt;div className="clear"&gt;&lt;/div&gt;
 
-          &lt;h2&gt;Episodes&lt;/h2&gt;
-          &lt;p&gt;
-            {this.state.items.slice(0, 10).map(function (item, i) {
-              return &lt;Episode key={hashCode(item.file.url) + i} data={item} /&gt;;
-            })}
-          &lt;/p&gt;
-          
+          &lt;div className="episodes"&gt;
+            &lt;h2&gt;Episodes&lt;/h2&gt;
+            &lt;p&gt;
+              {this.state.items.slice(0, 10).map(function (item, i) {
+                return &lt;Episode key={hashCode(item.file.url) + i} data={item} /&gt;;
+              })}
+            &lt;/p&gt;
+          &lt;/div&gt;
         &lt;/div&gt;
         );
   }
