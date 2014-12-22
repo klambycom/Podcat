@@ -109,6 +109,7 @@ var Podcast = React.createClass({
             <small>{this.state.author}</small>
             <div className="links">
               <div className="left">
+                <a><span className="fa fa-microphone"></span> {this.state.items.length}</a>
                 <a href={this.state.links.rss}><span className="fa fa-rss"></span></a>
                 <a href={this.state.links.web}><span className="fa fa-link"></span></a>
               </div>
