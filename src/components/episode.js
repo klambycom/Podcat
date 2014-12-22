@@ -4,6 +4,13 @@ var React = require('react');
 var PlaylistActions = require('../reflux/playlist_actions');
 var moment = require('moment');
 
+var decodeText = function (text) {
+  if (text === '') { return text; }
+  var el = document.createElement('div');
+  el.innerHTML = text;
+  return el.childNodes[0].nodeValue;
+};
+
 var Episode = React.createClass({
   getInitialState: function () {
     return { added: false };
@@ -57,10 +64,10 @@ var Episode = React.createClass({
     return (
         <div className="episode">
           <div className="header">
-            <div className="title">{this.props.data.title}</div>
+            <div className="title">{decodeText(this.props.data.title)}</div>
             <div className="date">{this.getPubDate()}</div>
           </div>
-          <div className="summary">{this.props.data.summary}</div>
+          <div className="summary">{decodeText(this.props.data.summary)}</div>
           <div className="footer">{play} {add} {remove}</div>
         </div>
         );
