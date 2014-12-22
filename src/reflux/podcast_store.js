@@ -18,7 +18,8 @@ var store = Reflux.createStore({
       var database = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/' + id);
       database.once('value', function (data) {
         var podcast = data.val();
-        var lastEpisode = podcast.items[Object.keys(podcast.items)[0]].pubDate;
+        var keysFromItems = Object.keys(podcast.items);
+        var lastEpisode = podcast.items[keysFromItems[keysFromItems.length - 1]].pubDate;
         delete podcast.items;
 
         this.trigger({
