@@ -40,22 +40,25 @@ var Episode = React.createClass({
     PlaylistActions.remove(this.props.data);
     e.preventDefault();
   },
+  getPubDate: function () {
+    if (typeof this.props.data.pubDate !== 'undefined') {
+      var pubDate = moment(this.props.data.pubDate);
+      return pubDate.isBefore(moment().startOf('month')) ?
+        pubDate.format('ll') : pubDate.fromNow();
+    }
+    return '';
+  },
   render: function () {
     var remove = this.props.remove && (<a href="#" onClick={this.handleRemove}>Remove</a>);
     var play = this.props.play && (<a href="#" onClick={this.handleAdd('play')}>Play</a>);
     var add = this.props.add && (<a href="#" onClick={this.handleAdd('add')}>Queue</a>);
     if (this.state.added) { add = 'Queued'; }
 
-    var date = '';
-    if (typeof this.props.data.pubDate !== 'undefined') {
-      date = moment(this.props.data.pubDate).fromNow();
-    }
-
     return (
         <div className="episode">
           <div className="header">
             <div className="title">{this.props.data.title}</div>
-            <div className="date">{date}</div>
+            <div className="date">{this.getPubDate()}</div>
           </div>
           <div className="summary">{this.props.data.summary}</div>
           <div className="footer">{play} {add} {remove}</div>
