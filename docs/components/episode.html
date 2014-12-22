@@ -110,22 +110,25 @@
     PlaylistActions.remove(<span class="hljs-keyword">this</span>.props.data);
     e.preventDefault();
   },
+  getPubDate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.props.data.pubDate !== <span class="hljs-string">'undefined'</span>) {
+      <span class="hljs-keyword">var</span> pubDate = moment(<span class="hljs-keyword">this</span>.props.data.pubDate);
+      <span class="hljs-keyword">return</span> pubDate.isBefore(moment().startOf(<span class="hljs-string">'month'</span>)) ?
+        pubDate.format(<span class="hljs-string">'ll'</span>) : pubDate.fromNow();
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>;
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">var</span> remove = <span class="hljs-keyword">this</span>.props.remove &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleRemove}</span>&gt;</span>Remove<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var play = this.props.play &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     if (this.state.added) { add = 'Queued'; }
 
-    var date = '';
-    if (typeof this.props.data.pubDate !== 'undefined') {
-      date = moment(this.props.data.pubDate).fromNow();
-    }
-
     return (
         <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{this.props.data.title}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"date"</span>&gt;</span>{date}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"date"</span>&gt;</span>{this.getPubDate()}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"summary"</span>&gt;</span>{this.props.data.summary}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"footer"</span>&gt;</span>{play} {add} {remove}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>

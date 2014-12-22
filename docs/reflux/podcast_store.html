@@ -86,7 +86,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (moment(podcast.lastUpdate).utc().isBefore(moment.utc().subtract(<span class="hljs-number">1</span>, <span class="hljs-string">'hours'</span>))) {
-          rss.get(podcast.url, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, result)</span> </span>{
+          rss.get(podcast.links.rss, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, result)</span> </span>{
             <span class="hljs-keyword">if</span> (!error) {
               rss
                 .parseEpisodes(result)

@@ -43,10 +43,10 @@
           fn({ error: <span class="hljs-string">'no results'</span> }, <span class="hljs-literal">null</span>);
         } <span class="hljs-keyword">else</span> {
           fn(<span class="hljs-literal">null</span>, result.query.results.rss.channel);
+          <span class="hljs-built_in">window</span>.latestPodcast = result.query.results.rss.channel;
         }
-        <span class="hljs-built_in">window</span>.latestPodcast = result.query.results.rss.channel;
       } <span class="hljs-keyword">else</span> {
-        fn(<span class="hljs-string">'ERROR'</span>, <span class="hljs-literal">null</span>);
+        fn({ error: <span class="hljs-string">'failed request'</span>, statusCode: httpRequest.status }, <span class="hljs-literal">null</span>);
       }
     }
   };
