@@ -8,6 +8,7 @@ var PodcastStore = require('../reflux/podcast_store.js');
 var PodcastActions = require('../reflux/podcast_actions.js');
 var NotFound = require('./not_found.js');
 var Episode = require('./episode.js');
+var LoadMore = require('./load_more.js');
 var storage = require('../playlist_storage.js');
 
 var hashCode = function(str) {
@@ -28,7 +29,7 @@ var Podcast = React.createClass({
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
   getInitialState: function () {
     return {
-      page: 1,
+      show: 10,
       items: [],
       links: {},
       subscribed: false,
@@ -50,7 +51,7 @@ var Podcast = React.createClass({
   componentDidUpdate: function () {
     // Update component if params (id) is changed
     if (this.state.selectedPodcast !== this.getParams().id) {
-      this.setState({ selectedPodcast: this.getParams().id, items: [], page: 1 });
+      this.setState({ selectedPodcast: this.getParams().id, items: [], show: 10 });
       this.itemsRef.off('child_added', this.onItemAdded);
       this.componentDidMount();
     }
@@ -91,10 +92,8 @@ var Podcast = React.createClass({
 
     e.preventDefault();
   },
-  handleLoadMore: function (e) {
-    this.setState({ page: this.state.page + 1 });
-    console.log('load more');
-    e.preventDefault();
+  handleLoadMore: function (n) {
+    this.setState({ show: n });
   },
   render: function () {
     if (this.state.notFound) {
@@ -107,11 +106,6 @@ var Podcast = React.createClass({
       bgColor = {
         backgroundColor: 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')'
       };
-    }
-
-    var more = '';
-    if (this.state.page * 10 < this.state.items.length) {
-      more = <a href="#" className="more" onClick={this.handleLoadMore}>Load more episodes</a>;
     }
 
     return (
@@ -139,13 +133,15 @@ var Podcast = React.createClass({
           <div className="episodes">
             <h2>Episodes</h2>
             <p>
-              {this.state.items.slice(0, this.state.page * 10).map(function (item, i) {
+              {this.state.items.slice(0, this.state.show).map(function (item, i) {
                 return <Episode key={hashCode(item.file.url) + i} data={item} />;
               })}
             </p>
           </div>
 
-          {more}
+          <LoadMore onMore={this.handleLoadMore} total={this.state.items.length}>
+            Load more episodes
+          </LoadMore>
         </div>
         );
   }
