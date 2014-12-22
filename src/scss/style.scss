@@ -27,3 +27,12 @@ body {
 
   @include background-noise(white);
 }
+
+a.show-more {
+  background-color: rgb(226, 226, 226);
+  display: block;
+  text-align: center;
+  padding: 10px;
+
+  &:hover { background-color: rgb(211, 211, 211); }
+}

@@ -26,7 +26,7 @@ var LoadMore = React.createClass({
   render: function () {
     if (this.state.page * this.props.perPage < this.props.total) {
       return (
-          <a href="#" className="more" onClick={this.handleClick}>{this.props.children}</a>
+          <a href="#" className="show-more" onClick={this.handleClick}>{this.props.children}</a>
           );
     }
 

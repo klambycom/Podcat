@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Episode = require('./episode');
+var LoadMore = require('./load_more.js');
 var Firebase = require('firebase');
 var moment = require('moment');
 var storage = require('../playlist_storage.js');
@@ -10,7 +11,7 @@ var reverseDot = function (a) { return function (b) { return a[b]; }; };
 
 var Feed = React.createClass({
   getInitialState: function () {
-    return { items: [] };
+    return { items: [], show: 15 };
   },
   componentDidMount: function () {
     this.firebase = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts');
@@ -63,6 +64,7 @@ var Feed = React.createClass({
         }.bind(this));
     }, this);
   },
+  handleLoadMore: function (n) { this.setState({ show: n }); },
   render: function () {
     // No episodes
     var episodes = (
@@ -73,7 +75,7 @@ var Feed = React.createClass({
 
     // List episodes
     if (this.state.items.length > 0) {
-      episodes = this.state.items.map(function (item, i) {
+      episodes = this.state.items.slice(0, this.state.show).map(function (item, i) {
         return <Episode key={i} data={item} />;
       });
     }
@@ -81,7 +83,11 @@ var Feed = React.createClass({
     return (
         <div id="feed">
           <h1>Feed</h1>
-          {episodes}
+          <div>{episodes}</div>
+
+          <LoadMore onMore={this.handleLoadMore} perPage={15} total={this.state.items.length}>
+            Load more episodes
+          </LoadMore>
         </div>
         );
   }
