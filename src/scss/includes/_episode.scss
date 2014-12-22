@@ -1,6 +1,10 @@
 .episode {
-  padding: 10px 0;
-  border-bottom: 5px rgb(226, 226, 226) solid;
+  &:not(:last-child) {
+    padding: 10px 0;
+    border-bottom: 2px rgb(226, 226, 226) solid;
+  }
+
+  &:last-child { padding: 10px 0 0 0; }
 
   .header {
     .title {

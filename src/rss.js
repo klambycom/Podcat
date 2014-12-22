@@ -69,7 +69,7 @@ var parseEpisodes = function (feed) {
 };
 
 var parsePodcast = function (feed) {
-  var keywords, category, description, pubDate;
+  var keywords, category, description, pubDate, link;
 
   keywords = function(words) {
     if (Array.isArray(words)) {
@@ -96,6 +96,15 @@ var parsePodcast = function (feed) {
     return feed.lastBuildDate || feed.pubDate;
   };
 
+  link = function (link) {
+    if (Array.isArray(link)) {
+      return link.reduce(function (acc, x) {
+        return typeof x === 'string' ? x : acc;
+      }, '');
+    }
+    return link;
+  };
+
   return {
     title: feed.title || 'No title',
     author: feed.author || 'No author',
@@ -107,7 +116,10 @@ var parsePodcast = function (feed) {
     subtitle: feed.subtitle || 'No subtitle',
     lastUpdate: moment.utc().format(),
     explicit: feed.explicit || 'Unknown',
-    keywords: (feed.keywords && keywords(feed.keywords)) || []
+    keywords: (feed.keywords && keywords(feed.keywords)) || [],
+    links: {
+      web: link(feed.link) || ''
+    }
   };
 };
 

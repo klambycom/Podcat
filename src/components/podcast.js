@@ -29,6 +29,7 @@ var Podcast = React.createClass({
   getInitialState: function () {
     return {
       items: [],
+      links: {},
       subscribed: false,
       notFound: false,
       selectedPodcast: this.getParams().id
@@ -91,28 +92,44 @@ var Podcast = React.createClass({
       return (<NotFound>There is no podcast on this url.</NotFound>);
     }
 
+    var bgColor = {};
+    if (typeof this.state.colors !== 'undefined') {
+      var rgb = this.state.colors[0];
+      bgColor = {
+        backgroundColor: 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')'
+      };
+    }
+
     return (
         <div id="podcast">
-          <img src={this.state.image} alt={this.state.title} />
-          <div className="header">
+          <div className="info" style={bgColor}>
+            <img src={this.state.image} alt={this.state.title} />
             <h1>{this.state.title}</h1>
-            <a
-              href="#"
-              className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
-              onClick={this.handleSubscribe}>
-              {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}</a>
+            <p>{this.state.summary}</p>
+            <small>{this.state.author}</small>
+            <div className="links">
+              <div className="left">
+                <a><span className="fa fa-microphone"></span> {this.state.items.length}</a>
+                <a href={this.state.links.rss}><span className="fa fa-rss"></span></a>
+                <a href={this.state.links.web}><span className="fa fa-link"></span></a>
+              </div>
+              <a
+                href="#"
+                className={this.state.subscribed ? 'unsubscribe' : 'subscribe'}
+                onClick={this.handleSubscribe}>
+                {this.state.subscribed ? 'Unsubscribe' : 'Subscribe'}</a>
+            </div>
+            <div className="clear"></div>
           </div>
-          <p>{this.state.summary}</p>
-          <small>{this.state.author}</small>
-          <div className="clear"></div>
 
-          <h2>Episodes</h2>
-          <p>
-            {this.state.items.slice(0, 10).map(function (item, i) {
-              return <Episode key={hashCode(item.file.url) + i} data={item} />;
-            })}
-          </p>
-          
+          <div className="episodes">
+            <h2>Episodes</h2>
+            <p>
+              {this.state.items.slice(0, 10).map(function (item, i) {
+                return <Episode key={hashCode(item.file.url) + i} data={item} />;
+              })}
+            </p>
+          </div>
         </div>
         );
   }

@@ -3,6 +3,7 @@ var Reflux = require('reflux');
 var actions = require('./search_actions.js');
 var rss = require('../rss.js');
 var Alert = require('./alert.js').actions;
+var findColors = require('../find_colors.js');
 
 var store = Reflux.createStore({
   listenables: actions,
@@ -28,22 +29,27 @@ var store = Reflux.createStore({
           rss.get(url[0], function (error, result) {
             if (!error) {
               var json = rss.parse(result);
-              json.url = url[0];
+              json.links.rss = url[0];
 
-              // Save podcast
-              var post = this.database.push(json);
+              // Most common colors in cover image
+              findColors(json.image, function (colors) {
+                json.colors = colors.slice(0, 10);
 
-              // Save episodes
-              var itemsRef = this.database
-                .child(post.key())
-                .child('items');
+                // Save podcast
+                var post = this.database.push(json);
 
-              rss.parseEpisodes(result).forEach(function (x, i, arr) {
-                var newItemRef = itemsRef.push();
-                newItemRef.setWithPriority(x, arr.length - i);
-              });
+                // Save episodes
+                var itemsRef = this.database
+                  .child(post.key())
+                  .child('items');
 
-              this.trigger('feed', post.key());
+                rss.parseEpisodes(result).forEach(function (x, i, arr) {
+                  var newItemRef = itemsRef.push();
+                  newItemRef.setWithPriority(x, arr.length - i);
+                });
+
+                this.trigger('feed', post.key());
+              }.bind(this));
             } else {
               Alert.warning(
                   'Podcast',

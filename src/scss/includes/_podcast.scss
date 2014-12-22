@@ -3,36 +3,72 @@
     clear: both;
   }
 
-$button-hover-color: #318131;
-  .header {
-    display: flex;
-    justify-content: space-between;
+  .info {
+    text-align: center;
+    background-image: url(/assets/gradient.png);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 
-    .subscribe, .unsubscribe {
-      padding: 10px 25px;
-      height: 16px;
-      margin-top: 25px;
+    & > img {
+      width: 100px;
+      margin-top: 10px;
+    }
+
+    h1 {
+    font-size: 1.2em;
+    margin: 0 10px;
+    }
+
+    p {
       font-size: .8em;
-      color: white;
+      margin: 5px 10px;
     }
 
-    .subscribe {
-      background-color: $button-color;
-      &:hover { background-color: $button-hover-color; }
+    small {
+      color: gray;
+      font-size: .65em;
+      margin: 0 10px;
     }
 
-    .unsubscribe {
-      background-color: #A64B43;
-      &:hover { background-color: #BB625A; }
+    .links {
+      background-color: rgb(226, 226, 226);
+      margin-top: 10px;
+      //padding: 5px;
+
+      display: flex;
+      justify-content: space-between;
+
+      .left {
+        display: flex;
+
+        a {
+          padding: 10px 15px;
+          border-right: 3px white solid;
+          display: block;
+          color: black;
+        }
+      }
+
+      .subscribe, .unsubscribe {
+        padding: 10px 15px;
+        border-left: 3px white solid;
+        color: white;
+      }
+
+      .subscribe {
+        background-color: $button-color;
+        &:hover { background-color: $button-hover-color; }
+      }
+
+      .unsubscribe {
+        background-color: #A64B43;
+        &:hover { background-color: #BB625A; }
+      }
     }
   }
 
-  img {
-    width: 250px;
-    float: left;
-    margin-right: 10px;
-  }
-
-  table {
+  .episodes {
+    h2 { margin: 30px 0 0 0; }
+    p { margin-top: 0; }
   }
 }
