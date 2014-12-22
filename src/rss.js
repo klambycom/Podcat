@@ -100,7 +100,7 @@ var parsePodcast = function (feed) {
     if (Array.isArray(link)) {
       return link.reduce(function (acc, x) {
         return typeof x === 'string' ? x : acc;
-      }, '')
+      }, '');
     }
     return link;
   };

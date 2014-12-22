@@ -34,7 +34,7 @@ var pixels = function (path, callback) {
 
 var findColors = function (path, callback) {
   var reindex = function (colors) {
-    return colors.filter(function (x) { return typeof x !== 'undefined' });
+    return colors.filter(function (x) { return typeof x !== 'undefined'; });
   };
 
   var sort = function (colors) {
