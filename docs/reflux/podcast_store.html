@@ -63,7 +63,8 @@
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">var</span> database = <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://blinding-torch-6567.firebaseio.com/podcasts/'</span> + id);
       database.once(<span class="hljs-string">'value'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(data)</span> </span>{
         <span class="hljs-keyword">var</span> podcast = data.val();
-        <span class="hljs-keyword">var</span> lastEpisode = podcast.items[<span class="hljs-built_in">Object</span>.keys(podcast.items)[<span class="hljs-number">0</span>]].pubDate;
+        <span class="hljs-keyword">var</span> keysFromItems = <span class="hljs-built_in">Object</span>.keys(podcast.items);
+        <span class="hljs-keyword">var</span> lastEpisode = podcast.items[keysFromItems[keysFromItems.length - <span class="hljs-number">1</span>]].pubDate;
         <span class="hljs-keyword">delete</span> podcast.items;
 
         <span class="hljs-keyword">this</span>.trigger({

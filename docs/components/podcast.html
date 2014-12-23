@@ -40,6 +40,7 @@
 <span class="hljs-keyword">var</span> PodcastActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/podcast_actions.js'</span>);
 <span class="hljs-keyword">var</span> NotFound = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./not_found.js'</span>);
 <span class="hljs-keyword">var</span> Episode = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./episode.js'</span>);
+<span class="hljs-keyword">var</span> LoadMore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./load_more.js'</span>);
 <span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
 <span class="hljs-keyword">var</span> hashCode = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(str)</span> </span>{</pre></div></div>
@@ -73,6 +74,7 @@
   mixins: [ Router.State, Reflux.listenTo(PodcastStore, <span class="hljs-string">'onSubscriptionChange'</span>) ],
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">return</span> {
+      show: <span class="hljs-number">10</span>,
       items: [],
       links: {},
       subscribed: <span class="hljs-literal">false</span>,
@@ -119,7 +121,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.selectedPodcast !== <span class="hljs-keyword">this</span>.getParams().id) {
-      <span class="hljs-keyword">this</span>.setState({ selectedPodcast: <span class="hljs-keyword">this</span>.getParams().id });
+      <span class="hljs-keyword">this</span>.setState({ selectedPodcast: <span class="hljs-keyword">this</span>.getParams().id, items: [], show: <span class="hljs-number">10</span> });
       <span class="hljs-keyword">this</span>.itemsRef.off(<span class="hljs-string">'child_added'</span>, <span class="hljs-keyword">this</span>.onItemAdded);
       <span class="hljs-keyword">this</span>.componentDidMount();
     }
@@ -128,7 +130,14 @@
     <span class="hljs-keyword">var</span> item = data.val();
     item.queued = storage.indexOf({ audio_url: item.file.url }) &gt;= <span class="hljs-number">0</span>;
     item.id = data.key();
-    <span class="hljs-keyword">this</span>.state.items.unshift(item);</pre></div></div>
+    <span class="hljs-keyword">this</span>.state.items.unshift(item);
+    <span class="hljs-keyword">this</span>.delayedForceUpdate();
+  },
+  delayedForceUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    clearTimeout(<span class="hljs-keyword">this</span>.delayID);
+    <span class="hljs-keyword">this</span>.delayID = setTimeout(<span class="hljs-keyword">this</span>.forceUpdate.bind(<span class="hljs-keyword">this</span>), <span class="hljs-number">100</span>);
+  },
+  onSubscriptionChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{</pre></div></div>
             
         </li>
         
@@ -138,23 +147,6 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>TODO forceUpdate later when new episodes</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.items.length &lt; <span class="hljs-number">11</span>) { <span class="hljs-keyword">this</span>.forceUpdate(); }
-  },
-  onSubscriptionChange: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(result)</span> </span>{</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Update subscribe/unsubscribe button</p>
 
@@ -167,11 +159,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>Update podcast data</p>
 
@@ -194,6 +186,9 @@
     }
 
     e.preventDefault();
+  },
+  handleLoadMore: function (n) {
+    this.setState({ show: n });
   },
   render: function () {
     if (this.state.notFound) {
@@ -233,11 +228,15 @@
           &lt;div className="episodes"&gt;
             &lt;h2&gt;Episodes&lt;/h2&gt;
             &lt;p&gt;
-              {this.state.items.slice(0, 10).map(function (item, i) {
+              {this.state.items.slice(0, this.state.show).map(function (item, i) {
                 return &lt;Episode key={hashCode(item.file.url) + i} data={item} /&gt;;
               })}
             &lt;/p&gt;
           &lt;/div&gt;
+
+          &lt;LoadMore onMore={this.handleLoadMore} total={this.state.items.length}&gt;
+            Load more episodes
+          &lt;/LoadMore&gt;
         &lt;/div&gt;
         );
   }

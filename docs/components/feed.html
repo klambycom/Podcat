@@ -34,6 +34,7 @@
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> Episode = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./episode'</span>);
+<span class="hljs-keyword">var</span> LoadMore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./load_more.js'</span>);
 <span class="hljs-keyword">var</span> Firebase = <span class="hljs-built_in">require</span>(<span class="hljs-string">'firebase'</span>);
 <span class="hljs-keyword">var</span> moment = <span class="hljs-built_in">require</span>(<span class="hljs-string">'moment'</span>);
 <span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
@@ -42,7 +43,7 @@
 
 <span class="hljs-keyword">var</span> Feed = React.createClass({
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> { items: [] };
+    <span class="hljs-keyword">return</span> { items: [], show: <span class="hljs-number">15</span> };
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.firebase = <span class="hljs-keyword">new</span> Firebase(<span class="hljs-string">'https://blinding-torch-6567.firebaseio.com/podcasts'</span>);
@@ -159,6 +160,7 @@
         }.bind(<span class="hljs-keyword">this</span>));
     }, <span class="hljs-keyword">this</span>);
   },
+  handleLoadMore: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(n)</span> </span>{ <span class="hljs-keyword">this</span>.setState({ show: n }); },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
             
         </li>
@@ -196,7 +198,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.items.length &gt; <span class="hljs-number">0</span>) {
-      episodes = <span class="hljs-keyword">this</span>.state.items.map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item, i)</span> </span>{
+      episodes = <span class="hljs-keyword">this</span>.state.items.slice(<span class="hljs-number">0</span>, <span class="hljs-keyword">this</span>.state.show).map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item, i)</span> </span>{
         <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Episode</span> <span class="hljs-attribute">key</span>=<span class="hljs-value">{i}</span> <span class="hljs-attribute">data</span>=<span class="hljs-value">{item}</span> /&gt;</span>;</span>
       });
     }
@@ -204,7 +206,11 @@
     <span class="hljs-keyword">return</span> (
         <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"feed"</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>Feed<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
-          {episodes}
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>{episodes}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-title">LoadMore</span> <span class="hljs-attribute">onMore</span>=<span class="hljs-value">{this.handleLoadMore}</span> <span class="hljs-attribute">perPage</span>=<span class="hljs-value">{15}</span> <span class="hljs-attribute">total</span>=<span class="hljs-value">{this.state.items.length}</span>&gt;</span>
+            Load more episodes
+          <span class="hljs-tag">&lt;/<span class="hljs-title">LoadMore</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }
