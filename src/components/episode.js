@@ -13,19 +13,47 @@ var decodeText = function (text) {
 
 var Episode = React.createClass({
   getInitialState: function () {
-    return { added: false };
+    return { added: false, className: 'episode' };
   },
   getDefaultProps: function () {
-    return { play: true, add: true, remove: false };
+    return { play: true, add: true, remove: false, draggable: false };
   },
   propTypes: {
     data: React.PropTypes.object.isRequired,
     play: React.PropTypes.bool,
     add: React.PropTypes.bool,
-    remove: React.PropTypes.bool
+    remove: React.PropTypes.bool,
+    draggable: React.PropTypes.bool
   },
   componentDidMount: function () {
     this.setState({ added: this.props.data.queued });
+
+    var div = this.refs.episode.getDOMNode();
+    div.addEventListener('dragstart', this.handleDragStart);
+    div.addEventListener('dragend', this.handleDragEnd);
+    div.addEventListener('dragover', this.handleDragOver);
+    div.addEventListener('dragleave', this.handleDragLeave);
+  },
+  handleDragStart: function (e) {
+    this.refs.episode.getDOMNode().classList.add('drag');
+    //console.log(e);
+  },
+  handleDragOver: function (e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    // PlaylistActions.dragOver(this.props.data) // to
+    this.refs.episode.getDOMNode().classList.add('over');
+  },
+  handleDragLeave: function (e) {
+    //console.log('leave', this.props.data, e);
+    this.refs.episode.getDOMNode().classList.remove('over');
+  },
+  handleDragEnd: function (e) {
+    // PlaylistActions.dragEnd(this.props.data) // from, end everything
+    //console.log('end', this.props.data.title);
+    this.refs.episode.getDOMNode().classList.remove('drag');
+    this.refs.episode.getDOMNode().classList.remove('over');
   },
   handleAdd: function (fnName) {
     return function (e) {
@@ -62,7 +90,7 @@ var Episode = React.createClass({
     if (this.state.added) { add = 'Queued'; }
 
     return (
-        <div className="episode">
+        <div draggable={this.props.draggable} ref="episode" className={this.state.className}> 
           <div className="header">
             <div className="title">{decodeText(this.props.data.title)}</div>
             <div className="date">{this.getPubDate()}</div>

@@ -36,6 +36,7 @@ var Playlist = React.createClass({
               key={i}
               data={item}
               play={i !== 0}
+              draggable={i !== 0}
               add={false}
               remove={i !== 0} />);
       });
