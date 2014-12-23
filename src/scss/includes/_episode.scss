@@ -43,4 +43,39 @@
   .footer a {
     margin-right: 10px;
   }
+
+  a.remove {
+    color: rgb(200, 0, 0) !important;
+    &:hover { color: rgb(155, 0, 0) !important; }
+  }
+
+  &.compact {
+    .image {
+      background-color: rgb(179, 88, 88);
+      float: left;
+      margin-right: 5px;
+      font-size: 25px;
+      padding: 9px 8px 6px 12px;
+      color: rgba(255, 255, 255, .8) !important;
+      &:hover { color: rgba(65, 65, 65, .8) !important; }
+    }
+
+    .header {
+      .title {
+        width: initial;
+        float: initial;
+      }
+
+      .date { display: none; }
+
+      .title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+
+    .summary { display: none; }
+    .footer { font-size: .8em; }
+  }
 }

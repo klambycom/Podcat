@@ -34,6 +34,7 @@ var Playlist = React.createClass({
         return (
             <Episode
               key={i}
+              compact={true}
               data={item}
               play={i !== 0}
               draggable={i !== 0}

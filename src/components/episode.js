@@ -13,17 +13,18 @@ var decodeText = function (text) {
 
 var Episode = React.createClass({
   getInitialState: function () {
-    return { added: false, className: 'episode' };
+    return { added: false };
   },
   getDefaultProps: function () {
-    return { play: true, add: true, remove: false, draggable: false };
+    return { play: true, add: true, remove: false, draggable: false, compact: false };
   },
   propTypes: {
     data: React.PropTypes.object.isRequired,
     play: React.PropTypes.bool,
     add: React.PropTypes.bool,
     remove: React.PropTypes.bool,
-    draggable: React.PropTypes.bool
+    draggable: React.PropTypes.bool,
+    compact: React.PropTypes.bool
   },
   componentDidMount: function () {
     this.setState({ added: this.props.data.queued });
@@ -84,19 +85,33 @@ var Episode = React.createClass({
     return '';
   },
   render: function () {
-    var remove = this.props.remove && (<a href="#" onClick={this.handleRemove}>Remove</a>);
+    var remove = this.props.remove &&
+      (<a href="#" className="remove" onClick={this.handleRemove}>Remove</a>);
     var play = this.props.play && (<a href="#" onClick={this.handleAdd('play')}>Play</a>);
     var add = this.props.add && (<a href="#" onClick={this.handleAdd('add')}>Queue</a>);
     if (this.state.added) { add = 'Queued'; }
 
+    var classes = 'episode', image = '', createdBy = '';
+    if (this.props.compact) {
+      classes += ' compact';
+      image = (
+          <a href="#" className="image fa fa-play" onClick={this.handleAdd('play')}></a>
+          );
+      play = '';
+      createdBy = 'creator';
+    }
+
     return (
-        <div draggable={this.props.draggable} ref="episode" className={this.state.className}> 
-          <div className="header">
-            <div className="title">{decodeText(this.props.data.title)}</div>
-            <div className="date">{this.getPubDate()}</div>
+        <div draggable={this.props.draggable} ref="episode" className={classes}> 
+          {image}
+          <div>
+            <div className="header">
+              <div className="title">{decodeText(this.props.data.title)}</div>
+              <div className="date">{this.getPubDate()}</div>
+            </div>
+            <div className="summary">{decodeText(this.props.data.summary)}</div>
+            <div className="footer">{createdBy} {play} {add} {remove}</div>
           </div>
-          <div className="summary">{decodeText(this.props.data.summary)}</div>
-          <div className="footer">{play} {add} {remove}</div>
         </div>
         );
   }
