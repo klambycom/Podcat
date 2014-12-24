@@ -95,6 +95,9 @@
       image: {
         episode: (x.image &amp;&amp; x.image.href) || podcastImage,
         podcast: podcastImage
+      },
+      podcast: {
+        title: feed.title || <span class="hljs-string">''</span>
       }
     };
   });

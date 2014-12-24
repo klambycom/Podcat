@@ -35,6 +35,7 @@
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">var</span> PlaylistActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_actions'</span>);
 <span class="hljs-keyword">var</span> moment = <span class="hljs-built_in">require</span>(<span class="hljs-string">'moment'</span>);
+<span class="hljs-keyword">var</span> Link = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-router'</span>).Link;
 
 <span class="hljs-keyword">var</span> decodeText = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
   <span class="hljs-keyword">if</span> (text === <span class="hljs-string">''</span>) { <span class="hljs-keyword">return</span> text; }
@@ -48,19 +49,27 @@
     <span class="hljs-keyword">return</span> { added: <span class="hljs-literal">false</span> };
   },
   getDefaultProps: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> { play: <span class="hljs-literal">true</span>, add: <span class="hljs-literal">true</span>, remove: <span class="hljs-literal">false</span> };
+    <span class="hljs-keyword">return</span> { play: <span class="hljs-literal">true</span>, add: <span class="hljs-literal">true</span>, remove: <span class="hljs-literal">false</span>, draggable: <span class="hljs-literal">false</span>, compact: <span class="hljs-literal">false</span> };
   },
   propTypes: {
     data: React.PropTypes.object.isRequired,
     play: React.PropTypes.bool,
     add: React.PropTypes.bool,
-    remove: React.PropTypes.bool
+    remove: React.PropTypes.bool,
+    draggable: React.PropTypes.bool,
+    compact: React.PropTypes.bool
   },
   componentDidMount: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
     <span class="hljs-keyword">this</span>.setState({ added: <span class="hljs-keyword">this</span>.props.data.queued });
+
+    <span class="hljs-keyword">var</span> div = <span class="hljs-keyword">this</span>.refs.episode.getDOMNode();
+    div.addEventListener(<span class="hljs-string">'dragstart'</span>, <span class="hljs-keyword">this</span>.handleDragStart);
+    div.addEventListener(<span class="hljs-string">'dragend'</span>, <span class="hljs-keyword">this</span>.handleDragEnd);
+    div.addEventListener(<span class="hljs-string">'dragover'</span>, <span class="hljs-keyword">this</span>.handleDragOver);
+    div.addEventListener(<span class="hljs-string">'dragleave'</span>, <span class="hljs-keyword">this</span>.handleDragLeave);
   },
-  handleAdd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{</pre></div></div>
+  handleDragStart: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.refs.episode.getDOMNode().classList.add(<span class="hljs-string">'drag'</span>);</pre></div></div>
             
         </li>
         
@@ -71,13 +80,14 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Trigger play or add action</p>
+              <p>console.log(e);</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      PlaylistActions[fnName]({
-        title: <span class="hljs-keyword">this</span>.props.data.title,
-        image: <span class="hljs-keyword">this</span>.props.data.image,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  },
+  handleDragOver: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{
+    e.preventDefault();
+    e.dataTransfer.dropEffect = <span class="hljs-string">'move'</span>;</pre></div></div>
             
         </li>
         
@@ -87,6 +97,79 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>PlaylistActions.dragOver(this.props.data) // to</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.refs.episode.getDOMNode().classList.add(<span class="hljs-string">'over'</span>);
+  },
+  handleDragLeave: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>console.log(‘leave’, this.props.data, e);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.refs.episode.getDOMNode().classList.remove(<span class="hljs-string">'over'</span>);
+  },
+  handleDragEnd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>PlaylistActions.dragEnd(this.props.data) // from, end everything
+console.log(‘end’, this.props.data.title);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.refs.episode.getDOMNode().classList.remove(<span class="hljs-string">'drag'</span>);
+    <span class="hljs-keyword">this</span>.refs.episode.getDOMNode().classList.remove(<span class="hljs-string">'over'</span>);
+  },
+  handleAdd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(fnName)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(e)</span> </span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Trigger play or add action</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      PlaylistActions[fnName]({
+        title: <span class="hljs-keyword">this</span>.props.data.title,
+        image: <span class="hljs-keyword">this</span>.props.data.image,
+        colors: <span class="hljs-keyword">this</span>.props.data.colors,
+        podcast: <span class="hljs-keyword">this</span>.props.data.podcast,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>this.props.data.audio_url is when episode already is in playlist</p>
 
@@ -98,11 +181,11 @@
         </li>
         
         
-        <li id="section-4">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Change state of added</p>
 
@@ -126,19 +209,48 @@
     <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>;
   },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">var</span> remove = <span class="hljs-keyword">this</span>.props.remove &amp;&amp; (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleRemove}</span>&gt;</span>Remove<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
+    <span class="hljs-keyword">var</span> remove = <span class="hljs-keyword">this</span>.props.remove &amp;&amp;
+      (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"remove"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleRemove}</span>&gt;</span>Remove<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var play = this.props.play &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     if (this.state.added) { add = 'Queued'; }
 
+    var classes = 'episode', image = '', createdBy = '';
+    if (this.props.compact) {
+      classes += ' compact';
+
+      var c = this.props.data.colors[0];
+      var imageStyle = { backgroundColor: 'rgb(' + c.r + ', ' + c.g + ', ' + c.b + ')' };
+      image = (
+          <span class="hljs-tag">&lt;<span class="hljs-title">a</span>
+            <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span>
+            <span class="hljs-attribute">className</span>=<span class="hljs-value">"image fa fa-play"</span>
+            <span class="hljs-attribute">style</span>=<span class="hljs-value">{imageStyle}</span>
+            <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('play')}</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+          );
+      if (!this.props.play) {
+        image = <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{imageStyle}</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"image fa fa-volume-up"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+      }
+
+      play = <span class="hljs-string">''</span>;
+      createdBy = (
+          <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Link</span> <span class="hljs-attribute">to</span>=<span class="hljs-value">'podcast'</span> <span class="hljs-attribute">params</span>=<span class="hljs-value">{{id:this.props.data.podcast.id}}</span>&gt;</span>
+            {this.props.data.podcast.title}
+          <span class="hljs-tag">&lt;/<span class="hljs-title">Link</span>&gt;</span>
+          );
+    }
+
     return (
-        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"episode"</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{decodeText(this.props.data.title)}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"date"</span>&gt;</span>{this.getPubDate()}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">draggable</span>=<span class="hljs-value">{this.props.draggable}</span> <span class="hljs-attribute">ref</span>=<span class="hljs-value">"episode"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">{classes}</span>&gt;</span> 
+          {image}
+          <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"header"</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"title"</span>&gt;</span>{decodeText(this.props.data.title)}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"date"</span>&gt;</span>{this.getPubDate()}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"summary"</span>&gt;</span>{decodeText(this.props.data.summary)}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"footer"</span>&gt;</span>{createdBy} {play} {add} {remove}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"summary"</span>&gt;</span>{decodeText(this.props.data.summary)}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"footer"</span>&gt;</span>{play} {add} {remove}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
         );
   }
