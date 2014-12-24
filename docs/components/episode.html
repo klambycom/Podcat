@@ -165,7 +165,7 @@
       (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"remove"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleRemove}</span>&gt;</span>Remove<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var play = this.props.play &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('play')}</span>&gt;</span>Play<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
     var add = this.props.add &amp;&amp; (<span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#"</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleAdd('add')}</span>&gt;</span>Queue<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>);
-    if (this.state.added) { add = 'Queued'; }
+    if (this.props.add &amp;&amp; this.state.added) { add = 'Queued'; }
 
     var classes = 'episode', image = '', createdBy = '';
     if (this.props.compact) {
