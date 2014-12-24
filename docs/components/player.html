@@ -37,10 +37,10 @@
 <span class="hljs-keyword">var</span> ProgressBar = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./progress_bar.js'</span>);
 
 <span class="hljs-keyword">var</span> Reflux = <span class="hljs-built_in">require</span>(<span class="hljs-string">'reflux'</span>);
-<span class="hljs-keyword">var</span> PlaylistStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_store.js'</span>);
 <span class="hljs-keyword">var</span> ProgressBarStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/progress_bar_store.js'</span>);
 <span class="hljs-keyword">var</span> PlayerActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/player_actions.js'</span>);
 <span class="hljs-keyword">var</span> PlaylistActions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_actions.js'</span>);
+<span class="hljs-keyword">var</span> PlaylistStore = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../reflux/playlist_store.js'</span>);
 
 <span class="hljs-keyword">var</span> storage = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../playlist_storage.js'</span>);
 
@@ -94,7 +94,7 @@ this episode and there is a next episode</p>
     }
   },
   onPlay: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(episode, type)</span> </span>{
-    <span class="hljs-keyword">this</span>.changeEpisode(episode, (type !== <span class="hljs-string">'add'</span> &amp;&amp; type !== <span class="hljs-string">'remove'</span>));
+    <span class="hljs-keyword">this</span>.changeEpisode(episode, (type !== <span class="hljs-string">'add'</span> &amp;&amp; type !== <span class="hljs-string">'remove'</span> &amp;&amp; type !== <span class="hljs-string">'move'</span>));
   },
   changeEpisode: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(items, autoplay)</span> </span>{</pre></div></div>
             

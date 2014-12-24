@@ -210,6 +210,13 @@
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.onNext();
     }
+  },
+  dragOver: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+    <span class="hljs-keyword">this</span>.dragTo = item;
+  },
+  dragEnd: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+    storage.moveUnder(item, <span class="hljs-keyword">this</span>.dragTo);
+    <span class="hljs-keyword">this</span>.trigger(storage.all(), <span class="hljs-string">'move'</span>);
   }
 });
 
