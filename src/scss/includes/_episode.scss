@@ -4,7 +4,7 @@
     background-color: rgb(226, 226, 226);
   }
 
-  &.over { border-bottom: 2px rgb(34, 34, 34) dashed !important; }
+  &.over { border-bottom: 2px #2A712A dashed !important; }
 
   &:not(:last-child) {
     padding: 10px 0;
