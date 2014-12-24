@@ -62,6 +62,13 @@ var store = Reflux.createStore({
       // Else play next episode in playlist
       this.onNext();
     }
+  },
+  dragOver: function (item) {
+    this.dragTo = item;
+  },
+  dragEnd: function (item) {
+    storage.moveUnder(item, this.dragTo);
+    this.trigger(storage.all(), 'move');
   }
 });
 

@@ -38,6 +38,13 @@ var storage = {
     queue.unshift(removed[0]);
     this.save(queue);
   },
+  moveUnder: function (item, to) {
+    var toID = this.indexOf(to);
+    this.remove(item);
+    var items = this.all();
+    items.splice(toID + 1, 0, item);
+    this.save(items);
+  },
   update: function (obj) {
     var queue = this.all();
     Object.keys(obj).forEach(function (key) {

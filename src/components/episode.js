@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Reflux = require('reflux');
 var PlaylistActions = require('../reflux/playlist_actions');
+var PlaylistStore = require('../reflux/playlist_store.js');
 var moment = require('moment');
 var Link = require('react-router').Link;
 
@@ -13,6 +15,7 @@ var decodeText = function (text) {
 };
 
 var Episode = React.createClass({
+  mixins: [ Reflux.listenTo(PlaylistStore, 'onMove') ],
   getInitialState: function () {
     return { added: false };
   },
@@ -38,24 +41,24 @@ var Episode = React.createClass({
   },
   handleDragStart: function () {
     this.refs.episode.getDOMNode().classList.add('drag');
-    //console.log(e);
   },
   handleDragOver: function (e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
 
-    // PlaylistActions.dragOver(this.props.data) // to
+    PlaylistActions.dragOver(this.props.data) // to
     this.refs.episode.getDOMNode().classList.add('over');
   },
   handleDragLeave: function () {
-    //console.log('leave', this.props.data, e);
     this.refs.episode.getDOMNode().classList.remove('over');
   },
   handleDragEnd: function () {
-    // PlaylistActions.dragEnd(this.props.data) // from, end everything
-    //console.log('end', this.props.data.title);
+    PlaylistActions.dragEnd(this.props.data) // from
     this.refs.episode.getDOMNode().classList.remove('drag');
     this.refs.episode.getDOMNode().classList.remove('over');
+  },
+  onMove: function (_, type) {
+    if (type === 'move') { this.refs.episode.getDOMNode().classList.remove('over'); }
   },
   handleAdd: function (fnName) {
     return function (e) {

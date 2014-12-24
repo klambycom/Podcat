@@ -5,10 +5,10 @@ var PlayPause = require('./play_pause.js');
 var ProgressBar = require('./progress_bar.js');
 
 var Reflux = require('reflux');
-var PlaylistStore = require('../reflux/playlist_store.js');
 var ProgressBarStore = require('../reflux/progress_bar_store.js');
 var PlayerActions = require('../reflux/player_actions.js');
 var PlaylistActions = require('../reflux/playlist_actions.js');
+var PlaylistStore = require('../reflux/playlist_store.js');
 
 var storage = require('../playlist_storage.js');
 
@@ -36,7 +36,7 @@ var Player = React.createClass({
     }
   },
   onPlay: function (episode, type) {
-    this.changeEpisode(episode, (type !== 'add' && type !== 'remove'));
+    this.changeEpisode(episode, (type !== 'add' && type !== 'remove' && type !== 'move'));
   },
   changeEpisode: function (items, autoplay) {
     // Stop playing if playlist is empty

@@ -6,7 +6,9 @@ var actions = Reflux.createActions([
   'next',
   'previous',
   'add',
-  'remove'
+  'remove',
+  'dragOver',
+  'dragEnd'
 ]);
 
 module.exports = actions;
