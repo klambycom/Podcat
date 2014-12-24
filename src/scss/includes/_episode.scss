@@ -55,21 +55,19 @@
       border-radius: 2px;
       opacity: .7;
       &:hover { opacity: 1; }
+      &.fa-volume-up { padding: 9px 8px 6px 9px; }
     }
 
     .header {
       .title {
         width: initial;
         float: initial;
-      }
-
-      .date { display: none; }
-
-      .title {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
       }
+
+      .date { display: none; }
     }
 
     .summary { display: none; }
