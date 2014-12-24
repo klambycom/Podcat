@@ -95,7 +95,7 @@ var Episode = React.createClass({
       (<a href="#" className="remove" onClick={this.handleRemove}>Remove</a>);
     var play = this.props.play && (<a href="#" onClick={this.handleAdd('play')}>Play</a>);
     var add = this.props.add && (<a href="#" onClick={this.handleAdd('add')}>Queue</a>);
-    if (this.state.added) { add = 'Queued'; }
+    if (this.props.add && this.state.added) { add = 'Queued'; }
 
     var classes = 'episode', image = '', createdBy = '';
     if (this.props.compact) {
