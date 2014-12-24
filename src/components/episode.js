@@ -98,10 +98,18 @@ var Episode = React.createClass({
     if (this.props.compact) {
       classes += ' compact';
 
+      var c = this.props.data.colors[0];
+      var imageStyle = { backgroundColor: 'rgb(' + c.r + ', ' + c.g + ', ' + c.b + ')' };
       image = (
-          <a href="#" className="image fa fa-play" onClick={this.handleAdd('play')}></a>
+          <a
+            href="#"
+            className="image fa fa-play"
+            style={imageStyle}
+            onClick={this.handleAdd('play')}></a>
           );
-      if (!this.props.play) { image = <div className="image fa fa-volume-up"></div>; }
+      if (!this.props.play) {
+        image = <div style={imageStyle} className="image fa fa-volume-up"></div>;
+      }
 
       play = '';
       createdBy = (
