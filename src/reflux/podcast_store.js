@@ -42,6 +42,8 @@ var store = Reflux.createStore({
                 .forEach(function (x) {
                   // Add to firebase
                   var newItemRef = database.child('items').push();
+                  x.podcast.id = id;
+                  x.colors = podcast.colors;
                   newItemRef.setWithPriority(x, Date.now());
                 }, this);
                 // Update lastUpdate date

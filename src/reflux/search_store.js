@@ -45,6 +45,8 @@ var store = Reflux.createStore({
 
                 rss.parseEpisodes(result).forEach(function (x, i, arr) {
                   var newItemRef = itemsRef.push();
+                  x.podcast.id = post.key();
+                  x.colors = json.colors;
                   newItemRef.setWithPriority(x, arr.length - i);
                 });
 

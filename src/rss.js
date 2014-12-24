@@ -63,6 +63,9 @@ var parseEpisodes = function (feed) {
       image: {
         episode: (x.image && x.image.href) || podcastImage,
         podcast: podcastImage
+      },
+      podcast: {
+        title: feed.title || ''
       }
     };
   });

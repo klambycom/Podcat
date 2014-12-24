@@ -3,6 +3,7 @@
 var React = require('react');
 var PlaylistActions = require('../reflux/playlist_actions');
 var moment = require('moment');
+var Link = require('react-router').Link;
 
 var decodeText = function (text) {
   if (text === '') { return text; }
@@ -62,6 +63,8 @@ var Episode = React.createClass({
       PlaylistActions[fnName]({
         title: this.props.data.title,
         image: this.props.data.image,
+        colors: this.props.data.colors,
+        podcast: this.props.data.podcast,
         // this.props.data.audio_url is when episode already is in playlist
         audio_url: this.props.data.audio_url || this.props.data.file.url
       });
@@ -101,7 +104,11 @@ var Episode = React.createClass({
       if (!this.props.play) { image = <div className="image fa fa-volume-up"></div>; }
 
       play = '';
-      createdBy = 'creator';
+      createdBy = (
+          <Link to='podcast' params={{id:this.props.data.podcast.id}}>
+            {this.props.data.podcast.title}
+          </Link>
+          );
     }
 
     return (
