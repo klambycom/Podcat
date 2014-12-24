@@ -65,6 +65,9 @@ var storage = {
   history: {
     ID: 'playlist.history',
     all: function () { return all(sessionStorage, this.ID); },
+    save: function (items) {
+      sessionStorage.setItem(this.ID, JSON.stringify(items));
+    },
     add: function (item) {
       if (item === null) { return; }
 
