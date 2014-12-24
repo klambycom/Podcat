@@ -94,9 +94,12 @@ var Episode = React.createClass({
     var classes = 'episode', image = '', createdBy = '';
     if (this.props.compact) {
       classes += ' compact';
+
       image = (
           <a href="#" className="image fa fa-play" onClick={this.handleAdd('play')}></a>
           );
+      if (!this.props.play) { image = <div className="image fa fa-volume-up"></div>; }
+
       play = '';
       createdBy = 'creator';
     }

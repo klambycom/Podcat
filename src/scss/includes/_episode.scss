@@ -4,11 +4,6 @@
     background-color: rgb(226, 226, 226);
   }
 
-  //&.over:after {
-  //  content: "Drop here";
-  //  border-bottom: 2px rgb(34, 34, 34) dashed !important;
-  //}
-
   &.over { border-bottom: 2px rgb(34, 34, 34) dashed !important; }
 
   &:not(:last-child) {
@@ -55,10 +50,12 @@
       float: left;
       margin-right: 5px;
       font-size: 25px;
-      padding: 9px 8px 6px 12px;
+      padding: 9px 9px 6px 11px;
+
       color: rgba(255, 255, 255, .8) !important;
-      &:hover { color: rgba(65, 65, 65, .8) !important; }
     }
+
+    a.image:hover { color: rgba(65, 65, 65, .8) !important; }
 
     .header {
       .title {
