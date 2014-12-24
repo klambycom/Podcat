@@ -36,7 +36,7 @@ var Episode = React.createClass({
     div.addEventListener('dragover', this.handleDragOver);
     div.addEventListener('dragleave', this.handleDragLeave);
   },
-  handleDragStart: function (e) {
+  handleDragStart: function () {
     this.refs.episode.getDOMNode().classList.add('drag');
     //console.log(e);
   },
@@ -47,11 +47,11 @@ var Episode = React.createClass({
     // PlaylistActions.dragOver(this.props.data) // to
     this.refs.episode.getDOMNode().classList.add('over');
   },
-  handleDragLeave: function (e) {
+  handleDragLeave: function () {
     //console.log('leave', this.props.data, e);
     this.refs.episode.getDOMNode().classList.remove('over');
   },
-  handleDragEnd: function (e) {
+  handleDragEnd: function () {
     // PlaylistActions.dragEnd(this.props.data) // from, end everything
     //console.log('end', this.props.data.title);
     this.refs.episode.getDOMNode().classList.remove('drag');
