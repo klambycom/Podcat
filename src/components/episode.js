@@ -46,14 +46,14 @@ var Episode = React.createClass({
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
 
-    PlaylistActions.dragOver(this.props.data) // to
+    PlaylistActions.dragOver(this.props.data); // to
     this.refs.episode.getDOMNode().classList.add('over');
   },
   handleDragLeave: function () {
     this.refs.episode.getDOMNode().classList.remove('over');
   },
   handleDragEnd: function () {
-    PlaylistActions.dragEnd(this.props.data) // from
+    PlaylistActions.dragEnd(this.props.data); // from
     this.refs.episode.getDOMNode().classList.remove('drag');
     this.refs.episode.getDOMNode().classList.remove('over');
   },
