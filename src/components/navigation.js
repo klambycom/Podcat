@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
+var IndexLink = require('react-router').IndexLink;
 var Reflux = require('reflux');
 var PlaylistStore = require('../reflux/playlist_store.js');
 
@@ -24,14 +25,15 @@ var Navigation = React.createClass({
   render: function () {
     return (
         <div id="navigation">
-          <div className='title'><Link to='/'>Ninja Podcat</Link></div>
+          <div className='title'><IndexLink to='/' activeClassName='active'>Ninja Podcat</IndexLink></div>
           <ul className='links'>
-            <li><Link to='/'>Explore</Link></li>
+            <li><IndexLink to='/' activeClassName='active'>Explore</IndexLink></li>
             <li><Link
-                  to='playlist'
+                  to='/playlist'
                   id='playlist-link'
+                  activeClassName='active'
                   className={this.state.playlistClass}>Playlist</Link></li>
-            <li><Link to='feed'>Feed</Link></li>
+            <li><Link to='/feed' activeClassName='active'>Feed</Link></li>
           </ul>
         </div>
         );

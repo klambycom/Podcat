@@ -24,7 +24,7 @@ var Playlist = React.createClass({
     // No queued episodes
     var episodes = (
         <div>
-          No episodes queued, add from <Link to="feed">the feed</Link>.
+          No episodes queued, add from <Link to="/feed">the feed</Link>.
         </div>
         );
 

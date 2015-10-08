@@ -116,7 +116,7 @@ var Episode = React.createClass({
 
       play = '';
       createdBy = (
-          <Link to='podcast' params={{id:this.props.data.podcast.id}}>
+          <Link to={'/podcast/' + this.props.data.podcast.id}>
             {this.props.data.podcast.title}
           </Link>
           );

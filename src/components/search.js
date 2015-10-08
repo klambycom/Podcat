@@ -2,13 +2,14 @@
 
 var React = require('react');
 var Router = require('react-router');
+var History = require('history');
 var Reflux = require('reflux');
 var SearchStore = require('../reflux/search_store.js');
 var SearchActions = require('../reflux/search_actions.js');
 
 var Search = React.createClass({
   mixins: [
-    Router.Navigation,
+    History,
     Reflux.listenTo(SearchStore, 'onSearch')
   ],
   getInitialState: function () {
@@ -20,7 +21,7 @@ var Search = React.createClass({
   onSearch: function (type, result) {
     if (type === 'feed') {
       // Podcast-data downloaded, redirect to page for podcast
-      this.transitionTo('podcast', { id: result });
+      this.history.pushState(null, '/podcast/' + result);
     } else if (type === 'url') {
       // User have entered a URL
       this.setState({ icon: 'fa fa-plus', useEnter: true });

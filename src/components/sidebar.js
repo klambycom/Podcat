@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
+var IndexLink = require('react-router').IndexLink;
 var Reflux = require('reflux');
 var PodcastActions = require('../reflux/podcast_actions.js');
 var PodcastStore = require('../reflux/podcast_store.js');
@@ -26,7 +27,7 @@ var Sidebar = React.createClass({
     if (this.state.items.length > 0) {
       subscriptions = this.state.items.map(function (podcast, i) {
         return (
-            <Link to='podcast' params={{id:podcast.id}} className="item" key={i}>
+            <Link to={'/podcast/' + podcast.id} className="item" key={i} activeClassName="active">
               <img src={podcast.image} alt={podcast.title} />
             </Link>
             );
@@ -37,7 +38,7 @@ var Sidebar = React.createClass({
         <div id="sidebar">
           <h2>Your subscriptions</h2>
           <p className="subscriptions">{subscriptions}</p>
-          <Link to='/' className="add-podcast">Add new podcast</Link>
+          <IndexLink to='/' className="add-podcast">Add new podcast</IndexLink>
         </div>
         );
   }

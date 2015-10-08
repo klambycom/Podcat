@@ -26,7 +26,7 @@ var hashCode = function(str) {
 };
 
 var Podcast = React.createClass({
-  mixins: [ Router.State, Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
+  mixins: [ Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
   getInitialState: function () {
     return {
       show: 10,
@@ -34,15 +34,15 @@ var Podcast = React.createClass({
       links: {},
       subscribed: false,
       notFound: false,
-      selectedPodcast: this.getParams().id
+      selectedPodcast: this.props.params.id
     };
   },
   componentDidMount: function () {
-    PodcastActions.init(this.getParams().id);
+    PodcastActions.init(this.props.params.id);
 
     // Get episodes from firebase
     this.itemsRef = new Firebase(
-        'https://blinding-torch-6567.firebaseio.com/podcasts/' + this.getParams().id + '/items');
+        'https://blinding-torch-6567.firebaseio.com/podcasts/' + this.props.params.id + '/items');
     this.itemsRef.orderByPriority().on('child_added', this.onItemAdded);
   },
   componentDidUnmount: function () {
@@ -50,8 +50,8 @@ var Podcast = React.createClass({
   },
   componentDidUpdate: function () {
     // Update component if params (id) is changed
-    if (this.state.selectedPodcast !== this.getParams().id) {
-      this.setState({ selectedPodcast: this.getParams().id, items: [], show: 10 });
+    if (this.state.selectedPodcast !== this.props.params.id) {
+      this.setState({ selectedPodcast: this.props.params.id, items: [], show: 10 });
       this.itemsRef.off('child_added', this.onItemAdded);
       this.componentDidMount();
     }
@@ -85,9 +85,9 @@ var Podcast = React.createClass({
   },
   handleSubscribe: function (e) {
     if (this.state.subscribed) {
-      PodcastActions.unsubscribe(this.getParams().id);
+      PodcastActions.unsubscribe(this.props.params.id);
     } else {
-      PodcastActions.subscribe(this.getParams().id, this.state);
+      PodcastActions.subscribe(this.props.params.id, this.state);
     }
 
     e.preventDefault();

@@ -42,7 +42,7 @@ var Explore = React.createClass({
           <p className="podcast-covers">
           {this.state.newestPodcasts.slice(0, 4).map(function (podcast, i) {
             return (
-                <Link to='podcast' params={{id:podcast.id}} className="item" key={i}>
+                <Link to={'/podcast/' + podcast.id} className="item" key={i}>
                   <img src={podcast.image} alt={podcast.title} />
                 </Link>
                 );
@@ -54,7 +54,7 @@ var Explore = React.createClass({
           {this.state.newestPodcasts.map(function (podcast, i) {
             return (
                 <div className="item" key={i+4}>
-                  <h3><Link to='podcast' params={{id:podcast.id}}>{podcast.title}</Link></h3>
+                  <h3><Link to={'/podcast/' + podcast.id}>{podcast.title}</Link></h3>
                   <div className="subtitle">{podcast.subtitle}</div>
                 </div>
                 );

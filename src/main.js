@@ -8,21 +8,18 @@ var NotFound = require('./components/not_found.js');
 var Explore = require('./components/explore.js');
 var Podcast = require('./components/podcast.js');
 
-var Router = require('react-router');
+var Router = require('react-router').Router;
 var Route = require('react-router').Route;
-var DefaultRoute = require('react-router').DefaultRoute;
-var NotFoundRoute = require('react-router').NotFoundRoute;
+var IndexRoute = require('react-router').IndexRoute;
 
 var routes = (
-    <Route name="app" path="/" handler={App}>
-      <NotFoundRoute handler={NotFound} />
-      <Route name="playlist" handler={Playlist} />
-      <Route name="feed" handler={Feed} />
-      <Route name="podcast" handler={Podcast} path="podcast/:id" />
-      <DefaultRoute handler={Explore} />
+    <Route path="/" component={App}>
+      <IndexRoute component={Explore} />
+      <Route path="playlist" component={Playlist} />
+      <Route path="feed" component={Feed} />
+      <Route path="podcast/:id" component={Podcast} />
+      <Route path="*" component={NotFound} />
     </Route>
 );
 
-Router.run(routes, function (Handler) {
-  React.render(<Handler />, document.getElementById('main'));
-});
+React.render(<Router routes={routes} />, document.getElementById('main'));

@@ -5,7 +5,6 @@ var Player = require('./player');
 var Navigation = require('./navigation');
 var Sidebar = require('./sidebar');
 var Alert = require('./alert');
-var RouteHandler = require('react-router').RouteHandler;
 
 var App = React.createClass({
   render: function () {
@@ -14,7 +13,7 @@ var App = React.createClass({
           <Navigation />
           <Alert />
           <div className="float-left">
-            <RouteHandler />
+            {this.props.children}
           </div>
           <div className="float-right">
             <Player />
