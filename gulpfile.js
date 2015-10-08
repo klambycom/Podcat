@@ -112,5 +112,5 @@ gulp.task('watch', function () {
   gulp.watch(paths.scss, ['sass']);
 });
 
-gulp.task('default', ['browserify', 'copyindex', 'sass']);
+gulp.task('default', ['browserify', 'copyindex', 'sass', 'copyassets']);
 gulp.task('docs', ['builddocs', 'docsindex']);
