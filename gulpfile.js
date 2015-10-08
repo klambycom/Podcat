@@ -25,7 +25,7 @@ var paths = {
 
 gulp.task('browserify', function () {
   return gulp.src(paths.main)
-    .pipe(browserify({ transform: 'reactify', debug: true }))
+    .pipe(browserify({ transform: 'babelify', debug: true }))
     .pipe(concat('main.js'))
     .pipe(gulp.dest(paths.dist));
 });
