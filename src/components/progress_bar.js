@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var Reflux = require('reflux');
 var ProgressBarStore = require('../reflux/progress_bar_store.js');

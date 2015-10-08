@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var Search = require('./search');
 var Firebase = require('firebase');

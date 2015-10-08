@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var Reflux = require('reflux');
 var PlaylistActions = require('../reflux/playlist_actions');

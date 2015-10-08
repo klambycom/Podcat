@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var Episode = require('./episode');
 var Link = require('react-router').Link;

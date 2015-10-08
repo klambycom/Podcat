@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var Player = require('./player');
 var Navigation = require('./navigation');

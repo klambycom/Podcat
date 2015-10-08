@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react');
 var PlayPause = require('./play_pause.js');
 var ProgressBar = require('./progress_bar.js');
