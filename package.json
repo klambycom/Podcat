@@ -33,7 +33,6 @@
     "gulp-sass": "^1.1.0",
     "gulp-sourcemaps": "^1.2.8",
     "jshint-stylish": "^1.0.0",
-    "react-tools": "0.12.0",
     "reactify": "0.15.2"
   }
 }
