@@ -1,16 +1,14 @@
-var React = require('react');
-var App = require('./components/app.js');
-var Playlist = require('./components/playlist.js');
-var Feed = require('./components/feed.js');
-var NotFound = require('./components/not_found.js');
-var Explore = require('./components/explore.js');
-var Podcast = require('./components/podcast.js');
+import React from 'react';
+import { Router, Route, IndexRoute } from 'react-router';
 
-var Router = require('react-router').Router;
-var Route = require('react-router').Route;
-var IndexRoute = require('react-router').IndexRoute;
+import App from './components/app.js';
+import Playlist from './components/playlist.js';
+import Feed from './components/feed.js';
+import NotFound from './components/not_found.js';
+import Explore from './components/explore.js';
+import Podcast from './components/podcast.js';
 
-var routes = (
+let routes = (
     <Route path="/" component={App}>
       <IndexRoute component={Explore} />
       <Route path="playlist" component={Playlist} />

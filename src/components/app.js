@@ -1,11 +1,13 @@
-var React = require('react');
-var Player = require('./player');
-var Navigation = require('./navigation');
-var Sidebar = require('./sidebar');
-var Alert = require('./alert');
+import React from 'react';
+import Player from './player';
+import Navigation from './navigation';
+import Sidebar from './sidebar';
+import Alert from './alert';
 
-var App = React.createClass({
-  render: function () {
+export default React.createClass({
+  name: 'App',
+
+  render() {
     return (
         <div>
           <Navigation />
@@ -22,5 +24,3 @@ var App = React.createClass({
         );
   }
 });
-
-module.exports = App;

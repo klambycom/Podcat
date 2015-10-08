@@ -1,26 +1,32 @@
-var React = require('react');
-var Episode = require('./episode');
-var Link = require('react-router').Link;
+import React from 'react';
+import Episode from './episode';
+import { Link } from 'react-router';
 
-var Reflux = require('reflux');
-var PlaylistStore = require('../reflux/playlist_store.js');
+import Reflux from 'reflux';
+import PlaylistStore from '../reflux/playlist_store.js';
 
-var storage = require('../playlist_storage.js');
+import storage from '../playlist_storage.js';
 
-var Playlist = React.createClass({
+export default React.createClass({
+  name: 'Playlist',
+
   mixins: [Reflux.listenTo(PlaylistStore, 'onChange')],
-  getInitialState: function () {
+
+  getInitialState() {
     return { items: [] };
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     this.setState({ items: storage.all() });
   },
-  onChange: function (items) {
+
+  onChange(items) {
     this.setState({ items: items });
   },
-  render: function () {
+
+  render() {
     // No queued episodes
-    var episodes = (
+    let episodes = (
         <div>
           No episodes queued, add from <Link to="/feed">the feed</Link>.
         </div>
@@ -49,5 +55,3 @@ var Playlist = React.createClass({
         );
   }
 });
-
-module.exports = Playlist;

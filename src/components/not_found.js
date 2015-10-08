@@ -1,7 +1,9 @@
-var React = require('react');
+import React from 'react';
 
-var NotFound = React.createClass({
-  render: function () {
+export default React.createClass({
+  name: 'NotFound',
+
+  render() {
     return (
         <div id="not-found">
           <h1>404</h1>
@@ -10,5 +12,3 @@ var NotFound = React.createClass({
         );
   }
 });
-
-module.exports = NotFound;

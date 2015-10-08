@@ -1,22 +1,28 @@
-var React = require('react');
+import React from 'react';
 
-var Reflux = require('reflux');
-var PlayerActions = require('../reflux/player_actions.js');
-var PlayerStore = require('../reflux/player_store.js');
+import Reflux from 'reflux';
+import PlayerActions from '../reflux/player_actions.js';
+import PlayerStore from '../reflux/player_store.js';
 
-var PlayPause = React.createClass({
+export default React.createClass({
+  name: 'PlayPause',
+
   mixins: [Reflux.listenTo(PlayerStore, 'onChange')],
-  getInitialState: function () {
+
+  getInitialState() {
     return { play: false };
   },
-  onChange: function (state) {
+
+  onChange(state) {
     this.setState({ play: state });
   },
-  handleClick: function (e) {
+
+  handleClick(e) {
     PlayerActions.toggle();
     e.preventDefault();
   },
-  render: function () {
+
+  render() {
     if (this.state.play) {
       return (<a href="#" onClick={this.handleClick} className="fa fa-pause"></a>);
     } else {
@@ -24,5 +30,3 @@ var PlayPause = React.createClass({
     }
   }
 });
-
-module.exports = PlayPause;

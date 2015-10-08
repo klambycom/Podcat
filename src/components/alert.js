@@ -1,27 +1,34 @@
-var React = require('react');
-var Reflux = require('reflux');
-var AlertStore = require('../reflux/alert.js').store;
-var PlayerActions = require('../reflux/player_actions.js');
+import React from 'react';
+import Reflux from 'reflux';
+import * as Alert from '../reflux/alert.js';
+import PlayerActions from '../reflux/player_actions.js';
 
-var Alert = React.createClass({
-  mixins: [Reflux.listenTo(AlertStore, 'onAlert')],
-  getInitialState: function () {
+export default React.createClass({
+  name: 'Alert',
+
+  mixins: [Reflux.listenTo(Alert.store, 'onAlert')],
+
+  getInitialState() {
     return { type: 'hide', title: '', message: '', source: '' };
   },
-  onAlert: function (obj) {
+
+  onAlert(obj) {
     this.setState(obj);
   },
-  handleClose: function (e) {
+
+  handleClose(e) {
     this.setState({ type: 'hide' });
     e.preventDefault();
   },
-  handleReload: function (e) {
+
+  handleReload(e) {
     this.setState({ type: 'hide' });
     PlayerActions.reload();
     e.preventDefault();
   },
-  render: function () {
-    var more = '';
+
+  render() {
+    let more = '';
     if (this.state.source === 'player.src') {
       more = <a href="#" onClick={this.handleReload}>Try to reload</a>;
     }
@@ -35,5 +42,3 @@ var Alert = React.createClass({
         );
   }
 });
-
-module.exports = Alert;

@@ -1,17 +1,17 @@
-var React = require('react');
-var Router = require('react-router');
-var Reflux = require('reflux');
-var Firebase = require('firebase');
-var PodcastStore = require('../reflux/podcast_store.js');
-var PodcastActions = require('../reflux/podcast_actions.js');
-var NotFound = require('./not_found.js');
-var Episode = require('./episode.js');
-var LoadMore = require('./load_more.js');
-var storage = require('../playlist_storage.js');
+import React from 'react';
+import Router from 'react-router';
+import Reflux from 'reflux';
+import Firebase from 'firebase';
+import PodcastStore from '../reflux/podcast_store.js';
+import PodcastActions from '../reflux/podcast_actions.js';
+import NotFound from './not_found.js';
+import Episode from './episode.js';
+import LoadMore from './load_more.js';
+import storage from '../playlist_storage.js';
 
-var hashCode = function(str) {
+let hashCode = function(str) {
   // Source: http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-  var hash = 0, i, chr, len;
+  let hash = 0, i, chr, len;
   if (str.length === 0) { return hash; }
   for (i = 0, len = str.length; i < len; i += 1) {
     chr = str.charCodeAt(i);
@@ -23,9 +23,12 @@ var hashCode = function(str) {
   return hash;
 };
 
-var Podcast = React.createClass({
+export default React.createClass({
+  name: 'Podcast',
+
   mixins: [ Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
-  getInitialState: function () {
+
+  getInitialState() {
     return {
       show: 10,
       items: [],
@@ -35,18 +38,21 @@ var Podcast = React.createClass({
       selectedPodcast: this.props.params.id
     };
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     PodcastActions.init(this.props.params.id);
 
     // Get episodes from firebase
     this.itemsRef = new Firebase(
-        'https://blinding-torch-6567.firebaseio.com/podcasts/' + this.props.params.id + '/items');
+        `https://blinding-torch-6567.firebaseio.com/podcasts/${this.props.params.id}/items`);
     this.itemsRef.orderByPriority().on('child_added', this.onItemAdded);
   },
-  componentDidUnmount: function () {
+
+  componentDidUnmount() {
     this.itemsRef.off('child_added', this.onItemAdded);
   },
-  componentDidUpdate: function () {
+
+  componentDidUpdate() {
     // Update component if params (id) is changed
     if (this.state.selectedPodcast !== this.props.params.id) {
       this.setState({ selectedPodcast: this.props.params.id, items: [], show: 10 });
@@ -54,18 +60,21 @@ var Podcast = React.createClass({
       this.componentDidMount();
     }
   },
-  onItemAdded: function (data) {
-    var item = data.val();
+
+  onItemAdded(data) {
+    let item = data.val();
     item.queued = storage.indexOf({ audio_url: item.file.url }) >= 0;
     item.id = data.key();
     this.state.items.unshift(item);
     this.delayedForceUpdate();
   },
-  delayedForceUpdate: function () {
+
+  delayedForceUpdate() {
     clearTimeout(this.delayID);
     this.delayID = setTimeout(this.forceUpdate.bind(this), 100);
   },
-  onSubscriptionChange: function (result) {
+
+  onSubscriptionChange(result) {
     // Update subscribe/unsubscribe button
     if (typeof result.subscribed !== 'undefined') {
       this.setState({ subscribed: result.subscribed });
@@ -81,7 +90,8 @@ var Podcast = React.createClass({
       }
     }
   },
-  handleSubscribe: function (e) {
+
+  handleSubscribe(e) {
     if (this.state.subscribed) {
       PodcastActions.unsubscribe(this.props.params.id);
     } else {
@@ -90,19 +100,21 @@ var Podcast = React.createClass({
 
     e.preventDefault();
   },
-  handleLoadMore: function (n) {
+
+  handleLoadMore(n) {
     this.setState({ show: n });
   },
-  render: function () {
+
+  render() {
     if (this.state.notFound) {
       return (<NotFound>There is no podcast on this url.</NotFound>);
     }
 
-    var bgColor = {};
+    let bgColor = {};
     if (typeof this.state.colors !== 'undefined') {
-      var rgb = this.state.colors[0];
+      let rgb = this.state.colors[0];
       bgColor = {
-        backgroundColor: 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')'
+        backgroundColor: `rgb(${rgb.r},${rgb.g},${rgb.b})`
       };
     }
 
@@ -144,5 +156,3 @@ var Podcast = React.createClass({
         );
   }
 });
-
-module.exports = Podcast;

@@ -1,25 +1,26 @@
-var React = require('react');
-var Router = require('react-router');
-var History = require('history');
-var Reflux = require('reflux');
-var SearchStore = require('../reflux/search_store.js');
-var SearchActions = require('../reflux/search_actions.js');
+import React from 'react';
+import Router from 'react-router';
+import History from 'history';
+import Reflux from 'reflux';
+import SearchStore from '../reflux/search_store.js';
+import SearchActions from '../reflux/search_actions.js';
 
-var Search = React.createClass({
-  mixins: [
-    History,
-    Reflux.listenTo(SearchStore, 'onSearch')
-  ],
-  getInitialState: function () {
+export default React.createClass({
+  name: 'Search',
+
+  mixins: [ History, Reflux.listenTo(SearchStore, 'onSearch') ],
+
+  getInitialState() {
     return {
       icon: 'fa fa-search',
       useEnter: false
     };
   },
-  onSearch: function (type, result) {
+
+  onSearch(type, result) {
     if (type === 'feed') {
       // Podcast-data downloaded, redirect to page for podcast
-      this.history.pushState(null, '/podcast/' + result);
+      this.history.pushState(null, `/podcast/${result}`);
     } else if (type === 'url') {
       // User have entered a URL
       this.setState({ icon: 'fa fa-plus', useEnter: true });
@@ -31,16 +32,19 @@ var Search = React.createClass({
       this.setState({ icon: 'fa fa-search', useEnter: false });
     }
   },
-  handleInput: function (e) {
+
+  handleInput(e) {
     SearchActions.typing(e.target.value);
   },
-  handleSubmit: function (e) {
+
+  handleSubmit(e) {
     SearchActions.search(e.target.search_term.value);
     this.setState({ icon: 'fa fa-spinner fa-spin' });
     e.preventDefault();
   },
-  render: function () {
-    var enter = '';
+
+  render() {
+    let enter = '';
     if (this.state.useEnter) {
       enter = <small>Press <code>ENTER &crarr;</code> to search</small>;
     }
@@ -63,5 +67,3 @@ var Search = React.createClass({
         );
   }
 });
-
-module.exports = Search;

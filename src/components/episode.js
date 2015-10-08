@@ -1,25 +1,30 @@
-var React = require('react');
-var Reflux = require('reflux');
-var PlaylistActions = require('../reflux/playlist_actions');
-var PlaylistStore = require('../reflux/playlist_store.js');
-var moment = require('moment');
-var Link = require('react-router').Link;
+import React from 'react';
+import Reflux from 'reflux';
+import PlaylistActions from '../reflux/playlist_actions';
+import PlaylistStore from '../reflux/playlist_store.js';
+import moment from 'moment';
+import { Link } from 'react-router';
 
-var decodeText = function (text) {
+let decodeText = function (text) {
   if (text === '') { return text; }
-  var el = document.createElement('div');
+  let el = document.createElement('div');
   el.innerHTML = text;
   return el.childNodes[0].nodeValue;
 };
 
-var Episode = React.createClass({
+export default React.createClass({
+  name: 'Episode',
+
   mixins: [ Reflux.listenTo(PlaylistStore, 'onMove') ],
-  getInitialState: function () {
+
+  getInitialState() {
     return { added: false };
   },
-  getDefaultProps: function () {
+
+  getDefaultProps() {
     return { play: true, add: true, remove: false, draggable: false, compact: false };
   },
+
   propTypes: {
     data: React.PropTypes.object.isRequired,
     play: React.PropTypes.bool,
@@ -28,37 +33,44 @@ var Episode = React.createClass({
     draggable: React.PropTypes.bool,
     compact: React.PropTypes.bool
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     this.setState({ added: this.props.data.queued });
 
-    var div = this.refs.episode.getDOMNode();
+    let div = this.refs.episode.getDOMNode();
     div.addEventListener('dragstart', this.handleDragStart);
     div.addEventListener('dragend', this.handleDragEnd);
     div.addEventListener('dragover', this.handleDragOver);
     div.addEventListener('dragleave', this.handleDragLeave);
   },
-  handleDragStart: function () {
+
+  handleDragStart() {
     this.refs.episode.getDOMNode().classList.add('drag');
   },
-  handleDragOver: function (e) {
+
+  handleDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
 
     PlaylistActions.dragOver(this.props.data); // to
     this.refs.episode.getDOMNode().classList.add('over');
   },
-  handleDragLeave: function () {
+
+  handleDragLeave() {
     this.refs.episode.getDOMNode().classList.remove('over');
   },
-  handleDragEnd: function () {
+
+  handleDragEnd() {
     PlaylistActions.dragEnd(this.props.data); // from
     this.refs.episode.getDOMNode().classList.remove('drag');
     this.refs.episode.getDOMNode().classList.remove('over');
   },
-  onMove: function (_, type) {
+
+  onMove(_, type) {
     if (type === 'move') { this.refs.episode.getDOMNode().classList.remove('over'); }
   },
-  handleAdd: function (fnName) {
+
+  handleAdd(fnName) {
     return function (e) {
       // Trigger play or add action
       PlaylistActions[fnName]({
@@ -76,31 +88,34 @@ var Episode = React.createClass({
       e.preventDefault();
     }.bind(this);
   },
-  handleRemove: function (e) {
+
+  handleRemove(e) {
     PlaylistActions.remove(this.props.data);
     e.preventDefault();
   },
-  getPubDate: function () {
+
+  getPubDate() {
     if (typeof this.props.data.pubDate !== 'undefined') {
-      var pubDate = moment(this.props.data.pubDate);
+      let pubDate = moment(this.props.data.pubDate);
       return pubDate.isBefore(moment().startOf('month')) ?
         pubDate.format('ll') : pubDate.fromNow();
     }
     return '';
   },
-  render: function () {
-    var remove = this.props.remove &&
+
+  render() {
+    let remove = this.props.remove &&
       (<a href="#" className="remove" onClick={this.handleRemove}>Remove</a>);
-    var play = this.props.play && (<a href="#" onClick={this.handleAdd('play')}>Play</a>);
-    var add = this.props.add && (<a href="#" onClick={this.handleAdd('add')}>Queue</a>);
+    let play = this.props.play && (<a href="#" onClick={this.handleAdd('play')}>Play</a>);
+    let add = this.props.add && (<a href="#" onClick={this.handleAdd('add')}>Queue</a>);
     if (this.props.add && this.state.added) { add = 'Queued'; }
 
-    var classes = 'episode', image = '', createdBy = '';
+    let classes = 'episode', image = '', createdBy = '';
     if (this.props.compact) {
       classes += ' compact';
 
-      var c = this.props.data.colors[0];
-      var imageStyle = { backgroundColor: 'rgb(' + c.r + ', ' + c.g + ', ' + c.b + ')' };
+      let c = this.props.data.colors[0];
+      let imageStyle = { backgroundColor: `rgb(${c.r}, ${c.g}, ${c.b})` };
       image = (
           <a
             href="#"
@@ -114,7 +129,7 @@ var Episode = React.createClass({
 
       play = '';
       createdBy = (
-          <Link to={'/podcast/' + this.props.data.podcast.id}>
+          <Link to={`/podcast/${this.props.data.podcast.id}`}>
             {this.props.data.podcast.title}
           </Link>
           );
@@ -135,5 +150,3 @@ var Episode = React.createClass({
         );
   }
 });
-
-module.exports = Episode;

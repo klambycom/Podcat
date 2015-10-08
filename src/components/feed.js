@@ -1,31 +1,34 @@
-var React = require('react');
-var Episode = require('./episode');
-var LoadMore = require('./load_more.js');
-var Firebase = require('firebase');
-var moment = require('moment');
-var storage = require('../playlist_storage.js');
+import React from 'react';
+import Episode from './episode';
+import LoadMore from './load_more.js';
+import Firebase from 'firebase';
+import moment from 'moment';
+import storage from '../playlist_storage.js';
 
-var reverseDot = function (a) { return function (b) { return a[b]; }; };
+let reverseDot = function (a) { return function (b) { return a[b]; }; };
 
-var Feed = React.createClass({
-  getInitialState: function () {
+export default React.createClass({
+  name: 'Feed',
+
+  getInitialState() {
     return { items: [], show: 15 };
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     this.firebase = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts');
     this.subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
     // Init data
-    var nrOfSubs = Object.keys(this.subscriptions).length;
-    var counter = 0;
-    var items = [];
+    let nrOfSubs = Object.keys(this.subscriptions).length;
+    let counter = 0;
+    let items = [];
     Object.keys(this.subscriptions).forEach(function (x) {
       this.firebase
         .child(x)
         .child('items')
         .limitToLast(50)
         .once('value', function (snapshot) {
-          var data = snapshot.val();
+          let data = snapshot.val();
           items = items.concat(
               Object
                 .keys(data)
@@ -46,8 +49,8 @@ var Feed = React.createClass({
           if ((counter += 1) === nrOfSubs) {
             // Sort items
             items.sort(function (a, b) {
-              var aa = moment.utc(a.pubDate);
-              var bb = moment.utc(b.pubDate);
+              let aa = moment.utc(a.pubDate);
+              let bb = moment.utc(b.pubDate);
 
               if (aa.isBefore(bb)) {
                 return 1;
@@ -62,10 +65,12 @@ var Feed = React.createClass({
         }.bind(this));
     }, this);
   },
-  handleLoadMore: function (n) { this.setState({ show: n }); },
-  render: function () {
+
+  handleLoadMore(n) { this.setState({ show: n }); },
+
+  render() {
     // No episodes
-    var episodes = (
+    let episodes = (
         <div>
           You have no episodes in your feed. Have you subscribed to any podcasts?
         </div>
@@ -90,5 +95,3 @@ var Feed = React.createClass({
         );
   }
 });
-
-module.exports = Feed;

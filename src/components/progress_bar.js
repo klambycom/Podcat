@@ -1,13 +1,13 @@
-var React = require('react');
-var Reflux = require('reflux');
-var ProgressBarStore = require('../reflux/progress_bar_store.js');
-var ProgressBarActions = require('../reflux/progress_bar_actions.js');
+import React from 'react';
+import Reflux from 'reflux';
+import ProgressBarStore from '../reflux/progress_bar_store.js';
+import ProgressBarActions from '../reflux/progress_bar_actions.js';
 
-var secsToStr = function (time) {
+let secsToStr = function (time) {
   if (isNaN(time)) { return '00:00'; }
-  var hour = '';
-  var min = Math.round(time / 60);
-  var sec = Math.round(time % 60);
+  let hour = '';
+  let min = Math.round(time / 60);
+  let sec = Math.round(time % 60);
 
   if (min > 59) {
     hour = Math.round(min / 60) + ':';
@@ -17,9 +17,12 @@ var secsToStr = function (time) {
   return hour + (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
 };
 
-var ProgressBar = React.createClass({
+export default React.createClass({
+  name: 'ProgressBar',
+
   mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
-  getInitialState: function () {
+
+  getInitialState() {
     return {
       // Time in seconds
       currentTime: 0,
@@ -33,22 +36,28 @@ var ProgressBar = React.createClass({
       loading: false
     };
   },
-  onProgress: function (progress) {
+
+  onProgress(progress) {
     this.setState(progress);
   },
+
   eventOffset: function (fn) {
     return function (e) {
       fn(e.nativeEvent.offsetX, this.refs.progress_bar.getDOMNode().offsetWidth);
     }.bind(this);
   },
+
   handleClick: ProgressBarActions.updateTime,
+
   handleMouseMove: ProgressBarActions.moveMouse,
-  renderLoading: function () {
+
+  renderLoading() {
     if (this.state.loading) { return <div className="loading"></div>; }
   },
-  render: function () {
-    var bufferedStyles = { width: this.state.bufferedPercent + '%' };
-    var timeStyles = { width: this.state.timePercent + '%' };
+
+  render() {
+    let bufferedStyles = { width: `${this.state.bufferedPercent}%` };
+    let timeStyles = { width: `${this.state.timePercent}%` };
 
     return (
         <div
@@ -67,5 +76,3 @@ var ProgressBar = React.createClass({
         );
   }
 });
-
-module.exports = ProgressBar;

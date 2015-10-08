@@ -1,28 +1,33 @@
-var React = require('react');
-var PlayPause = require('./play_pause.js');
-var ProgressBar = require('./progress_bar.js');
+import React from 'react';
+import PlayPause from './play_pause.js';
+import ProgressBar from './progress_bar.js';
 
-var Reflux = require('reflux');
-var ProgressBarStore = require('../reflux/progress_bar_store.js');
-var PlayerActions = require('../reflux/player_actions.js');
-var PlaylistActions = require('../reflux/playlist_actions.js');
-var PlaylistStore = require('../reflux/playlist_store.js');
+import Reflux from 'reflux';
+import ProgressBarStore from '../reflux/progress_bar_store.js';
+import PlayerActions from '../reflux/player_actions.js';
+import PlaylistActions from '../reflux/playlist_actions.js';
+import PlaylistStore from '../reflux/playlist_store.js';
 
-var storage = require('../playlist_storage.js');
+import storage from '../playlist_storage.js';
 
-var Player = React.createClass({
+export default React.createClass({
+  name: 'Player',
+
   mixins: [
     Reflux.listenTo(PlaylistStore, 'onPlay'),
     Reflux.listenTo(ProgressBarStore, 'onTimeUpdate')
   ],
-  getInitialState: function () {
+
+  getInitialState() {
     return { image: '', title: '', playing: false, nearEnd: false, nextEpisode: {} };
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     // Load first episode from saved playlist
     this.changeEpisode(storage.all(), false);
   },
-  onTimeUpdate: function (data) {
+
+  onTimeUpdate(data) {
     // Get information about next episode, if only a couple of seconds left on
     // this episode and there is a next episode
     if (typeof data.nearEnd !== "undefined") {
@@ -33,10 +38,12 @@ var Player = React.createClass({
       }
     }
   },
-  onPlay: function (episode, type) {
+
+  onPlay(episode, type) {
     this.changeEpisode(episode, (type !== 'add' && type !== 'remove' && type !== 'move'));
   },
-  changeEpisode: function (items, autoplay) {
+
+  changeEpisode(items, autoplay) {
     // Stop playing if playlist is empty
     if (items.length === 0) {
       this.setState({ playing: false });
@@ -51,7 +58,7 @@ var Player = React.createClass({
     PlayerActions.play(items[0].audio_url, autoplay);
 
     // Find cover image
-    var img = new Image();
+    let img = new Image();
     img.addEventListener('load', function () {
       this.setState({ image: items[0].image.episode });
     }.bind(this));
@@ -60,17 +67,20 @@ var Player = React.createClass({
     }.bind(this));
     img.src = items[0].image.episode;
   },
-  handlePrevious: function (e) {
+
+  handlePrevious(e) {
     PlaylistActions.previous();
     e.preventDefault();
   },
-  handleNext: function (e) {
+
+  handleNext(e) {
     PlaylistActions.next();
     e.preventDefault();
   },
-  render: function () {
-    var hide = this.state.playing ? '': 'hide';
-    var nextEpisode = this.state.nearEnd ? 'next-episode' : 'next-episode hide';
+
+  render() {
+    let hide = this.state.playing ? '': 'hide';
+    let nextEpisode = this.state.nearEnd ? 'next-episode' : 'next-episode hide';
 
     return (
         <div>
@@ -91,5 +101,3 @@ var Player = React.createClass({
         );
   }
 });
-
-module.exports = Player;

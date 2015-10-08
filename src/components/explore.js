@@ -1,23 +1,28 @@
-var React = require('react');
-var Search = require('./search');
-var Firebase = require('firebase');
-var Link = require('react-router').Link;
+import React from 'react';
+import Search from './search';
+import Firebase from 'firebase';
+import { Link } from 'react-router';
 
-var Explore = React.createClass({
-  getInitialState: function () {
+export default React.createClass({
+  name: 'Explore',
+
+  getInitialState() {
     return { newestPodcasts: [] };
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     this.database = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/');
     this.database.limitToFirst(15).on('child_added', this.onNewPodcast);
   },
-  componentWillUnmount: function () {
+
+  componentWillUnmount() {
     this.database.off('child_added', this.onNewPodcast);
   },
-  onNewPodcast: function (snapshot) {
-    var id = snapshot.key();
-    var podcast = snapshot.val();
-    var podcasts = this.state.newestPodcasts;
+
+  onNewPodcast(snapshot) {
+    let id = snapshot.key();
+    let podcast = snapshot.val();
+    let podcasts = this.state.newestPodcasts;
 
     podcasts.unshift({
       id: id,
@@ -28,7 +33,8 @@ var Explore = React.createClass({
 
     this.setState({ newestPodcasts: podcasts });
   },
-  render: function () {
+
+  render() {
     return (
         <div id="explore">
           <h1>Explore</h1>
@@ -40,7 +46,7 @@ var Explore = React.createClass({
           <p className="podcast-covers">
           {this.state.newestPodcasts.slice(0, 4).map(function (podcast, i) {
             return (
-                <Link to={'/podcast/' + podcast.id} className="item" key={i}>
+                <Link to={`/podcast/${podcast.id}`} className="item" key={i}>
                   <img src={podcast.image} alt={podcast.title} />
                 </Link>
                 );
@@ -52,7 +58,7 @@ var Explore = React.createClass({
           {this.state.newestPodcasts.map(function (podcast, i) {
             return (
                 <div className="item" key={i+4}>
-                  <h3><Link to={'/podcast/' + podcast.id}>{podcast.title}</Link></h3>
+                  <h3><Link to={`/podcast/${podcast.id}`}>{podcast.title}</Link></h3>
                   <div className="subtitle">{podcast.subtitle}</div>
                 </div>
                 );
@@ -62,5 +68,3 @@ var Explore = React.createClass({
         );
   }
 });
-
-module.exports = Explore;

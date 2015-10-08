@@ -1,15 +1,18 @@
-var React = require('react');
-var Link = require('react-router').Link;
-var IndexLink = require('react-router').IndexLink;
-var Reflux = require('reflux');
-var PlaylistStore = require('../reflux/playlist_store.js');
+import React from 'react';
+import { Link, IndexLink } from 'react-router';
+import Reflux from 'reflux';
+import PlaylistStore from '../reflux/playlist_store.js';
 
-var Navigation = React.createClass({
+export default React.createClass({
+  name: 'Navigation',
+
   mixins: [Reflux.listenTo(PlaylistStore, 'onChangeInPlaylist')],
-  getInitialState: function () {
+
+  getInitialState() {
     return { playlistClass: '' };
   },
-  onChangeInPlaylist: function (_, e) {
+
+  onChangeInPlaylist(_, e) {
     // If episode have been added
     if (e === 'add') {
       // Highlight playlist link
@@ -20,7 +23,8 @@ var Navigation = React.createClass({
       }.bind(this), 500);
     }
   },
-  render: function () {
+
+  render() {
     return (
         <div id="navigation">
           <div className='title'><IndexLink to='/' activeClassName='active'>Ninja Podcat</IndexLink></div>
@@ -37,5 +41,3 @@ var Navigation = React.createClass({
         );
   }
 });
-
-module.exports = Navigation;

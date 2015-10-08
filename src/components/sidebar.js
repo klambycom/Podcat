@@ -1,31 +1,36 @@
-var React = require('react');
-var Link = require('react-router').Link;
-var IndexLink = require('react-router').IndexLink;
-var Reflux = require('reflux');
-var PodcastActions = require('../reflux/podcast_actions.js');
-var PodcastStore = require('../reflux/podcast_store.js');
+import React from 'react';
+import { Link, IndexLink } from 'react-router';
+import Reflux from 'reflux';
+import PodcastActions from '../reflux/podcast_actions.js';
+import PodcastStore from '../reflux/podcast_store.js';
 
-var Sidebar = React.createClass({
+export default React.createClass({
+  name: 'Sidebar',
+
   mixins: [ Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
-  getInitialState: function () {
+
+  getInitialState() {
     return { items: [] };
   },
-  componentDidMount: function () {
+
+  componentDidMount() {
     PodcastActions.init();
   },
-  onSubscriptionChange: function (result) {
-    this.setState({
-      items: Object
-        .keys(result.subscriptions)
-        .map(function (x) { return result.subscriptions[x]; })
-    });
+
+  onSubscriptionChange(result) {
+    let items = Object
+      .keys(result.subscriptions)
+      .map((x) => result.subscriptions[x]);
+
+    this.setState({ items });
   },
-  render: function () {
-    var subscriptions = 'You have not subscribed to any podcasts yet!';
+
+  render() {
+    let subscriptions = 'You have not subscribed to any podcasts yet!';
     if (this.state.items.length > 0) {
       subscriptions = this.state.items.map(function (podcast, i) {
         return (
-            <Link to={'/podcast/' + podcast.id} className="item" key={i} activeClassName="active">
+            <Link to={`/podcast/${podcast.id}`} className="item" key={i} activeClassName="active">
               <img src={podcast.image} alt={podcast.title} />
             </Link>
             );
@@ -41,5 +46,3 @@ var Sidebar = React.createClass({
         );
   }
 });
-
-module.exports = Sidebar;
