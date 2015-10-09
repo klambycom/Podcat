@@ -10,6 +10,7 @@ var jshint = require('gulp-jshint');
 var react = require('gulp-react');
 var deploy = require('gulp-gh-pages');
 var autoprefixer = require('gulp-autoprefixer');
+var uglify = require('gulp-uglify');
 
 var paths = {
   dist:   'dist',
@@ -27,6 +28,14 @@ gulp.task('browserify', function () {
   return gulp.src(paths.main)
     .pipe(browserify({ transform: 'babelify', debug: true }))
     .pipe(concat('main.js'))
+    .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('uglify', function () {
+  return gulp.src(paths.main)
+    .pipe(browserify({ transform: 'babelify', debug: true }))
+    .pipe(concat('main.min.js'))
+    .pipe(uglify())
     .pipe(gulp.dest(paths.dist));
 });
 
