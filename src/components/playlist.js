@@ -3,14 +3,14 @@ import Episode from './episode';
 import { Link } from 'react-router';
 
 import Reflux from 'reflux';
-import PlaylistStore from '../reflux/playlist_store.js';
+import * as Playlist from '../reflux/playlist.js';
 
 import storage from '../playlist_storage.js';
 
 export default React.createClass({
   name: 'Playlist',
 
-  mixins: [Reflux.listenTo(PlaylistStore, 'onChange')],
+  mixins: [Reflux.listenTo(Playlist.store, 'onChange')],
 
   getInitialState() {
     return { items: [] };

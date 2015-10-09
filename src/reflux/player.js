@@ -1,16 +1,15 @@
-var Reflux = require('reflux');
-var actions = require('./player_actions.js');
-var AudioPlayer = require('../audio_player.js');
-var storage = require('../playlist_storage.js');
+import Reflux from 'reflux';
+import AudioPlayer from '../audio_player.js';
+import storage from '../playlist_storage.js';
 
-var saveCurrentTime = function () {
-  var playlist = storage.all();
+let saveCurrentTime = function () {
+  let playlist = storage.all();
   playlist[0].currentTime = AudioPlayer.currentTime;
   storage.save(playlist);
 };
 
-var changeCurrentTime = function () {
-  var playlist = storage.all();
+let changeCurrentTime = function () {
+  let playlist = storage.all();
   if (typeof playlist[0].currentTime !== 'undefined') {
     AudioPlayer.currentTime = playlist[0].currentTime;
     delete playlist[0].currentTime;
@@ -18,13 +17,17 @@ var changeCurrentTime = function () {
   }
 };
 
-var store = Reflux.createStore({
+export let actions = Reflux.createActions([ 'play', 'pause', 'toggle', 'reload' ]);
+
+export let store = Reflux.createStore({
   listenables: actions,
-  init: function () {
+
+  init() {
     window.addEventListener('beforeunload', saveCurrentTime);
     AudioPlayer.addEventListener('canplay', changeCurrentTime);
   },
-  onPlay: function (url, autoplay) {
+
+  onPlay(url, autoplay) {
     // Change src if current url is not already playing
     if (AudioPlayer.src !== url) {
       AudioPlayer.src = url;
@@ -37,11 +40,13 @@ var store = Reflux.createStore({
 
     this.trigger(!AudioPlayer.paused);
   },
-  onPause: function () {
+
+  onPause() {
     AudioPlayer.pause();
     this.trigger(false);
   },
-  onToggle: function() {
+
+  onToggle() {
     if (AudioPlayer.paused) {
       AudioPlayer.play();
     } else {
@@ -50,11 +55,10 @@ var store = Reflux.createStore({
 
     this.trigger(!AudioPlayer.paused);
   },
-  onReload: function () {
-    var url = AudioPlayer.src;
+
+  onReload() {
+    let url = AudioPlayer.src;
     AudioPlayer.src = '';
     this.onPlay(url, true);
   }
 });
-
-module.exports = store;

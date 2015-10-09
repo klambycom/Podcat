@@ -1,13 +1,11 @@
 import React from 'react';
-
 import Reflux from 'reflux';
-import PlayerActions from '../reflux/player_actions.js';
-import PlayerStore from '../reflux/player_store.js';
+import * as Player from '../reflux/player.js';
 
 export default React.createClass({
   name: 'PlayPause',
 
-  mixins: [Reflux.listenTo(PlayerStore, 'onChange')],
+  mixins: [Reflux.listenTo(Player.store, 'onChange')],
 
   getInitialState() {
     return { play: false };
@@ -18,7 +16,7 @@ export default React.createClass({
   },
 
   handleClick(e) {
-    PlayerActions.toggle();
+    Player.actions.toggle();
     e.preventDefault();
   },
 

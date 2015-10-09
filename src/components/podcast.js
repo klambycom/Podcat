@@ -2,8 +2,7 @@ import React from 'react';
 import Router from 'react-router';
 import Reflux from 'reflux';
 import Firebase from 'firebase';
-import PodcastStore from '../reflux/podcast_store.js';
-import PodcastActions from '../reflux/podcast_actions.js';
+import * as Podcast from '../reflux/podcast.js';
 import NotFound from './not_found.js';
 import Episode from './episode.js';
 import LoadMore from './load_more.js';
@@ -26,7 +25,7 @@ let hashCode = function(str) {
 export default React.createClass({
   name: 'Podcast',
 
-  mixins: [ Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
+  mixins: [ Reflux.listenTo(Podcast.store, 'onSubscriptionChange') ],
 
   getInitialState() {
     return {
@@ -40,7 +39,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    PodcastActions.init(this.props.params.id);
+    Podcast.actions.init(this.props.params.id);
 
     // Get episodes from firebase
     this.itemsRef = new Firebase(
@@ -93,9 +92,9 @@ export default React.createClass({
 
   handleSubscribe(e) {
     if (this.state.subscribed) {
-      PodcastActions.unsubscribe(this.props.params.id);
+      Podcast.actions.unsubscribe(this.props.params.id);
     } else {
-      PodcastActions.subscribe(this.props.params.id, this.state);
+      Podcast.actions.subscribe(this.props.params.id, this.state);
     }
 
     e.preventDefault();

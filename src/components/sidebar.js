@@ -1,20 +1,19 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 import Reflux from 'reflux';
-import PodcastActions from '../reflux/podcast_actions.js';
-import PodcastStore from '../reflux/podcast_store.js';
+import * as Podcast from '../reflux/podcast.js';
 
 export default React.createClass({
   name: 'Sidebar',
 
-  mixins: [ Reflux.listenTo(PodcastStore, 'onSubscriptionChange') ],
+  mixins: [ Reflux.listenTo(Podcast.store, 'onSubscriptionChange') ],
 
   getInitialState() {
     return { items: [] };
   },
 
   componentDidMount() {
-    PodcastActions.init();
+    Podcast.actions.init();
   },
 
   onSubscriptionChange(result) {

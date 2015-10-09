@@ -1,11 +1,16 @@
-var Reflux = require('reflux');
-var actions = require('./progress_bar_actions.js');
-var AudioPlayer = require('../audio_player.js');
-var storage = require('../playlist_storage.js');
+import Reflux from 'reflux';
+import AudioPlayer from '../audio_player.js';
+import storage from '../playlist_storage.js';
 
-var store = Reflux.createStore({
+export let actions = Reflux.createActions([
+  'updateTime',
+  'moveMouse'
+]);
+
+export let store = Reflux.createStore({
   listenables: actions,
-  init: function () {
+
+  init() {
     // Events for progress bar
     AudioPlayer.addEventListener('progress', this.triggerProgress.bind(this));
     AudioPlayer.addEventListener('timeupdate', this.triggerProgress.bind(this));
@@ -13,28 +18,31 @@ var store = Reflux.createStore({
     AudioPlayer.addEventListener('loadstart', this.triggerLoading.bind(this, true));
     AudioPlayer.addEventListener('canplay', this.triggerLoading.bind(this, false));
   },
-  onUpdateTime: function (offset, width) {
+
+  onUpdateTime(offset, width) {
     AudioPlayer.currentTime = AudioPlayer.duration * (offset / width);
   },
-  onMoveMouse: function (offset, width) {
+
+  onMoveMouse(offset, width) {
     this.trigger({ underCursor: AudioPlayer.duration * (offset / width) });
   },
-  triggerProgress: function () {
+
+  triggerProgress() {
     // Get buffered percent
-    var buffered = 0;
+    let buffered = 0;
     if (AudioPlayer.buffered.length > 0) {
       buffered = AudioPlayer.buffered.end(AudioPlayer.buffered.length - 1) / AudioPlayer.duration * 100;
     }
 
     // Get played percent
-    var time = 0;
+    let time = 0;
     if (!isNaN(AudioPlayer.duration)) {
       time = AudioPlayer.currentTime / AudioPlayer.duration * 100;
     }
 
     // Get next episode
-    var nearEnd = AudioPlayer.duration - AudioPlayer.currentTime < 30;
-    var nextEpisode = nearEnd ? storage.peek() : {};
+    let nearEnd = AudioPlayer.duration - AudioPlayer.currentTime < 30;
+    let nextEpisode = nearEnd ? storage.peek() : {};
 
     this.trigger({
       currentTime: AudioPlayer.currentTime,
@@ -45,9 +53,8 @@ var store = Reflux.createStore({
       nextEpisode: nextEpisode
     });
   },
-  triggerLoading: function (loading) {
+
+  triggerLoading(loading) {
     this.trigger({ loading: loading });
   }
 });
-
-module.exports = store;

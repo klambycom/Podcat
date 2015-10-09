@@ -1,25 +1,27 @@
-var Firebase = require('firebase');
-var moment = require('moment');
-var rss = require('../rss.js');
-var Reflux = require('reflux');
-var actions = require('./podcast_actions.js');
-var Alert = require('./alert.js').actions;
+import Firebase from 'firebase';
+import moment from 'moment';
+import rss from '../rss.js';
+import Reflux from 'reflux';
+import Alert from './alert';
 
-var store = Reflux.createStore({
+export let actions = Reflux.createActions([ 'init', 'subscribe', 'unsubscribe' ]);
+
+export let store = Reflux.createStore({
   listenables: actions,
-  onInit: function (id) {
-    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
+
+  onInit(id) {
+    let subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
     if (typeof id === 'undefined') {
       this.trigger({ subscriptions: subscriptions });
     } else {
-      var podcastFromSubscriptions = subscriptions[id];
+      let podcastFromSubscriptions = subscriptions[id];
       // Get podcast data from firebase
-      var database = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/' + id);
+      let database = new Firebase('https://blinding-torch-6567.firebaseio.com/podcasts/' + id);
       database.once('value', function (data) {
-        var podcast = data.val();
-        var keysFromItems = Object.keys(podcast.items);
-        var lastEpisode = podcast.items[keysFromItems[keysFromItems.length - 1]].pubDate;
+        let podcast = data.val();
+        let keysFromItems = Object.keys(podcast.items);
+        let lastEpisode = podcast.items[keysFromItems[keysFromItems.length - 1]].pubDate;
         delete podcast.items;
 
         this.trigger({
@@ -41,7 +43,7 @@ var store = Reflux.createStore({
                 .reverse()
                 .forEach(function (x) {
                   // Add to firebase
-                  var newItemRef = database.child('items').push();
+                  let newItemRef = database.child('items').push();
                   x.podcast.id = id;
                   x.colors = podcast.colors;
                   newItemRef.setWithPriority(x, Date.now());
@@ -49,15 +51,16 @@ var store = Reflux.createStore({
                 // Update lastUpdate date
                 database.update({ lastUpdate: moment.utc().format() });
             } else {
-              Alert.warning('Podcast', 'Could not parse the RSS-feed', 'podcast.rss');
+              Alert.actions.warning('Podcast', 'Could not parse the RSS-feed', 'podcast.rss');
             }
           }.bind(this));
         }
       }, this);
     }
   },
-  onSubscribe: function (key, podcast) {
-    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
+
+  onSubscribe(key, podcast) {
+    let subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || {};
 
     subscriptions[key] = {
       id: key,
@@ -74,11 +77,12 @@ var store = Reflux.createStore({
       subscribed: true
     });
   },
-  onUnsubscribe: function (key) {
-    var subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || [];
+
+  onUnsubscribe(key) {
+    let subscriptions = JSON.parse(localStorage.getItem('podcat.subscriptions')) || [];
 
     // Remove subscription from localStorage
-    var tmp = subscriptions[key];
+    let tmp = subscriptions[key];
     delete subscriptions[key];
 
     localStorage.setItem('podcat.subscriptions', JSON.stringify(subscriptions));
@@ -90,5 +94,3 @@ var store = Reflux.createStore({
     });
   }
 });
-
-module.exports = store;

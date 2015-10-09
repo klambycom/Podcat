@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 import Reflux from 'reflux';
-import PlaylistStore from '../reflux/playlist_store.js';
+import * as Playlist from '../reflux/playlist.js';
 
 export default React.createClass({
   name: 'Navigation',
 
-  mixins: [Reflux.listenTo(PlaylistStore, 'onChangeInPlaylist')],
+  mixins: [Reflux.listenTo(Playlist.store, 'onChangeInPlaylist')],
 
   getInitialState() {
     return { playlistClass: '' };

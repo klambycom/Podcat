@@ -1,7 +1,7 @@
 import React from 'react';
 import Reflux from 'reflux';
 import * as Alert from '../reflux/alert.js';
-import PlayerActions from '../reflux/player_actions.js';
+import * as Player from '../reflux/player.js';
 
 export default React.createClass({
   name: 'Alert',
@@ -23,7 +23,7 @@ export default React.createClass({
 
   handleReload(e) {
     this.setState({ type: 'hide' });
-    PlayerActions.reload();
+    Player.actions.reload();
     e.preventDefault();
   },
 

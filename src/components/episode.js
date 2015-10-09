@@ -1,7 +1,6 @@
 import React from 'react';
 import Reflux from 'reflux';
-import PlaylistActions from '../reflux/playlist_actions';
-import PlaylistStore from '../reflux/playlist_store.js';
+import * as Playlist from '../reflux/playlist';
 import moment from 'moment';
 import { Link } from 'react-router';
 
@@ -15,7 +14,7 @@ let decodeText = function (text) {
 export default React.createClass({
   name: 'Episode',
 
-  mixins: [ Reflux.listenTo(PlaylistStore, 'onMove') ],
+  mixins: [ Reflux.listenTo(Playlist.store, 'onMove') ],
 
   getInitialState() {
     return { added: false };
@@ -52,7 +51,7 @@ export default React.createClass({
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
 
-    PlaylistActions.dragOver(this.props.data); // to
+    Playlist.actions.dragOver(this.props.data); // to
     this.refs.episode.getDOMNode().classList.add('over');
   },
 
@@ -61,7 +60,7 @@ export default React.createClass({
   },
 
   handleDragEnd() {
-    PlaylistActions.dragEnd(this.props.data); // from
+    Playlist.actions.dragEnd(this.props.data); // from
     this.refs.episode.getDOMNode().classList.remove('drag');
     this.refs.episode.getDOMNode().classList.remove('over');
   },
@@ -73,7 +72,7 @@ export default React.createClass({
   handleAdd(fnName) {
     return function (e) {
       // Trigger play or add action
-      PlaylistActions[fnName]({
+      Playlist.actions[fnName]({
         title: this.props.data.title,
         image: this.props.data.image,
         colors: this.props.data.colors,
@@ -90,7 +89,7 @@ export default React.createClass({
   },
 
   handleRemove(e) {
-    PlaylistActions.remove(this.props.data);
+    Playlist.actions.remove(this.props.data);
     e.preventDefault();
   },
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import Reflux from 'reflux';
-import ProgressBarStore from '../reflux/progress_bar_store.js';
-import ProgressBarActions from '../reflux/progress_bar_actions.js';
+import * as ProgressBar from '../reflux/progress_bar.js';
 
 let secsToStr = function (time) {
   if (isNaN(time)) { return '00:00'; }
@@ -20,7 +19,7 @@ let secsToStr = function (time) {
 export default React.createClass({
   name: 'ProgressBar',
 
-  mixins: [Reflux.listenTo(ProgressBarStore, 'onProgress')],
+  mixins: [Reflux.listenTo(ProgressBar.store, 'onProgress')],
 
   getInitialState() {
     return {
@@ -47,9 +46,9 @@ export default React.createClass({
     }.bind(this);
   },
 
-  handleClick: ProgressBarActions.updateTime,
+  handleClick: ProgressBar.actions.updateTime,
 
-  handleMouseMove: ProgressBarActions.moveMouse,
+  handleMouseMove: ProgressBar.actions.moveMouse,
 
   renderLoading() {
     if (this.state.loading) { return <div className="loading"></div>; }

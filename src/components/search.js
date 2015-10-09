@@ -2,13 +2,12 @@ import React from 'react';
 import Router from 'react-router';
 import History from 'history';
 import Reflux from 'reflux';
-import SearchStore from '../reflux/search_store.js';
-import SearchActions from '../reflux/search_actions.js';
+import * as Search from '../reflux/search.js';
 
 export default React.createClass({
   name: 'Search',
 
-  mixins: [ History, Reflux.listenTo(SearchStore, 'onSearch') ],
+  mixins: [ History, Reflux.listenTo(Search.store, 'onSearch') ],
 
   getInitialState() {
     return {
@@ -34,11 +33,11 @@ export default React.createClass({
   },
 
   handleInput(e) {
-    SearchActions.typing(e.target.value);
+    Search.actions.typing(e.target.value);
   },
 
   handleSubmit(e) {
-    SearchActions.search(e.target.search_term.value);
+    Search.actions.search(e.target.search_term.value);
     this.setState({ icon: 'fa fa-spinner fa-spin' });
     e.preventDefault();
   },

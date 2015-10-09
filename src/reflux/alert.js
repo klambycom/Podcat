@@ -1,11 +1,12 @@
-var Reflux = require('reflux');
-var AudioPlayer = require('../audio_player.js');
+import Reflux from 'reflux';
+import AudioPlayer from '../audio_player.js';
 
-var actions = Reflux.createActions([ 'success', 'info', 'warning', 'danger', 'close' ]);
+export let actions = Reflux.createActions([ 'success', 'info', 'warning', 'danger', 'close' ]);
 
-var store = Reflux.createStore({
+export let store = Reflux.createStore({
   listenables: actions,
-  init: function () {
+
+  init() {
     // Error that occurred during the loading of an audio
     AudioPlayer.addEventListener(
         'error',
@@ -17,24 +18,24 @@ var store = Reflux.createStore({
         this.onWarning.bind(
           this, 'Error!', 'Media data is not available.', 'player.src'));
   },
-  onSuccess: function (title, message, source) {
-    this.trigger({ type: 'success', title: title, message: message, source: source });
+
+  onSuccess(title, message, source) {
+    this.trigger({ type: 'success', title, message, source });
   },
-  onInfo: function (title, message, source) {
-    this.trigger({ type: 'info', title: title, message: message, source: source });
+
+  onInfo(title, message, source) {
+    this.trigger({ type: 'info', title, message, source });
   },
-  onWarning: function (title, message, source) {
-    this.trigger({ type: 'warning', title: title, message: message, source: source });
+
+  onWarning(title, message, source) {
+    this.trigger({ type: 'warning', title, message, source });
   },
-  onDanger: function (title, message, source) {
-    this.trigger({ type: 'danger', title: title, message: message, source: source });
+
+  onDanger(title, message, source) {
+    this.trigger({ type: 'danger', title, message, source });
   },
-  onClose: function () {
+
+  onClose() {
     this.trigger({ type: 'hide', title: '', message: '', source: '' });
   }
 });
-
-module.exports = {
-  actions: actions,
-  store: store
-};

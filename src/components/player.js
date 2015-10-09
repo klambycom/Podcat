@@ -3,10 +3,9 @@ import PlayPause from './play_pause.js';
 import ProgressBar from './progress_bar.js';
 
 import Reflux from 'reflux';
-import ProgressBarStore from '../reflux/progress_bar_store.js';
-import PlayerActions from '../reflux/player_actions.js';
-import PlaylistActions from '../reflux/playlist_actions.js';
-import PlaylistStore from '../reflux/playlist_store.js';
+import * as ProgressBarFlux from '../reflux/progress_bar.js';
+import * as Player from '../reflux/player.js';
+import * as Playlist from '../reflux/playlist.js';
 
 import storage from '../playlist_storage.js';
 
@@ -14,8 +13,8 @@ export default React.createClass({
   name: 'Player',
 
   mixins: [
-    Reflux.listenTo(PlaylistStore, 'onPlay'),
-    Reflux.listenTo(ProgressBarStore, 'onTimeUpdate')
+    Reflux.listenTo(Playlist.store, 'onPlay'),
+    Reflux.listenTo(ProgressBarFlux.store, 'onTimeUpdate')
   ],
 
   getInitialState() {
@@ -55,7 +54,7 @@ export default React.createClass({
       title: items[0].title,
       playing: true
     });
-    PlayerActions.play(items[0].audio_url, autoplay);
+    Player.actions.play(items[0].audio_url, autoplay);
 
     // Find cover image
     let img = new Image();
@@ -69,12 +68,12 @@ export default React.createClass({
   },
 
   handlePrevious(e) {
-    PlaylistActions.previous();
+    Playlist.actions.previous();
     e.preventDefault();
   },
 
   handleNext(e) {
-    PlaylistActions.next();
+    Playlist.actions.next();
     e.preventDefault();
   },
 

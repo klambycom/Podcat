@@ -1,15 +1,27 @@
-var Reflux = require('reflux');
-var actions = require('./playlist_actions.js');
-var storage = require('../playlist_storage.js');
-var AudioPlayer = require('../audio_player.js');
+import Reflux from 'reflux';
+import storage from '../playlist_storage.js';
+import AudioPlayer from '../audio_player.js';
 
-var store = Reflux.createStore({
+export let actions = Reflux.createActions([
+  'play',
+  'pause',
+  'next',
+  'previous',
+  'add',
+  'remove',
+  'dragOver',
+  'dragEnd'
+]);
+
+export let store = Reflux.createStore({
   listenables: actions,
-  init: function () {
+
+  init() {
     AudioPlayer.addEventListener('ended', this.ended.bind(this));
   },
-  onPlay: function (episode) {
-    var index = storage.indexOf(episode);
+
+  onPlay(episode) {
+    let index = storage.indexOf(episode);
 
     if (index > -1) {
       // If episode is later in queue, move forward to first
@@ -23,15 +35,17 @@ var store = Reflux.createStore({
 
     this.trigger(storage.all());
   },
-  onPause: function (time) {
+
+  onPause(time) {
     // Save new start time
     storage.update({ start_time: time });
     this.trigger(storage.all());
   },
-  onNext: function () {
+
+  onNext() {
     if (!storage.empty()) {
       // Remove first episode in queue
-      var removed = storage.removeFirst();
+      let removed = storage.removeFirst();
 
       // Add removed episode to history
       storage.history.add(removed);
@@ -39,21 +53,25 @@ var store = Reflux.createStore({
       this.trigger(storage.all());
     }
   },
-  onPrevious: function () {
+
+  onPrevious() {
     // Remove from history and add first in queue
-    var previous = storage.history.remove();
+    let previous = storage.history.remove();
     actions.play(previous);
   },
-  onAdd: function (episode) {
+
+  onAdd(episode) {
     // Add last in queue
     storage.add(episode);
     this.trigger(storage.all(), 'add');
   },
-  onRemove: function (episode) {
+
+  onRemove(episode) {
     storage.remove(episode);
     this.trigger(storage.all(), 'remove');
   },
-  ended: function () {
+
+  ended() {
     if (storage.empty()) {
       // Remove playlist if last episode in playlist just ended
       storage.clear();
@@ -63,13 +81,13 @@ var store = Reflux.createStore({
       this.onNext();
     }
   },
-  dragOver: function (item) {
+
+  dragOver(item) {
     this.dragTo = item;
   },
-  dragEnd: function (item) {
+
+  dragEnd(item) {
     storage.moveUnder(item, this.dragTo);
     this.trigger(storage.all(), 'move');
   }
 });
-
-module.exports = store;
