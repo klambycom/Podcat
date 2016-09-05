@@ -1,0 +1,29 @@
+.user {
+	display: flex;
+	align-items: center;
+	font-weight: lighter;
+
+	&__avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 100%;
+		border: 2px solid white;
+
+		&--placeholder {
+			background: url(/dist/user.svg) 7px 7px no-repeat;
+			background-size: 25px;
+		}
+	}
+
+	&__text {
+		text-align: right;
+		margin-right: 10px;
+
+		a {
+			color: white;
+			text-decoration: none;
+
+			&:hover { text-decoration: underline; }
+		}
+	}
+}
