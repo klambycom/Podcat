@@ -9,10 +9,10 @@ const User = React.createClass({
       <div className="user">
         <div className="user__text">
           <div className="user__text__signin">
-            <Link to="/">Sign in</Link>
+            <Link to="/signin">Sign in</Link>
           </div>
-          <small className="user__text__signup">
-            or <Link to="/">create a new account</Link>
+          <small className="user__text__register">
+            or <Link to="/register">create a free account</Link>
           </small>
         </div>
         <div className="user__avatar user__avatar--placeholder"></div>
