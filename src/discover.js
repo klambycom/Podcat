@@ -1,40 +1,43 @@
 import React from "react";
+import Relay from "react-relay";
+import {Link} from "react-router";
 import Feed from "./components/feed";
 
-const Discover = React.createClass({
+import "css/discover.less"
+
+let Discover = React.createClass({
   getInitialState() {
     return {data: []};
   },
 
-  loadData() {
-    console.log(this);
-
-    fetch("http://95.85.33.102/api/feeds")
-      .then(response => response.json())
-      .then(json => this.setState({data: json.data}));
-  },
-
-  componentDidMount() {
-    this.loadData();
-  },
-
   renderFeed(feed, i) {
-    return <Feed
-      title={feed.title}
-      author={feed.author}
-      copyright={feed.copyright}
-      summary={feed.summary}
-      images={feed.images}
-      key={i} />;
+    return <Feed store={feed} key={i} />;
   },
 
   render() {
-    console.log(this.state);
     return (
-      <div>
-        {this.state.data.map(this.renderFeed)}
+      <div className="discover">
+        <div className="discover__section">
+          <h2 className="discover__section__headline">Recommendations</h2>
+          <div className="discover__section__content discover__section__content--row">
+            {this.props.store.recommendations.map(this.renderFeed)}
+          </div>
+        </div>
+        <Link to="/podcasts/11">Podcast</Link>
       </div>
     );
+  }
+});
+
+Discover = Relay.createContainer(Discover, {
+  fragments: {
+    store: () => Relay.QL`
+      fragment on User {
+        recommendations(filter: NEWEST, limit: 4) {
+          ${Feed.getFragment('store')}
+        }
+      }
+    `
   }
 });
 
