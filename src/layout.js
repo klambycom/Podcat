@@ -6,6 +6,7 @@ import User from "./components/user";
 
 import "css/normalize.less";
 import "css/header.less"
+import "css/layout.less"
 
 const Layout = React.createClass({
   render() {
@@ -16,15 +17,21 @@ const Layout = React.createClass({
           <Search />
           <User />
         </header>
-        {this.props.children}
-        <div className="sidebar">
-          <nav>
-            <ul>
-              <li><Link to="/">Discover</Link></li>
-              <li><Link to="/playlist">Playlist</Link></li>
-              <li><Link to="/settings">Settings</Link></li>
-            </ul>
-          </nav>
+        <div className="layout">
+          <div className="layout__page">
+            {this.props.children}
+          </div>
+          <div className="layout__sidebar">
+            <div className="layout__sidebar__content">
+              <nav>
+                <ul>
+                  <li><Link to="/">Discover</Link></li>
+                  <li><Link to="/playlist">Playlist</Link></li>
+                  <li><Link to="/settings">Settings</Link></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     );
