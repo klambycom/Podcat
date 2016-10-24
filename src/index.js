@@ -1,6 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Router, Route, IndexRoute, browserHistory} from "react-router";
+import Relay from "react-relay";
+
+import {
+  applyRouterMiddleware,
+  Router,
+  Route,
+  IndexRoute,
+  browserHistory
+} from "react-router";
+import useRelay from "react-router-relay";
 
 import Layout from "./layout";
 import Discover from "./discover";
@@ -13,13 +22,36 @@ import NotFound from "./not_found";
 
 import "css/index.less";
 
+Relay.injectNetworkLayer(
+  new Relay.DefaultNetworkLayer("http://localhost:4000/graphql")
+);
+
+const CurrentUserQueries = {
+  store: () => Relay.QL`query { user }`
+};
+
+const PodcastQueries = {
+  store: () => Relay.QL`query ($id: ID!) { podcast(id: $id) }`
+};
+
 ReactDOM.render((
-  <Router history={browserHistory}>
+  <Router
+    history={browserHistory}
+    render={applyRouterMiddleware(useRelay)}
+    environment={Relay.Store}
+  >
     <Route path="/" component={Layout}>
-      <IndexRoute component={Discover} />
+      <IndexRoute
+        component={Discover}
+        queries={CurrentUserQueries}
+      />
       <Route path="playlist" component={Playlist} />
       <Route path="settings" component={Settings} />
-      <Route path="podcasts/:id" component={Podcast} />
+      <Route
+        path="podcasts/:id"
+        component={Podcast}
+        queries={PodcastQueries}
+      />
       <Route path="signin" component={Signin} />
       <Route path="register" component={Register} />
     </Route>
