@@ -1,17 +1,37 @@
 import React from "react";
+import Relay from "react-relay";
+import {Link} from "react-router";
 
-const Feed = React.createClass({
+import "css/components/feed.less"
+
+let Feed = React.createClass({
   render() {
-    console.log(this.props);
+    const podcastUrl = `/podcasts/${this.props.store.slug}`;
+
     return (
-      <article>
-        <header>
-          <h1>{this.props.title}</h1>
-          <h2>From {this.props.author}</h2>
-          <p>{this.props.summary}</p>
-        </header>
-      </article>
+      <div className="recommendation">
+        <img
+          src={this.props.store.image}
+          alt={this.props.store.title}
+          className="recommendation__image"
+        />
+        <Link to={podcastUrl} className="recommendation__title">
+          {this.props.store.title}
+        </Link>
+      </div>
     );
+  }
+});
+
+Feed = Relay.createContainer(Feed, {
+  fragments: {
+    store: () => Relay.QL`
+      fragment on Podcast {
+        slug
+        title
+        image(size: 200)
+      }
+    `
   }
 });
 
