@@ -22,15 +22,43 @@ const Layout = React.createClass({
             {this.props.children}
           </div>
           <div className="layout__sidebar">
-            <div className="layout__sidebar__content">
-              <nav>
-                <ul>
-                  <li><Link to="/">Discover</Link></li>
-                  <li><Link to="/playlist">Playlist</Link></li>
-                  <li><Link to="/settings">Settings</Link></li>
-                </ul>
-              </nav>
+            <div className="layout__sidebar__player">Play, pause and stuff.</div>
+            <div className="layout__sidebar__subscriptions">
+              <ul>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+              </ul>
             </div>
+            <nav className="layout__sidebar__navigation">
+              <ul>
+                <li><Link to="/">Discover</Link></li>
+                <li><Link to="/playlist">Playlist</Link></li>
+                <li><Link to="/settings">Settings</Link></li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
