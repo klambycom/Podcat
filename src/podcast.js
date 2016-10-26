@@ -1,24 +1,36 @@
 import React from "react";
 import Relay from "react-relay";
+import FeedItem from "./components/feed_item";
+
+import "css/podcast.less"
 
 const Podcast = React.createClass({
   renderEpisode(episode, i) {
-    return (
-      <div key={i}>
-        <h2>{episode.title}</h2>
-        <small>{episode.duration}</small>
-        <p>{episode.subtitle}</p>
-      </div>
-    );
+    return <FeedItem store={episode} key={i} />
   },
 
   render() {
     return (
-      <div>
-        <header>
-          <img src={this.props.store.image} alt={this.props.store.title} />
-          <h1>{this.props.store.title} <small>{this.props.store.author}</small></h1>
-          <div>{this.props.store.summary}</div>
+      <div className="podcast">
+        <header className="podcast__header">
+          <img
+            className="podcast__header__image"
+            src={this.props.store.image}
+            alt={this.props.store.title}
+          />
+          <div className="podcast__header__information">
+            <h1 className="podcast__header__title">
+              {this.props.store.title}
+              <small className="podcast__header__title__author">
+                {this.props.store.author}
+              </small>
+            </h1>
+            <div className="podcast__header__summary">{this.props.store.summary}</div>
+            <div className="podcast__header__meta">
+              <a href={this.props.store.feedUrl}>RSS</a>
+              <a href={this.props.store.link}>Homepage</a>
+            </div>
+          </div>
         </header>
         <div>{this.props.store.episodes.map(this.renderEpisode)}</div>
         <footer>
@@ -41,7 +53,7 @@ export default Relay.createContainer(Podcast, {
         description
         author
         copyright
-        image(size: 100)
+        image(size: 150)
         block
         explicit
         feedUrl
@@ -50,16 +62,7 @@ export default Relay.createContainer(Podcast, {
         updatedAt
         insertedAt
         episodes(limit: 10) {
-          title
-          subtitle
-          summary
-          author
-          duration
-          enclosure {
-            length
-            type
-            url
-          }
+          ${FeedItem.getFragment('store')}
         }
       }
     `

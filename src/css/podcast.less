@@ -1,0 +1,29 @@
+@header-height: 150px;
+
+.podcast__header {
+	height: @header-height;
+
+	&__title {
+		margin-top: 0;
+
+		&__author {
+			font-size: .5em;
+			margin-left: 10px;
+			font-weight: 100;
+		}
+	}
+
+	&__image {
+		float: left;
+		width: @header-height;
+		height: @header-height;
+		margin-right: 20px;
+	}
+
+	&__information {
+		height: @header-height;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+}
